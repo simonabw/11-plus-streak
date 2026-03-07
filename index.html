@@ -330,6 +330,24 @@
     display: flex;
     justify-content: space-between;
   }
+  .goal-subject-reqs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .goal-req-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 8px;
+    background: #f3f4f6;
+  }
+  .goal-req-item.met { background: #ecfdf5; color: var(--green); }
+  .goal-req-item.unmet { background: #fef3c7; color: #d97706; }
   .goal-complete-msg {
     color: var(--green);
     font-weight: 800;
@@ -883,6 +901,7 @@
         <div class="goal-bar-bg">
           <div class="goal-bar-fill" id="goalBar" style="width: 0%"></div>
         </div>
+        <div class="goal-subject-reqs" id="goalSubjectReqs"></div>
         <div class="goal-complete-msg" id="goalComplete">🎉 Daily goal smashed!</div>
       </div>
     </div>
@@ -1169,10 +1188,20 @@ function getThisWeekTotal() {
   return getWeekDates().reduce((sum, d) => sum + getDayTotal(dateKey(d)), 0);
 }
 
+function getMinPerSubject() {
+  return Math.floor(state.dailyGoal / 2);
+}
+
+function isDayGoalMet(key) {
+  const e = getDayEntry(key);
+  const minEach = getMinPerSubject();
+  return (e.maths + e.english) >= state.dailyGoal && e.maths >= minEach && e.english >= minEach;
+}
+
 function countGoalsHit() {
   let count = 0;
   for (const k of Object.keys(state.days)) {
-    if (getDayTotal(k) >= state.dailyGoal) count++;
+    if (isDayGoalMet(k)) count++;
   }
   return count;
 }
@@ -1354,9 +1383,21 @@ function render() {
 
   // Streak hint
   const hint = document.getElementById('streakHint');
+  const minReq = getMinPerSubject();
   if (todayM > 0 && todayE > 0) {
-    hint.textContent = '🔥 Both subjects done — streak day!';
-    hint.className = 'streak-hint success';
+    if (todayM >= minReq && todayE >= minReq && today >= state.dailyGoal) {
+      hint.textContent = '🔥 Goal smashed — both subjects done!';
+      hint.className = 'streak-hint success';
+    } else if (todayM < minReq || todayE < minReq) {
+      const needs = [];
+      if (todayM < minReq) needs.push(`${minReq - todayM} more Maths`);
+      if (todayE < minReq) needs.push(`${minReq - todayE} more English`);
+      hint.textContent = `⚡ Keep going! Need ${needs.join(' & ')} to hit your goal!`;
+      hint.className = 'streak-hint warning';
+    } else {
+      hint.textContent = '🔥 Both subjects done — streak day!';
+      hint.className = 'streak-hint success';
+    }
   } else if (todayM > 0 || todayE > 0) {
     const missing = todayM === 0 ? 'Maths' : 'English';
     hint.textContent = `⚠️ Do some ${missing} to keep your streak!`;
@@ -1367,12 +1408,23 @@ function render() {
   }
 
   // Goal
+  const goalMet = isDayGoalMet(todayKey());
   const goalPct = Math.min(100, (today / state.dailyGoal) * 100);
   document.getElementById('goalProgress').textContent = `${today} / ${state.dailyGoal}`;
   const goalBar = document.getElementById('goalBar');
   goalBar.style.width = goalPct + '%';
-  goalBar.classList.toggle('complete', today >= state.dailyGoal);
-  document.getElementById('goalComplete').classList.toggle('show', today >= state.dailyGoal);
+  goalBar.classList.toggle('complete', goalMet);
+  document.getElementById('goalComplete').classList.toggle('show', goalMet);
+
+  // Per-subject goal requirements
+  const minEach = getMinPerSubject();
+  const mathsMet = todayM >= minEach;
+  const englishMet = todayE >= minEach;
+  const reqsEl = document.getElementById('goalSubjectReqs');
+  reqsEl.innerHTML = `
+    <span class="goal-req-item ${mathsMet ? 'met' : 'unmet'}">📐 Maths ${todayM}/${minEach} ${mathsMet ? '✓' : ''}</span>
+    <span class="goal-req-item ${englishMet ? 'met' : 'unmet'}">📖 English ${todayE}/${minEach} ${englishMet ? '✓' : ''}</span>
+  `;
 
   // Motivational
   if (!window._motivSet) {
@@ -1536,7 +1588,7 @@ function renderHistory() {
     div.className = 'history-item';
     div.innerHTML = `
       <span>${label}</span>
-      <span class="history-count">${count}q (M:${entry.maths} E:${entry.english}) ${count >= state.dailyGoal ? '🎯' : ''}</span>
+      <span class="history-count">${count}q (M:${entry.maths} E:${entry.english}) ${isDayGoalMet(k) ? '🎯' : ''}</span>
     `;
     list.appendChild(div);
   });
