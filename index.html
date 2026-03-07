@@ -776,6 +776,342 @@
     body { display: flex; justify-content: center; }
     .app-container { max-width: 480px; width: 100%; }
   }
+
+  /* Tab Bar */
+  .tab-bar {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 20px;
+    background: white;
+    border-radius: 16px;
+    margin: 8px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    color: #9ca3af;
+  }
+  .tab-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(124,58,237,0.3);
+  }
+
+  /* Practice View */
+  .view-practice { display: none; }
+  .view-practice .main { padding: 10px 20px 120px; }
+
+  .practice-picker { text-align: center; }
+  .category-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 12px 0;
+  }
+  .category-btn {
+    padding: 24px 12px;
+    border: 3px solid #e5e7eb;
+    border-radius: 20px;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .category-btn:hover, .category-btn:active {
+    border-color: var(--primary);
+    transform: scale(1.02);
+  }
+  .category-btn .cat-icon { font-size: 36px; display: block; margin-bottom: 8px; }
+
+  .subtype-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin: 12px 0;
+  }
+  .subtype-btn {
+    padding: 8px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 20px;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .subtype-btn:hover, .subtype-btn.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+  }
+  .subtype-btn.mix-btn {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: white;
+    font-weight: 800;
+  }
+
+  /* Question Card */
+  .question-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-top: 4px solid var(--primary);
+    margin-top: 16px;
+  }
+  .q-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-light);
+  }
+  .q-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    margin: 0 12px;
+    overflow: hidden;
+  }
+  .q-progress-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .q-type-label {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+  .q-text {
+    font-size: 17px;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .q-instruction {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .q-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0;
+    font-size: 28px;
+    flex-wrap: wrap;
+  }
+  .q-visual .arrow { color: var(--text-light); font-size: 20px; }
+  .q-visual .q-mark {
+    width: 44px; height: 44px;
+    border: 3px dashed var(--primary);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: var(--primary); font-weight: 900;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .option-btn {
+    padding: 14px 12px;
+    border: 3px solid #e5e7eb;
+    border-radius: 14px;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .option-btn:hover { border-color: var(--primary-light); background: #faf5ff; }
+  .option-btn.selected { border-color: var(--primary); background: #f5f3ff; }
+  .option-btn.correct {
+    border-color: var(--green);
+    background: #ecfdf5;
+    color: var(--green);
+    animation: popCorrect 0.3s;
+  }
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: #fef2f2;
+    color: var(--red);
+  }
+  .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+  .option-btn.dim { opacity: 0.5; pointer-events: none; }
+  @keyframes popCorrect {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .q-feedback {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.5;
+    animation: slideUp 0.3s;
+  }
+  .q-feedback.correct { background: #ecfdf5; color: #065f46; border-left: 4px solid var(--green); }
+  .q-feedback.incorrect { background: #fef2f2; color: #991b1b; border-left: 4px solid var(--red); }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .q-next-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 14px;
+    background: var(--primary);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .q-next-btn:hover { background: var(--primary-dark); }
+
+  /* Session Summary */
+  .session-summary {
+    background: white;
+    border-radius: 20px;
+    padding: 24px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    text-align: center;
+    margin-top: 16px;
+    border-top: 4px solid var(--green);
+  }
+  .session-score {
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--primary);
+    margin: 8px 0;
+  }
+  .session-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-light);
+  }
+  .session-rewards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 16px 0;
+  }
+  .session-reward {
+    text-align: center;
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .session-reward .reward-val {
+    font-size: 20px;
+    color: var(--primary);
+  }
+  .session-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .session-btns button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .session-btns .btn-again { background: var(--primary); color: white; }
+  .session-btns .btn-back { background: #f3f4f6; color: #374151; }
+
+  /* Practice Stats */
+  .practice-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .practice-stat-box {
+    background: white;
+    border-radius: 14px;
+    padding: 12px 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .practice-stat-val {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--primary);
+  }
+  .practice-stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  /* SVG shapes for NVR */
+  .shape-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .shape-cell {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .shape-cell svg { width: 44px; height: 44px; }
+  .option-btn .shape-cell { width: 40px; height: 40px; margin: 0 auto; }
+  .option-btn .shape-cell svg { width: 36px; height: 36px; }
 </style>
 </head>
 <body>
@@ -856,7 +1192,13 @@
     </div>
   </div>
 
-  <div class="main">
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchView('tracker')">📊 Tracker</button>
+    <button class="tab-btn" onclick="switchView('practice')">📝 Practice</button>
+  </div>
+
+  <div class="view-tracker"><div class="main">
     <div class="motivational" id="motivational">Every question gets you closer to your goal!</div>
 
     <!-- Today's Practice -->
@@ -957,6 +1299,43 @@
       <div class="history-list" id="historyList"></div>
     </div>
   </div>
+  </div><!-- end view-tracker -->
+
+  <!-- Practice View -->
+  <div class="view-practice">
+    <div class="main">
+      <div class="practice-stats">
+        <div class="practice-stat-box">
+          <div class="practice-stat-val" id="pStatCorrect">0</div>
+          <div class="practice-stat-label">Correct</div>
+        </div>
+        <div class="practice-stat-box">
+          <div class="practice-stat-val" id="pStatAccuracy">-</div>
+          <div class="practice-stat-label">Accuracy</div>
+        </div>
+        <div class="practice-stat-box">
+          <div class="practice-stat-val" id="pStatBest">0%</div>
+          <div class="practice-stat-label">Best Session</div>
+        </div>
+      </div>
+
+      <div id="practiceArea">
+        <div class="practice-picker" id="practicePicker">
+          <div class="section-title">Choose a Category</div>
+          <div class="category-grid">
+            <button class="category-btn" onclick="showSubtypes('vr')">
+              <span class="cat-icon">📖</span>Verbal Reasoning
+            </button>
+            <button class="category-btn" onclick="showSubtypes('nvr')">
+              <span class="cat-icon">🧩</span>Non-Verbal Reasoning
+            </button>
+          </div>
+          <div class="subtype-grid" id="subtypeGrid"></div>
+        </div>
+        <div id="practiceContent"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -977,6 +1356,10 @@ const BADGES = [
   { id: 'goal7', icon: '🏅', name: 'Week Warrior', desc: 'Hit goal 7 times', check: d => d.goalsHit >= 7 },
   { id: 'goal30', icon: '🌍', name: 'World Champ', desc: 'Hit goal 30 times', check: d => d.goalsHit >= 30 },
   { id: 'day30', icon: '📅', name: '30 Day Hero', desc: 'Practice 30 days', check: d => d.daysActive >= 30 },
+  { id: 'quiz5', icon: '🧩', name: 'Quiz Starter', desc: '5 correct practice answers', check: d => d.practiceCorrect >= 5 },
+  { id: 'quiz25', icon: '🎓', name: 'Brain Power', desc: '25 correct practice answers', check: d => d.practiceCorrect >= 25 },
+  { id: 'quiz50', icon: '🧠', name: 'Genius Mode', desc: '50 correct practice answers', check: d => d.practiceCorrect >= 50 },
+  { id: 'perfect10', icon: '💯', name: 'Perfect 10', desc: '10/10 in a session', check: d => d.perfectSession === true },
 ];
 
 const REWARDS = [
@@ -1055,6 +1438,338 @@ const MOTIVATIONAL_MSGS = [
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+// ============ PRACTICE QUESTIONS ============
+const PRACTICE_QUESTIONS = [
+  // ---- VERBAL REASONING: SYNONYMS ----
+  { id:'vs1', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as HAPPY?', opts:['Sad','Joyful','Angry','Tired'], ans:1, exp:'"Joyful" means full of joy \u2014 the same as happy.' },
+  { id:'vs2', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as QUICK?', opts:['Slow','Heavy','Rapid','Dark'], ans:2, exp:'"Rapid" means very fast \u2014 the same as quick.' },
+  { id:'vs3', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as BRAVE?', opts:['Scared','Courageous','Gentle','Lazy'], ans:1, exp:'"Courageous" means showing bravery.' },
+  { id:'vs4', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as LARGE?', opts:['Tiny','Enormous','Narrow','Short'], ans:1, exp:'"Enormous" means extremely large.' },
+  { id:'vs5', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as FURIOUS?', opts:['Calm','Enraged','Puzzled','Gentle'], ans:1, exp:'"Enraged" means extremely angry, just like furious.' },
+  { id:'vs6', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as CLEVER?', opts:['Foolish','Intelligent','Clumsy','Weak'], ans:1, exp:'"Intelligent" means having great mental ability \u2014 the same as clever.' },
+  { id:'vs7', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as QUIET?', opts:['Loud','Silent','Bright','Heavy'], ans:1, exp:'"Silent" means making no sound \u2014 the same as quiet.' },
+  { id:'vs8', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as WEALTHY?', opts:['Poor','Affluent','Weak','Young'], ans:1, exp:'"Affluent" means having a great deal of money \u2014 the same as wealthy.' },
+  { id:'vs9', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as PECULIAR?', opts:['Ordinary','Bizarre','Beautiful','Rapid'], ans:1, exp:'"Bizarre" means very strange \u2014 the same as peculiar.' },
+  { id:'vs10', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as TRANQUIL?', opts:['Chaotic','Serene','Furious','Bold'], ans:1, exp:'"Serene" means calm and peaceful \u2014 the same as tranquil.' },
+
+  // ---- VERBAL REASONING: ANTONYMS ----
+  { id:'va1', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to HOT?', opts:['Warm','Cold','Bright','Soft'], ans:1, exp:'Cold is the opposite of hot.' },
+  { id:'va2', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to TALL?', opts:['Big','Short','Wide','Fast'], ans:1, exp:'Short is the opposite of tall.' },
+  { id:'va3', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to LIGHT?', opts:['Bright','Dark','Soft','Thin'], ans:1, exp:'Dark is the opposite of light.' },
+  { id:'va4', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to FULL?', opts:['Heavy','Empty','Round','Loud'], ans:1, exp:'Empty is the opposite of full.' },
+  { id:'va5', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to GENEROUS?', opts:['Kind','Selfish','Brave','Happy'], ans:1, exp:'Selfish means thinking only of yourself \u2014 the opposite of generous.' },
+  { id:'va6', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to ANCIENT?', opts:['Old','Modern','Wise','Heavy'], ans:1, exp:'Modern means relating to the present \u2014 the opposite of ancient.' },
+  { id:'va7', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to FIERCE?', opts:['Wild','Gentle','Strong','Loud'], ans:1, exp:'Gentle means mild and kind \u2014 the opposite of fierce.' },
+  { id:'va8', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to VICTORY?', opts:['Win','Defeat','Battle','Pride'], ans:1, exp:'Defeat means losing \u2014 the opposite of victory.' },
+  { id:'va9', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to ABUNDANT?', opts:['Plenty','Scarce','Rich','Wide'], ans:1, exp:'Scarce means in short supply \u2014 the opposite of abundant.' },
+  { id:'va10', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to CONCEALED?', opts:['Hidden','Exposed','Quiet','Lost'], ans:1, exp:'Exposed means uncovered and visible \u2014 the opposite of concealed.' },
+
+  // ---- VERBAL REASONING: ODD ONE OUT ----
+  { id:'vo1', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Apple','Banana','Carrot','Grape'], ans:2, exp:'Carrot is a vegetable. The others are all fruits.' },
+  { id:'vo2', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Dog','Cat','Eagle','Hamster'], ans:2, exp:'Eagle is a bird. The others are all common pets/mammals.' },
+  { id:'vo3', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Red','Blue','Circle','Green'], ans:2, exp:'Circle is a shape. The others are all colours.' },
+  { id:'vo4', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Piano','Violin','Drum','Guitar'], ans:2, exp:'Drum is a percussion instrument. The others all use strings or keys.' },
+  { id:'vo5', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Mars','Jupiter','Moon','Saturn'], ans:2, exp:'Moon is a natural satellite, not a planet. The others are all planets.' },
+  { id:'vo6', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Nurse','Doctor','Teacher','Surgeon'], ans:2, exp:'Teacher works in education. The others all work in healthcare.' },
+  { id:'vo7', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Whisper','Shout','Listen','Yell'], ans:2, exp:'Listen means to hear. The others are all ways of speaking.' },
+  { id:'vo8', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Oak','Pine','Tulip','Willow'], ans:2, exp:'Tulip is a flower. The others are all types of tree.' },
+
+  // ---- VERBAL REASONING: WORD ANALOGIES ----
+  { id:'vw1', cat:'vr', type:'Word Analogies', diff:1, q:'Hot is to Cold as Day is to ___?', opts:['Light','Night','Sun','Morning'], ans:1, exp:'Hot and Cold are opposites. Day and Night are also opposites.' },
+  { id:'vw2', cat:'vr', type:'Word Analogies', diff:1, q:'Puppy is to Dog as Kitten is to ___?', opts:['Mouse','Cat','Rabbit','Hamster'], ans:1, exp:'A puppy grows into a dog. A kitten grows into a cat.' },
+  { id:'vw3', cat:'vr', type:'Word Analogies', diff:1, q:'Eye is to See as Ear is to ___?', opts:['Nose','Hear','Touch','Taste'], ans:1, exp:'You use your eye to see. You use your ear to hear.' },
+  { id:'vw4', cat:'vr', type:'Word Analogies', diff:2, q:'Author is to Book as Artist is to ___?', opts:['Brush','Painting','Gallery','Colour'], ans:1, exp:'An author creates a book. An artist creates a painting.' },
+  { id:'vw5', cat:'vr', type:'Word Analogies', diff:2, q:'Fish is to Swim as Bird is to ___?', opts:['Nest','Fly','Egg','Feather'], ans:1, exp:'Fish swim to move. Birds fly to move.' },
+  { id:'vw6', cat:'vr', type:'Word Analogies', diff:2, q:'Glove is to Hand as Boot is to ___?', opts:['Sock','Foot','Lace','Coat'], ans:1, exp:'A glove covers your hand. A boot covers your foot.' },
+  { id:'vw7', cat:'vr', type:'Word Analogies', diff:3, q:'Chapter is to Book as Scene is to ___?', opts:['Actor','Play','Stage','Curtain'], ans:1, exp:'A chapter is a part of a book. A scene is a part of a play.' },
+  { id:'vw8', cat:'vr', type:'Word Analogies', diff:3, q:'Petal is to Flower as Feather is to ___?', opts:['Wing','Bird','Nest','Fly'], ans:1, exp:'A petal is a part of a flower. A feather is a part of a bird.' },
+
+  // ---- VERBAL REASONING: HIDDEN WORDS ----
+  { id:'vh1', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "The SAND ALE was old"', opts:['sand','dale','and','ale'], ans:1, exp:'The word "dale" is hidden: sanDALE \u2014 spanning "sand" and "ale".' },
+  { id:'vh2', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "Put the CAR PET away"', opts:['cart','pet','carpet','ape'], ans:2, exp:'"Carpet" spans the words "car" and "pet" \u2014 carPET.' },
+  { id:'vh3', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "She ran GE around"', opts:['anger','range','ran','gear'], ans:1, exp:'"Range" is hidden across "ran" and "ge" \u2014 rANGE.' },
+  { id:'vh4', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "HE ART was pretty"', opts:['hear','art','heart','heat'], ans:2, exp:'"Heart" spans across "he" and "art" \u2014 HEART.' },
+  { id:'vh5', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "The DISC OVER was exciting"', opts:['disco','cover','discover','over'], ans:2, exp:'"Discover" spans across "disc" and "over" \u2014 DISCOVER.' },
+  { id:'vh6', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "A BAND ON the stage"', opts:['band','abandon','don','ban'], ans:1, exp:'"Abandon" spans across "a band" and "on" \u2014 ABANDON.' },
+
+  // ---- NON-VERBAL REASONING: PATTERN SEQUENCES ----
+  { id:'ns1', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['\uD83D\uDD34','\uD83D\uDD35','\uD83D\uDD34','\uD83D\uDD35','\uD83D\uDD34'], opts:['\uD83D\uDD35','\uD83D\uDD34','\uD83D\uDFE2','\uD83D\uDFE1'], ans:0, exp:'The pattern alternates red, blue. After red comes blue.' },
+  { id:'ns2', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['\u2B06\uFE0F','\u27A1\uFE0F','\u2B07\uFE0F','\u2B05\uFE0F','\u2B06\uFE0F'], opts:['\u27A1\uFE0F','\u2B07\uFE0F','\u2B06\uFE0F','\u2B05\uFE0F'], ans:0, exp:'The arrows rotate clockwise: up, right, down, left, then repeat. After up comes right.' },
+  { id:'ns3', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['\u2B50','\u2B50\u2B50','\u2B50\u2B50\u2B50','\u2B50\u2B50\u2B50\u2B50'], opts:['\u2B50\u2B50\u2B50\u2B50\u2B50','\u2B50\u2B50\u2B50','\u2B50\u2B50','\u2B50'], ans:0, exp:'Each step adds one more star. After 4 stars comes 5 stars.' },
+  { id:'ns4', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['\uD83D\uDFE5','\uD83D\uDFE7','\uD83D\uDFE8','\uD83D\uDFE9'], opts:['\uD83D\uDFE6','\uD83D\uDFE5','\uD83D\uDFE7','\uD83D\uDFE8'], ans:0, exp:'The colours follow rainbow order: red, orange, yellow, green. Next is blue.' },
+  { id:'ns5', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['\u25B2','\u25B3','\u25B2','\u25B3','\u25B2'], opts:['\u25B3','\u25B2','\u25CB','\u25A1'], ans:0, exp:'The pattern alternates between filled and empty triangles. After filled comes empty.' },
+  { id:'ns6', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['\u25CF','\u25CF\u25CB','\u25CF\u25CB\u25CF','\u25CF\u25CB\u25CF\u25CB'], opts:['\u25CF\u25CB\u25CF\u25CB\u25CF','\u25CF\u25CF\u25CF','\u25CB\u25CB\u25CB\u25CB','\u25CF\u25CB\u25CF'], ans:0, exp:'Each step adds one more symbol, alternating filled and empty. The next has 5 symbols starting with filled.' },
+  { id:'ns7', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['\uD83D\uDD3A','\uD83D\uDD3B','\uD83D\uDD3A\uD83D\uDD3A','\uD83D\uDD3B\uD83D\uDD3B','\uD83D\uDD3A\uD83D\uDD3A\uD83D\uDD3A'], opts:['\uD83D\uDD3B\uD83D\uDD3B\uD83D\uDD3B','\uD83D\uDD3A\uD83D\uDD3A\uD83D\uDD3A\uD83D\uDD3A','\uD83D\uDD3B','\uD83D\uDD3A'], ans:0, exp:'The pattern alternates up/down triangles AND adds one more each pair. After 3 up-triangles comes 3 down-triangles.' },
+  { id:'ns8', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['1\uFE0F\u20E3','2\uFE0F\u20E3','4\uFE0F\u20E3','8\uFE0F\u20E3'], opts:['1\uFE0F\u20E36\uFE0F\u20E3','1\uFE0F\u20E30\uFE0F\u20E3','1\uFE0F\u20E32\uFE0F\u20E3','9\uFE0F\u20E3'], ans:0, exp:'Each number doubles: 1, 2, 4, 8. The next is 16.' },
+  { id:'ns9', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['\u25C6','\u25C7\u25C6','\u25C6\u25C7\u25C6','\u25C7\u25C6\u25C7\u25C6'], opts:['\u25C6\u25C7\u25C6\u25C7\u25C6','\u25C7\u25C7\u25C7\u25C7\u25C7','\u25C6\u25C6\u25C6\u25C6\u25C6','\u25C6\u25C7\u25C6\u25C7'], ans:0, exp:'Each step adds one more shape, and the first shape alternates. Step 5 starts with filled and has 5 shapes.' },
+  { id:'ns10', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['\u2B1B','\u2B1B\u2B1C','\u2B1B\u2B1C\u2B1B','\u2B1B\u2B1C\u2B1B\u2B1C'], opts:['\u2B1B\u2B1C\u2B1B\u2B1C\u2B1B','\u2B1C\u2B1B\u2B1C\u2B1B\u2B1C','\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B','\u2B1C\u2B1C\u2B1C\u2B1C\u2B1C'], ans:0, exp:'Each step adds one more square, alternating black and white. Step 5 has 5 squares starting with black.' },
+  { id:'ns11', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['\uD83D\uDFE1','\uD83D\uDFE1\uD83D\uDD35','\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35','\uD83D\uDD35\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35'], opts:['\uD83D\uDD35\uD83D\uDD35\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35','\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1','\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35','\uD83D\uDFE1\uD83D\uDD35\uD83D\uDD35\uD83D\uDD35\uD83D\uDD35'], ans:0, exp:'The gold circle moves one position right each step. In step 5 it is in position 4 (of 5).' },
+  { id:'ns12', cat:'nvr', type:'Sequences', diff:3, q:'What comes next?',
+    visual:['\uD83D\uDD34','\uD83D\uDD35\uD83D\uDD34','\uD83D\uDFE2\uD83D\uDD35\uD83D\uDD34','\uD83D\uDFE1\uD83D\uDFE2\uD83D\uDD35\uD83D\uDD34'], opts:['\uD83D\uDFE0\uD83D\uDFE1\uD83D\uDFE2\uD83D\uDD35\uD83D\uDD34','\uD83D\uDD34\uD83D\uDD35\uD83D\uDFE2\uD83D\uDFE1\uD83D\uDFE0','\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1','\uD83D\uDD34\uD83D\uDD34\uD83D\uDD34\uD83D\uDD34\uD83D\uDD34'], ans:0, exp:'A new colour is added to the LEFT each step. The pattern grows leftward with the original colours shifting right.' },
+
+  // ---- NON-VERBAL REASONING: ODD ONE OUT (SHAPES) ----
+  { id:'no1', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['\uD83D\uDD34','\uD83D\uDD35','\uD83D\uDFE2','\uD83D\uDFE5'], ans:3, exp:'The square is a different shape. The others are all circles.' },
+  { id:'no2', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['\u2B06\uFE0F','\u27A1\uFE0F','\u2B07\uFE0F','\uD83D\uDD04'], ans:3, exp:'The rotation symbol is different. The others are all straight directional arrows.' },
+  { id:'no3', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['\u25B2','\u25B3','\u25B2','\u25BC'], ans:3, exp:'The downward triangle points a different direction. The others all point upward.' },
+  { id:'no4', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['\uD83D\uDD34\uD83D\uDD35','\uD83D\uDD35\uD83D\uDD34','\uD83D\uDD34\uD83D\uDD35','\uD83D\uDD34\uD83D\uDD35'], ans:1, exp:'The second option has the colours in reverse order. The others are all the same.' },
+  { id:'no5', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['\u2B1B\u2B1C\u2B1B','\u2B1B\u2B1C\u2B1B','\u2B1C\u2B1B\u2B1C','\u2B1B\u2B1C\u2B1B'], ans:2, exp:'The third option has the pattern inverted (white-black-white instead of black-white-black).' },
+  { id:'no6', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['\u25CF\u25CF\u25CB','\u25CF\u25CF\u25CB','\u25CF\u25CB\u25CF','\u25CF\u25CF\u25CB'], ans:2, exp:'The third option has the empty circle in the middle. The others have it at the end.' },
+  { id:'no7', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['\uD83D\uDD3A\uD83D\uDD35\u2B1B','\uD83D\uDD35\u2B1B\uD83D\uDD3A','\u2B1B\uD83D\uDD3A\uD83D\uDD35','\uD83D\uDD3A\u2B1B\uD83D\uDD35'], ans:3, exp:'In the first three, each shape appears in every position (rotation). The fourth breaks this pattern.' },
+  { id:'no8', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['\u2B50\u2B50\u2B50','\u2B50\u2B50\u2B50','\u2B50\u2B50','\u2B50\u2B50\u2B50'], ans:2, exp:'The third option has only 2 stars. The others all have 3.' },
+
+  // ---- NON-VERBAL REASONING: SHAPE ANALOGIES ----
+  { id:'na1', cat:'nvr', type:'Analogies', diff:1, q:'\uD83D\uDD34 is to \uD83D\uDD35 as \uD83D\uDFE1 is to ___?',
+    opts:['\uD83D\uDFE2','\uD83D\uDD34','\uD83D\uDFE1','\u26AB'], ans:0, exp:'Red changes to blue (warm to cool). Yellow (warm) changes to green (cool) in the same way.' },
+  { id:'na2', cat:'nvr', type:'Analogies', diff:1, q:'\u2B06\uFE0F is to \u2B07\uFE0F as \u2B05\uFE0F is to ___?',
+    opts:['\u27A1\uFE0F','\u2B06\uFE0F','\u2B07\uFE0F','\u2B05\uFE0F'], ans:0, exp:'Up flips to down (180\u00B0 turn). Left flips to right in the same way.' },
+  { id:'na3', cat:'nvr', type:'Analogies', diff:1, q:'\u25CF is to \u25CB as \u25A0 is to ___?',
+    opts:['\u25A1','\u25CF','\u25B2','\u25A0'], ans:0, exp:'Filled circle becomes empty circle. Filled square becomes empty square.' },
+  { id:'na4', cat:'nvr', type:'Analogies', diff:2, q:'\u25B2 is to \u25BC as \u25C0 is to ___?',
+    opts:['\u25B6','\u25C0','\u25B2','\u25BC'], ans:0, exp:'Triangle pointing up flips to point down. Triangle pointing left flips to point right.' },
+  { id:'na5', cat:'nvr', type:'Analogies', diff:2, q:'\uD83D\uDD34\u25CF is to \u25CF\uD83D\uDD34 as \uD83D\uDD35\u25B2 is to ___?',
+    opts:['\u25B2\uD83D\uDD35','\uD83D\uDD35\u25B2','\u25B2\u25B2','\uD83D\uDD34\u25B2'], ans:0, exp:'The two shapes swap positions. So blue-triangle becomes triangle-blue.' },
+  { id:'na6', cat:'nvr', type:'Analogies', diff:2, q:'\u2B50 is to \u2B50\u2B50 as \uD83D\uDD35 is to ___?',
+    opts:['\uD83D\uDD35\uD83D\uDD35','\uD83D\uDD35','\uD83D\uDD34\uD83D\uDD34','\u2B50\uD83D\uDD35'], ans:0, exp:'One star doubles to two stars. One blue circle doubles to two blue circles.' },
+  { id:'na7', cat:'nvr', type:'Analogies', diff:3, q:'\uD83D\uDD34\uD83D\uDD35\uD83D\uDD34 is to \uD83D\uDD35\uD83D\uDD34\uD83D\uDD35 as \u2B1B\u2B1C\u2B1B is to ___?',
+    opts:['\u2B1C\u2B1B\u2B1C','\u2B1B\u2B1C\u2B1B','\u2B1C\u2B1C\u2B1C','\u2B1B\u2B1B\u2B1B'], ans:0, exp:'Each colour swaps to its opposite. Black-white-black becomes white-black-white.' },
+  { id:'na8', cat:'nvr', type:'Analogies', diff:3, q:'\u25B2 is to \u25B2\u25B2\u25B2 as \u25CF is to ___?',
+    opts:['\u25CF\u25CF\u25CF','\u25CF\u25CF','\u25CF','\u25B2\u25CF\u25B2'], ans:0, exp:'One triangle becomes three triangles (x3). One circle becomes three circles.' },
+];
+
+// ============ PRACTICE ENGINE ============
+let practiceSession = null;
+
+const VR_TYPES = ['Synonyms','Antonyms','Odd One Out','Word Analogies','Hidden Words'];
+const NVR_TYPES = ['Sequences','Odd One Out','Analogies'];
+
+function switchView(view) {
+  document.querySelector('.view-tracker').style.display = view === 'tracker' ? 'block' : 'none';
+  document.querySelector('.view-practice').style.display = view === 'practice' ? 'block' : 'none';
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', (i === 0 && view === 'tracker') || (i === 1 && view === 'practice'));
+  });
+  if (view === 'practice') renderPracticeStats();
+}
+
+function renderPracticeStats() {
+  const ps = state.practiceStats || { totalCorrect: 0, totalAttempted: 0, bestSessionPct: 0 };
+  document.getElementById('pStatCorrect').textContent = ps.totalCorrect || 0;
+  const acc = ps.totalAttempted > 0 ? Math.round((ps.totalCorrect / ps.totalAttempted) * 100) + '%' : '-';
+  document.getElementById('pStatAccuracy').textContent = acc;
+  document.getElementById('pStatBest').textContent = (ps.bestSessionPct || 0) + '%';
+}
+
+function showSubtypes(cat) {
+  const types = cat === 'vr' ? VR_TYPES : NVR_TYPES;
+  const grid = document.getElementById('subtypeGrid');
+  grid.innerHTML = '<button class="subtype-btn mix-btn" onclick="startSession(\'' + cat + '\',\'all\')">&#x1F3B2; Mix All</button>';
+  types.forEach(t => {
+    grid.innerHTML += '<button class="subtype-btn" onclick="startSession(\'' + cat + '\',\'' + t + '\')">' + t + '</button>';
+  });
+}
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startSession(cat, type) {
+  let qs = PRACTICE_QUESTIONS.filter(q => q.cat === cat);
+  if (type !== 'all') qs = qs.filter(q => q.type === type);
+  qs = shuffleArray(qs);
+  // Prioritise unanswered questions
+  const answered = (state.practiceStats && state.practiceStats.answeredIds) || [];
+  qs.sort((a, b) => {
+    const aAns = answered.includes(a.id) ? 1 : 0;
+    const bAns = answered.includes(b.id) ? 1 : 0;
+    return aAns - bAns;
+  });
+  qs = qs.slice(0, 10); // 10 questions per session
+  practiceSession = {
+    cat, type,
+    questions: qs,
+    current: 0,
+    correct: 0,
+    xpEarned: 0,
+    coinsEarned: 0,
+    answered: false
+  };
+  document.getElementById('practicePicker').style.display = 'none';
+  document.getElementById('subtypeGrid').innerHTML = '';
+  renderCurrentQuestion();
+}
+
+function renderCurrentQuestion() {
+  const s = practiceSession;
+  if (!s || s.current >= s.questions.length) { showSessionSummary(); return; }
+  const q = s.questions[s.current];
+  s.answered = false;
+  const pct = Math.round((s.current / s.questions.length) * 100);
+
+  const content = document.getElementById('practiceContent');
+  let html = '<div class="question-card">';
+  html += '<div class="q-progress"><span>Q' + (s.current + 1) + '</span><div class="q-progress-bar"><div class="q-progress-fill" style="width:' + pct + '%"></div></div><span>' + (s.current + 1) + '/' + s.questions.length + '</span></div>';
+  html += '<div class="q-type-label">' + (q.cat === 'vr' ? '&#x1F4D6;' : '&#x1F9E9;') + ' ' + q.type + '</div>';
+
+  // Visual for NVR sequences
+  if (q.visual) {
+    html += '<div class="q-instruction">' + q.q + '</div>';
+    html += '<div class="q-visual">';
+    q.visual.forEach((v, i) => {
+      html += '<span>' + v + '</span>';
+      if (i < q.visual.length - 1) html += '<span class="arrow">\u2192</span>';
+    });
+    html += '<span class="arrow">\u2192</span><span class="q-mark">?</span>';
+    html += '</div>';
+  } else {
+    html += '<div class="q-text">' + q.q + '</div>';
+  }
+
+  html += '<div class="options-grid" id="qOptions">';
+  q.opts.forEach((opt, i) => {
+    html += '<button class="option-btn" onclick="selectPracticeAnswer(' + i + ')">' + opt + '</button>';
+  });
+  html += '</div>';
+  html += '<div id="qFeedback"></div>';
+  html += '<div id="qActions" style="display:none"><button class="q-next-btn" onclick="nextPracticeQuestion()">Next Question \u27A1\uFE0F</button></div>';
+  html += '</div>';
+  content.innerHTML = html;
+}
+
+function selectPracticeAnswer(idx) {
+  const s = practiceSession;
+  if (!s || s.answered) return;
+  s.answered = true;
+  const q = s.questions[s.current];
+  const correct = idx === q.ans;
+  const btns = document.querySelectorAll('#qOptions .option-btn');
+
+  btns.forEach((btn, i) => {
+    if (i === q.ans) btn.classList.add('correct');
+    if (i === idx && !correct) btn.classList.add('incorrect');
+    if (i !== idx && i !== q.ans) btn.classList.add('dim');
+    btn.classList.add('disabled');
+  });
+
+  const fb = document.getElementById('qFeedback');
+  if (correct) {
+    s.correct++;
+    // Award XP and coins
+    const streak = getCurrentStreak();
+    const xp = streak >= 3 ? 15 : 10;
+    const coins = 5;
+    s.xpEarned += xp;
+    s.coinsEarned += coins;
+    const oldXP = state.totalXP;
+    state.totalXP += xp;
+    state.coins += coins;
+    // Count toward daily goal
+    const subject = q.cat === 'vr' ? 'english' : 'maths';
+    const key = todayKey();
+    if (!state.days[key]) state.days[key] = { maths: 0, english: 0 };
+    state.days[key][subject]++;
+    state.goalsHit = countGoalsHit();
+    // Check for level up
+    const oldLevel = getLevel(oldXP);
+    const newLevel = getLevel(state.totalXP);
+    if (newLevel.level > oldLevel.level) showLevelUp(newLevel);
+    save();
+    render();
+    fb.innerHTML = '<div class="q-feedback correct">\u2705 Correct! +' + xp + ' XP +' + coins + ' \uD83E\uDE99<br>' + q.exp + '</div>';
+  } else {
+    fb.innerHTML = '<div class="q-feedback incorrect">\u274C Not quite!<br>' + q.exp + '</div>';
+  }
+
+  // Track in practice stats
+  if (!state.practiceStats) state.practiceStats = { totalAttempted:0, totalCorrect:0, vrCorrect:0, nvrCorrect:0, answeredIds:[], bestSessionPct:0, perfectSession:false };
+  state.practiceStats.totalAttempted++;
+  if (correct) {
+    state.practiceStats.totalCorrect++;
+    if (q.cat === 'vr') state.practiceStats.vrCorrect++;
+    else state.practiceStats.nvrCorrect++;
+    if (!state.practiceStats.answeredIds.includes(q.id)) state.practiceStats.answeredIds.push(q.id);
+  }
+  save();
+  renderPracticeStats();
+
+  document.getElementById('qActions').style.display = '';
+  // Check badges
+  checkBadges();
+}
+
+function nextPracticeQuestion() {
+  practiceSession.current++;
+  renderCurrentQuestion();
+}
+
+function showSessionSummary() {
+  const s = practiceSession;
+  const pct = s.questions.length > 0 ? Math.round((s.correct / s.questions.length) * 100) : 0;
+
+  // Update best session
+  if (!state.practiceStats) state.practiceStats = { totalAttempted:0, totalCorrect:0, vrCorrect:0, nvrCorrect:0, answeredIds:[], bestSessionPct:0, perfectSession:false };
+  if (pct > (state.practiceStats.bestSessionPct || 0)) {
+    state.practiceStats.bestSessionPct = pct;
+  }
+  // Check for perfect session badge
+  if (s.correct === s.questions.length && s.questions.length >= 10) {
+    state.practiceStats.perfectSession = true;
+  }
+  save();
+  renderPracticeStats();
+
+  const emoji = pct >= 80 ? '\uD83C\uDF89' : pct >= 50 ? '\uD83D\uDC4D' : '\uD83D\uDCAA';
+  const msg = pct >= 80 ? 'Amazing work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
+
+  const content = document.getElementById('practiceContent');
+  content.innerHTML = '<div class="session-summary">' +
+    '<div style="font-size:48px">' + emoji + '</div>' +
+    '<div class="session-label">' + msg + '</div>' +
+    '<div class="session-score">' + s.correct + '/' + s.questions.length + '</div>' +
+    '<div class="session-label">' + pct + '% correct</div>' +
+    '<div class="session-rewards">' +
+      '<div class="session-reward"><div class="reward-val">\u26A1 ' + s.xpEarned + '</div>XP earned</div>' +
+      '<div class="session-reward"><div class="reward-val">\uD83E\uDE99 ' + s.coinsEarned + '</div>Coins earned</div>' +
+    '</div>' +
+    '<div class="session-btns">' +
+      '<button class="btn-back" onclick="backToPicker()">\uD83C\uDFE0 Menu</button>' +
+      '<button class="btn-again" onclick="startSession(\'' + s.cat + '\',\'' + s.type + '\')">\uD83D\uDD04 Again</button>' +
+    '</div>' +
+  '</div>';
+
+  if (pct >= 80) fireConfetti();
+}
+
+function backToPicker() {
+  practiceSession = null;
+  document.getElementById('practicePicker').style.display = '';
+  document.getElementById('subtypeGrid').innerHTML = '';
+  document.getElementById('practiceContent').innerHTML = '';
+}
+
 // ============ STATE ============
 function getDefaultState() {
   return {
@@ -1070,6 +1785,7 @@ function getDefaultState() {
     activeAvatar: 'default',
     activeTitle: null,
     activeTheme: null,
+    practiceStats: { totalAttempted: 0, totalCorrect: 0, vrCorrect: 0, nvrCorrect: 0, answeredIds: [], bestSessionPct: 0, perfectSession: false },
   };
 }
 
@@ -1320,6 +2036,8 @@ function checkBadges() {
     currentStreak: getCurrentStreak(),
     goalsHit: state.goalsHit,
     daysActive: getDaysActive(),
+    practiceCorrect: state.practiceStats ? state.practiceStats.totalCorrect : 0,
+    perfectSession: state.practiceStats ? state.practiceStats.perfectSession : false,
   };
   let newBadge = null;
   for (const badge of BADGES) {
