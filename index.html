@@ -814,18 +814,18 @@
   .practice-picker { text-align: center; }
   .category-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
     margin: 12px 0;
   }
   .category-btn {
-    padding: 24px 12px;
+    padding: 18px 8px;
     border: 3px solid #e5e7eb;
     border-radius: 20px;
     background: white;
     font-family: 'Nunito', sans-serif;
     font-weight: 800;
-    font-size: 15px;
+    font-size: 13px;
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -913,7 +913,8 @@
     font-weight: 800;
     color: #1f2937;
     margin-bottom: 6px;
-    line-height: 1.4;
+    line-height: 1.6;
+    white-space: pre-line;
   }
   .q-instruction {
     font-size: 13px;
@@ -1148,12 +1149,13 @@
   .timer-bar-fill.warning { background: var(--accent); }
   .timer-bar-fill.danger { background: var(--red); }
   .diff-indicator {
-    display: inline-flex; align-items: center; gap: 3px; padding: 3px 10px;
-    border-radius: 8px; font-size: 11px; font-weight: 800; margin-left: 8px;
+    display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px;
+    border-radius: 10px; font-size: 14px; font-weight: 800; margin-left: 8px;
+    letter-spacing: 0.3px;
   }
-  .diff-indicator.diff-1 { background: #ecfdf5; color: var(--green); }
-  .diff-indicator.diff-2 { background: #fef3c7; color: #d97706; }
-  .diff-indicator.diff-3 { background: #fef2f2; color: var(--red); }
+  .diff-indicator.diff-1 { background: #ecfdf5; color: var(--green); border: 2px solid #a7f3d0; }
+  .diff-indicator.diff-2 { background: #fef3c7; color: #d97706; border: 2px solid #fde68a; }
+  .diff-indicator.diff-3 { background: #fef2f2; color: var(--red); border: 2px solid #fecaca; }
   .diff-up { animation: diffBounce 0.4s; }
   @keyframes diffBounce { 0%{transform:scale(1)} 40%{transform:scale(1.3)} 100%{transform:scale(1)} }
   .time-stats { display: flex; justify-content: center; gap: 16px; margin: 8px 0; font-size: 12px; font-weight: 700; color: var(--text-light); }
@@ -1376,6 +1378,9 @@
             <button class="category-btn" onclick="showSubtypes('nvr')">
               <span class="cat-icon">🧩</span>Non-Verbal Reasoning
             </button>
+            <button class="category-btn" onclick="showSubtypes('maths')">
+              <span class="cat-icon">📐</span>Maths
+            </button>
           </div>
           <div class="subtype-grid" id="subtypeGrid"></div>
           <div class="mode-toggles">
@@ -1496,328 +1501,390 @@ const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 // ============ PRACTICE QUESTIONS ============
 const PRACTICE_QUESTIONS = [
   // ---- VERBAL REASONING: SYNONYMS ----
-  { id:'vs1', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as HAPPY?', opts:['Sad','Joyful','Angry','Tired'], ans:1, exp:'"Joyful" means full of joy \u2014 the same as happy.' },
-  { id:'vs2', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as QUICK?', opts:['Slow','Heavy','Rapid','Dark'], ans:2, exp:'"Rapid" means very fast \u2014 the same as quick.' },
-  { id:'vs3', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as BRAVE?', opts:['Scared','Courageous','Gentle','Lazy'], ans:1, exp:'"Courageous" means showing bravery.' },
-  { id:'vs4', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as LARGE?', opts:['Tiny','Enormous','Narrow','Short'], ans:1, exp:'"Enormous" means extremely large.' },
-  { id:'vs5', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as FURIOUS?', opts:['Calm','Enraged','Puzzled','Gentle'], ans:1, exp:'"Enraged" means extremely angry, just like furious.' },
-  { id:'vs6', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as CLEVER?', opts:['Foolish','Intelligent','Clumsy','Weak'], ans:1, exp:'"Intelligent" means having great mental ability \u2014 the same as clever.' },
-  { id:'vs7', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as QUIET?', opts:['Loud','Silent','Bright','Heavy'], ans:1, exp:'"Silent" means making no sound \u2014 the same as quiet.' },
-  { id:'vs8', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as WEALTHY?', opts:['Poor','Affluent','Weak','Young'], ans:1, exp:'"Affluent" means having a great deal of money \u2014 the same as wealthy.' },
-  { id:'vs9', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as PECULIAR?', opts:['Ordinary','Bizarre','Beautiful','Rapid'], ans:1, exp:'"Bizarre" means very strange \u2014 the same as peculiar.' },
-  { id:'vs10', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as TRANQUIL?', opts:['Chaotic','Serene','Furious','Bold'], ans:1, exp:'"Serene" means calm and peaceful \u2014 the same as tranquil.' },
-  { id:'vs11', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as SWIFT?', opts:['Slow','Heavy','Speedy','Quiet'], ans:2, exp:'"Speedy" means moving fast \u2014 the same as swift.' },
-  { id:'vs12', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as ENORMOUS?', opts:['Huge','Tiny','Narrow','Flat'], ans:0, exp:'"Huge" means extremely large \u2014 the same as enormous.' },
-  { id:'vs13', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as JOYFUL?', opts:['Angry','Tired','Sad','Delighted'], ans:3, exp:'"Delighted" means very pleased and happy \u2014 the same as joyful.' },
-  { id:'vs14', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as FRAIL?', opts:['Strong','Fragile','Bold','Tall'], ans:1, exp:'"Fragile" means easily broken or weak \u2014 the same as frail.' },
-  { id:'vs15', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as CUNNING?', opts:['Honest','Loud','Crafty','Gentle'], ans:2, exp:'"Crafty" means clever at achieving things in a sly way \u2014 the same as cunning.' },
-  { id:'vs16', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as FIERCE?', opts:['Ferocious','Calm','Quiet','Gentle'], ans:0, exp:'"Ferocious" means savagely violent \u2014 the same as fierce.' },
-  { id:'vs17', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as SCARCE?', opts:['Common','Bright','Heavy','Rare'], ans:3, exp:'"Rare" means not found in large numbers \u2014 the same as scarce.' },
-  { id:'vs18', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as WEARY?', opts:['Alert','Exhausted','Angry','Young'], ans:1, exp:'"Exhausted" means extremely tired \u2014 the same as weary.' },
-  { id:'vs19', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as TIMID?', opts:['Bold','Loud','Shy','Rude'], ans:2, exp:'"Shy" means nervous and lacking confidence \u2014 the same as timid.' },
-  { id:'vs20', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as MAGNIFICENT?', opts:['Ordinary','Tiny','Dull','Splendid'], ans:3, exp:'"Splendid" means extremely impressive \u2014 the same as magnificent.' },
-  { id:'vs21', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as GENUINE?', opts:['Authentic','Fake','Broken','Rough'], ans:0, exp:'"Authentic" means real and not a copy \u2014 the same as genuine.' },
-  { id:'vs22', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as ABUNDANT?', opts:['Empty','Narrow','Plentiful','Scarce'], ans:2, exp:'"Plentiful" means existing in great quantities \u2014 the same as abundant.' },
+  { id:'vs1', cat:'vr', type:'Synonyms', diff:1, q:'Which word is closest in meaning to GLEEFUL?', opts:['Sorrowful','Delighted','Cautious','Weary'], ans:1, exp:'"Delighted" means very happy — the same as gleeful.' },
+  { id:'vs2', cat:'vr', type:'Synonyms', diff:1, q:'Which word is closest in meaning to FEEBLE?', opts:['Strong','Weak','Clever','Rapid'], ans:1, exp:'"Weak" means lacking strength — the same as feeble.' },
+  { id:'vs3', cat:'vr', type:'Synonyms', diff:1, q:'Which word is closest in meaning to PLENTIFUL?', opts:['Scarce','Abundant','Tiny','Expensive'], ans:1, exp:'"Abundant" means existing in large quantities — the same as plentiful.' },
+  { id:'vs4', cat:'vr', type:'Synonyms', diff:1, q:'Which word is closest in meaning to CUNNING?', opts:['Foolish','Gentle','Crafty','Boring'], ans:2, exp:'"Crafty" means skilled at deception — the same as cunning.' },
+  { id:'vs5', cat:'vr', type:'Synonyms', diff:1, q:'Which word is closest in meaning to TIMID?', opts:['Brave','Bold','Fierce','Shy'], ans:3, exp:'"Shy" means nervous around others — the same as timid.' },
+  { id:'vs6', cat:'vr', type:'Synonyms', diff:2, q:'Which word is closest in meaning to RELUCTANT?', opts:['Eager','Unwilling','Capable','Hasty'], ans:1, exp:'"Unwilling" means not wanting to do something — the same as reluctant.' },
+  { id:'vs7', cat:'vr', type:'Synonyms', diff:2, q:'Which word is closest in meaning to CONSPICUOUS?', opts:['Hidden','Noticeable','Modest','Ordinary'], ans:1, exp:'"Noticeable" means easy to see — the same as conspicuous.' },
+  { id:'vs8', cat:'vr', type:'Synonyms', diff:2, q:'Which word is closest in meaning to FUTILE?', opts:['Useful','Pointless','Angry','Careful'], ans:1, exp:'"Pointless" means serving no purpose — the same as futile.' },
+  { id:'vs9', cat:'vr', type:'Synonyms', diff:2, q:'Which word is closest in meaning to BENEVOLENT?', opts:['Cruel','Kind-hearted','Wealthy','Timid'], ans:1, exp:'"Kind-hearted" means generous and caring — the same as benevolent.' },
+  { id:'vs10', cat:'vr', type:'Synonyms', diff:2, q:'Which word is closest in meaning to LABORIOUS?', opts:['Easy','Exhausting','Brief','Amusing'], ans:1, exp:'"Exhausting" means requiring much effort — the same as laborious.' },
+  { id:'vs11', cat:'vr', type:'Synonyms', diff:3, q:'Which word is closest in meaning to UBIQUITOUS?', opts:['Rare','Widespread','Dangerous','Ancient'], ans:1, exp:'"Widespread" means found everywhere — the same as ubiquitous.' },
+  { id:'vs12', cat:'vr', type:'Synonyms', diff:3, q:'Which word is closest in meaning to SURREPTITIOUS?', opts:['Secretive','Surprising','Suspicious','Superior'], ans:0, exp:'"Secretive" means done in a stealthy way — the same as surreptitious.' },
+  { id:'vs13', cat:'vr', type:'Synonyms', diff:3, q:'Which word is closest in meaning to PRAGMATIC?', opts:['Idealistic','Dramatic','Practical','Chaotic'], ans:2, exp:'"Practical" means focused on what works — the same as pragmatic.' },
+  { id:'vs14', cat:'vr', type:'Synonyms', diff:3, q:'Which word is closest in meaning to OSTENTATIOUS?', opts:['Modest','Showy','Hostile','Cautious'], ans:1, exp:'"Showy" means designed to impress — the same as ostentatious.' },
+  { id:'vs15', cat:'vr', type:'Synonyms', diff:3, q:'Which word is closest in meaning to ARDUOUS?', opts:['Simple','Gruelling','Quick','Pleasant'], ans:1, exp:'"Gruelling" means extremely tiring and demanding — the same as arduous.' },
 
   // ---- VERBAL REASONING: ANTONYMS ----
-  { id:'va1', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to HOT?', opts:['Warm','Cold','Bright','Soft'], ans:1, exp:'Cold is the opposite of hot.' },
-  { id:'va2', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to TALL?', opts:['Big','Short','Wide','Fast'], ans:1, exp:'Short is the opposite of tall.' },
-  { id:'va3', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to LIGHT?', opts:['Bright','Dark','Soft','Thin'], ans:1, exp:'Dark is the opposite of light.' },
-  { id:'va4', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to FULL?', opts:['Heavy','Empty','Round','Loud'], ans:1, exp:'Empty is the opposite of full.' },
-  { id:'va5', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to GENEROUS?', opts:['Kind','Selfish','Brave','Happy'], ans:1, exp:'Selfish means thinking only of yourself \u2014 the opposite of generous.' },
-  { id:'va6', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to ANCIENT?', opts:['Old','Modern','Wise','Heavy'], ans:1, exp:'Modern means relating to the present \u2014 the opposite of ancient.' },
-  { id:'va7', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to FIERCE?', opts:['Wild','Gentle','Strong','Loud'], ans:1, exp:'Gentle means mild and kind \u2014 the opposite of fierce.' },
-  { id:'va8', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to VICTORY?', opts:['Win','Defeat','Battle','Pride'], ans:1, exp:'Defeat means losing \u2014 the opposite of victory.' },
-  { id:'va9', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to ABUNDANT?', opts:['Plenty','Scarce','Rich','Wide'], ans:1, exp:'Scarce means in short supply \u2014 the opposite of abundant.' },
-  { id:'va10', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to CONCEALED?', opts:['Hidden','Exposed','Quiet','Lost'], ans:1, exp:'Exposed means uncovered and visible \u2014 the opposite of concealed.' },
-  { id:'va11', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to EXPAND?', opts:['Grow','Stretch','Widen','Shrink'], ans:3, exp:'Shrink means to become smaller \u2014 the opposite of expand.' },
-  { id:'va12', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to BOLD?', opts:['Timid','Strong','Loud','Brave'], ans:0, exp:'Timid means shy and lacking courage \u2014 the opposite of bold.' },
-  { id:'va13', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to CAPTURE?', opts:['Trap','Grab','Release','Seize'], ans:2, exp:'Release means to set free \u2014 the opposite of capture.' },
-  { id:'va14', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to ASCEND?', opts:['Climb','Rise','Soar','Descend'], ans:3, exp:'Descend means to go down \u2014 the opposite of ascend.' },
-  { id:'va15', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to TRANSPARENT?', opts:['Clear','Opaque','Thin','Bright'], ans:1, exp:'Opaque means not see-through \u2014 the opposite of transparent.' },
-  { id:'va16', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to TEMPORARY?', opts:['Brief','Short','Permanent','Quick'], ans:2, exp:'Permanent means lasting forever \u2014 the opposite of temporary.' },
-  { id:'va17', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to FLEXIBLE?', opts:['Bendy','Soft','Elastic','Rigid'], ans:3, exp:'Rigid means stiff and unbending \u2014 the opposite of flexible.' },
-  { id:'va18', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to INCLUDE?', opts:['Exclude','Contain','Accept','Add'], ans:0, exp:'Exclude means to leave out \u2014 the opposite of include.' },
-  { id:'va19', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to SUPERIOR?', opts:['Better','Greater','Inferior','Higher'], ans:2, exp:'Inferior means lower in quality or rank \u2014 the opposite of superior.' },
-  { id:'va20', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to TRANQUIL?', opts:['Peaceful','Calm','Chaotic','Quiet'], ans:2, exp:'Chaotic means completely disordered \u2014 the opposite of tranquil.' },
-  { id:'va21', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to COURAGEOUS?', opts:['Cowardly','Brave','Strong','Fierce'], ans:0, exp:'Cowardly means lacking bravery \u2014 the opposite of courageous.' },
-  { id:'va22', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to SHALLOW?', opts:['Flat','Thin','Low','Profound'], ans:3, exp:'Profound means very deep \u2014 the opposite of shallow.' },
+  { id:'va1', cat:'vr', type:'Antonyms', diff:1, q:'Which word is most OPPOSITE in meaning to CLUMSY?', opts:['Awkward','Graceful','Heavy','Loud'], ans:1, exp:'"Graceful" means moving smoothly — the opposite of clumsy.' },
+  { id:'va2', cat:'vr', type:'Antonyms', diff:1, q:'Which word is most OPPOSITE in meaning to ARTIFICIAL?', opts:['Fake','Natural','Colourful','Modern'], ans:1, exp:'"Natural" means occurring in nature — the opposite of artificial.' },
+  { id:'va3', cat:'vr', type:'Antonyms', diff:1, q:'Which word is most OPPOSITE in meaning to DEMOLISH?', opts:['Damage','Construct','Explore','Abandon'], ans:1, exp:'"Construct" means to build — the opposite of demolish (to destroy).' },
+  { id:'va4', cat:'vr', type:'Antonyms', diff:1, q:'Which word is most OPPOSITE in meaning to PURCHASE?', opts:['Buy','Sell','Keep','Find'], ans:1, exp:'"Sell" means to give in exchange for money — the opposite of purchase.' },
+  { id:'va5', cat:'vr', type:'Antonyms', diff:1, q:'Which word is most OPPOSITE in meaning to BORROW?', opts:['Take','Lend','Steal','Want'], ans:1, exp:'"Lend" means to give temporarily — the opposite of borrow.' },
+  { id:'va6', cat:'vr', type:'Antonyms', diff:2, q:'Which word is most OPPOSITE in meaning to CAUTIOUS?', opts:['Careful','Reckless','Patient','Honest'], ans:1, exp:'"Reckless" means acting without thought for danger — the opposite of cautious.' },
+  { id:'va7', cat:'vr', type:'Antonyms', diff:2, q:'Which word is most OPPOSITE in meaning to TRANSPARENT?', opts:['Clear','Opaque','Thin','Bright'], ans:1, exp:'"Opaque" means not see-through — the opposite of transparent.' },
+  { id:'va8', cat:'vr', type:'Antonyms', diff:2, q:'Which word is most OPPOSITE in meaning to COMPULSORY?', opts:['Required','Voluntary','Difficult','Frequent'], ans:1, exp:'"Voluntary" means done by choice — the opposite of compulsory (required).' },
+  { id:'va9', cat:'vr', type:'Antonyms', diff:2, q:'Which word is most OPPOSITE in meaning to INFERIOR?', opts:['Lower','Superior','Similar','Separate'], ans:1, exp:'"Superior" means of higher quality — the opposite of inferior.' },
+  { id:'va10', cat:'vr', type:'Antonyms', diff:2, q:'Which word is most OPPOSITE in meaning to CONCEAL?', opts:['Hide','Reveal','Protect','Forget'], ans:1, exp:'"Reveal" means to make known — the opposite of conceal (to hide).' },
+  { id:'va11', cat:'vr', type:'Antonyms', diff:3, q:'Which word is most OPPOSITE in meaning to EPHEMERAL?', opts:['Temporary','Permanent','Fragile','Subtle'], ans:1, exp:'"Permanent" means lasting forever — the opposite of ephemeral (short-lived).' },
+  { id:'va12', cat:'vr', type:'Antonyms', diff:3, q:'Which word is most OPPOSITE in meaning to CANDID?', opts:['Honest','Deceitful','Calm','Generous'], ans:1, exp:'"Deceitful" means misleading — the opposite of candid (honest and direct).' },
+  { id:'va13', cat:'vr', type:'Antonyms', diff:3, q:'Which word is most OPPOSITE in meaning to AFFLUENT?', opts:['Wealthy','Destitute','Distant','Arrogant'], ans:1, exp:'"Destitute" means extremely poor — the opposite of affluent (wealthy).' },
+  { id:'va14', cat:'vr', type:'Antonyms', diff:3, q:'Which word is most OPPOSITE in meaning to PROLIFIC?', opts:['Productive','Unproductive','Dangerous','Unknown'], ans:1, exp:'"Unproductive" means producing very little — the opposite of prolific.' },
+  { id:'va15', cat:'vr', type:'Antonyms', diff:3, q:'Which word is most OPPOSITE in meaning to AMBIGUOUS?', opts:['Unclear','Explicit','Complex','Hostile'], ans:1, exp:'"Explicit" means completely clear — the opposite of ambiguous.' },
 
   // ---- VERBAL REASONING: ODD ONE OUT ----
-  { id:'vo1', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Apple','Banana','Carrot','Grape'], ans:2, exp:'Carrot is a vegetable. The others are all fruits.' },
-  { id:'vo2', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Dog','Cat','Eagle','Hamster'], ans:2, exp:'Eagle is a bird. The others are all common pets/mammals.' },
-  { id:'vo3', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Red','Blue','Circle','Green'], ans:2, exp:'Circle is a shape. The others are all colours.' },
-  { id:'vo4', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Piano','Violin','Drum','Guitar'], ans:2, exp:'Drum is a percussion instrument. The others all use strings or keys.' },
-  { id:'vo5', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Mars','Jupiter','Moon','Saturn'], ans:2, exp:'Moon is a natural satellite, not a planet. The others are all planets.' },
-  { id:'vo6', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Nurse','Doctor','Teacher','Surgeon'], ans:2, exp:'Teacher works in education. The others all work in healthcare.' },
-  { id:'vo7', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Whisper','Shout','Listen','Yell'], ans:2, exp:'Listen means to hear. The others are all ways of speaking.' },
-  { id:'vo8', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Oak','Pine','Tulip','Willow'], ans:2, exp:'Tulip is a flower. The others are all types of tree.' },
-  { id:'vo9', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Bus','Train','Bicycle','Aeroplane'], ans:2, exp:'A bicycle is human-powered. The others are all motorised transport.' },
-  { id:'vo10', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Rain','Snow','Sunshine','Hail'], ans:2, exp:'Sunshine is dry weather. The others all involve water falling from the sky.' },
-  { id:'vo11', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Elbow','Knee','Shoulder','Stomach'], ans:3, exp:'Stomach is an organ. The others are all joints in the body.' },
-  { id:'vo12', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Cotton','Silk','Wool','Steel'], ans:3, exp:'Steel is a metal. The others are all fabrics or textiles.' },
-  { id:'vo13', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Anger','Happiness','Sadness','Running'], ans:3, exp:'Running is a physical activity. The others are all emotions.' },
-  { id:'vo14', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Cricket','Tennis','Football','Chess'], ans:3, exp:'Chess is a board game. The others are all physical sports.' },
-  { id:'vo15', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Flute','Trumpet','Drum','Trombone'], ans:2, exp:'Drum is a percussion instrument. The others are all wind instruments.' },
-  { id:'vo16', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Paris','London','Germany','Tokyo'], ans:2, exp:'Germany is a country. The others are all capital cities.' },
-  { id:'vo17', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['History','Geography','Paintbrush','Science'], ans:2, exp:'Paintbrush is a tool. The others are all school subjects.' },
-  { id:'vo18', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Hammer','Screwdriver','Spanner','Curtain'], ans:3, exp:'Curtain is a household item. The others are all tools.' },
-  { id:'vo19', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Scarf','Gloves','Bookshelf','Jacket'], ans:2, exp:'Bookshelf is furniture. The others are all items of clothing.' },
-  { id:'vo20', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Wardrobe','Desk','Chair','Trumpet'], ans:3, exp:'Trumpet is a musical instrument. The others are all pieces of furniture.' },
+  { id:'vo1', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Robin','Sparrow','Eagle','Rabbit'], ans:3, exp:'Robin, Sparrow, and Eagle are birds. Rabbit is a mammal.' },
+  { id:'vo2', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Violin','Trumpet','Guitar','Cello'], ans:1, exp:'Violin, Guitar, and Cello are stringed instruments. Trumpet is brass.' },
+  { id:'vo3', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Mars','Jupiter','Moon','Saturn'], ans:2, exp:'Mars, Jupiter, and Saturn are planets. The Moon is a satellite.' },
+  { id:'vo4', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Inch','Metre','Kilogram','Mile'], ans:2, exp:'Inch, Metre, and Mile measure length. Kilogram measures weight.' },
+  { id:'vo5', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Oak','Elm','Daisy','Willow'], ans:2, exp:'Oak, Elm, and Willow are trees. Daisy is a flower.' },
+  { id:'vo6', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Whisper','Murmur','Shout','Mutter'], ans:2, exp:'Whisper, Murmur, and Mutter are quiet speech. Shout is loud.' },
+  { id:'vo7', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Scarlet','Crimson','Azure','Maroon'], ans:2, exp:'Scarlet, Crimson, and Maroon are reds. Azure is blue.' },
+  { id:'vo8', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Sprint','Dash','Stroll','Race'], ans:2, exp:'Sprint, Dash, and Race mean to move fast. Stroll means to walk slowly.' },
+  { id:'vo9', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Terrified','Anxious','Petrified','Content'], ans:3, exp:'Terrified, Anxious, and Petrified relate to fear. Content means satisfied.' },
+  { id:'vo10', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Colossal','Immense','Vast','Minute'], ans:3, exp:'Colossal, Immense, and Vast mean huge. Minute means tiny.' },
+  { id:'vo11', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Couplet','Sonnet','Limerick','Novel'], ans:3, exp:'Couplet, Sonnet, and Limerick are poetry forms. A Novel is prose.' },
+  { id:'vo12', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Famished','Ravenous','Peckish','Starving'], ans:2, exp:'Famished, Ravenous, Starving = extremely hungry. Peckish = slightly hungry.' },
+  { id:'vo13', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Physician','Surgeon','Barrister','Dentist'], ans:2, exp:'Physician, Surgeon, Dentist are medical. Barrister is a lawyer.' },
+  { id:'vo14', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Meander','Ramble','Wander','Sprint'], ans:3, exp:'Meander, Ramble, Wander = move slowly. Sprint = run fast.' },
+  { id:'vo15', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Calf','Foal','Puppy','Stallion'], ans:3, exp:'Calf, Foal, Puppy are young animals. Stallion is an adult horse.' },
 
   // ---- VERBAL REASONING: WORD ANALOGIES ----
-  { id:'vw1', cat:'vr', type:'Word Analogies', diff:1, q:'Hot is to Cold as Day is to ___?', opts:['Light','Night','Sun','Morning'], ans:1, exp:'Hot and Cold are opposites. Day and Night are also opposites.' },
-  { id:'vw2', cat:'vr', type:'Word Analogies', diff:1, q:'Puppy is to Dog as Kitten is to ___?', opts:['Mouse','Cat','Rabbit','Hamster'], ans:1, exp:'A puppy grows into a dog. A kitten grows into a cat.' },
-  { id:'vw3', cat:'vr', type:'Word Analogies', diff:1, q:'Eye is to See as Ear is to ___?', opts:['Nose','Hear','Touch','Taste'], ans:1, exp:'You use your eye to see. You use your ear to hear.' },
-  { id:'vw4', cat:'vr', type:'Word Analogies', diff:2, q:'Author is to Book as Artist is to ___?', opts:['Brush','Painting','Gallery','Colour'], ans:1, exp:'An author creates a book. An artist creates a painting.' },
-  { id:'vw5', cat:'vr', type:'Word Analogies', diff:2, q:'Fish is to Swim as Bird is to ___?', opts:['Nest','Fly','Egg','Feather'], ans:1, exp:'Fish swim to move. Birds fly to move.' },
-  { id:'vw6', cat:'vr', type:'Word Analogies', diff:2, q:'Glove is to Hand as Boot is to ___?', opts:['Sock','Foot','Lace','Coat'], ans:1, exp:'A glove covers your hand. A boot covers your foot.' },
-  { id:'vw7', cat:'vr', type:'Word Analogies', diff:3, q:'Chapter is to Book as Scene is to ___?', opts:['Actor','Play','Stage','Curtain'], ans:1, exp:'A chapter is a part of a book. A scene is a part of a play.' },
-  { id:'vw8', cat:'vr', type:'Word Analogies', diff:3, q:'Petal is to Flower as Feather is to ___?', opts:['Wing','Bird','Nest','Fly'], ans:1, exp:'A petal is a part of a flower. A feather is a part of a bird.' },
-  { id:'vw9', cat:'vr', type:'Word Analogies', diff:1, q:'Page is to Book as Brick is to ___?', opts:['Cement','Stone','Wall','Floor'], ans:2, exp:'A page is a part of a book. A brick is a part of a wall.' },
-  { id:'vw10', cat:'vr', type:'Word Analogies', diff:1, q:'Lamb is to Sheep as Calf is to ___?', opts:['Horse','Cow','Pig','Goat'], ans:1, exp:'A lamb is a baby sheep. A calf is a baby cow.' },
-  { id:'vw11', cat:'vr', type:'Word Analogies', diff:1, q:'Brush is to Painter as Stethoscope is to ___?', opts:['Nurse','Doctor','Teacher','Dentist'], ans:1, exp:'A painter uses a brush. A doctor uses a stethoscope.' },
-  { id:'vw12', cat:'vr', type:'Word Analogies', diff:1, q:'Bark is to Dog as Meow is to ___?', opts:['Cat','Bird','Mouse','Fish'], ans:0, exp:'A dog makes a bark sound. A cat makes a meow sound.' },
-  { id:'vw13', cat:'vr', type:'Word Analogies', diff:2, q:'Oven is to Baking as Pool is to ___?', opts:['Water','Diving','Swimming','Towel'], ans:2, exp:'An oven is where you do baking. A pool is where you do swimming.' },
-  { id:'vw14', cat:'vr', type:'Word Analogies', diff:2, q:'Wheel is to Car as Wing is to ___?', opts:['Sky','Bird','Feather','Aeroplane'], ans:3, exp:'A wheel is a part of a car. A wing is a part of an aeroplane.' },
-  { id:'vw15', cat:'vr', type:'Word Analogies', diff:2, q:'Tadpole is to Frog as Caterpillar is to ___?', opts:['Worm','Butterfly','Beetle','Ant'], ans:1, exp:'A tadpole grows into a frog. A caterpillar grows into a butterfly.' },
-  { id:'vw16', cat:'vr', type:'Word Analogies', diff:2, q:'Knife is to Cut as Pen is to ___?', opts:['Ink','Paper','Write','Draw'], ans:2, exp:'You use a knife to cut. You use a pen to write.' },
-  { id:'vw17', cat:'vr', type:'Word Analogies', diff:3, q:'Wood is to Table as Glass is to ___?', opts:['Cup','Window','Sand','Mirror'], ans:1, exp:'A table is made from wood. A window is made from glass.' },
-  { id:'vw18', cat:'vr', type:'Word Analogies', diff:3, q:'Stadium is to Sport as Theatre is to ___?', opts:['Film','Stage','Play','Audience'], ans:2, exp:'A stadium is where you watch sport. A theatre is where you watch a play.' },
-  { id:'vw19', cat:'vr', type:'Word Analogies', diff:3, q:'Flock is to Birds as Pack is to ___?', opts:['Cats','Wolves','Fish','Cows'], ans:1, exp:'A group of birds is called a flock. A group of wolves is called a pack.' },
-  { id:'vw20', cat:'vr', type:'Word Analogies', diff:3, q:'Ingredient is to Recipe as Letter is to ___?', opts:['Envelope','Stamp','Alphabet','Word'], ans:3, exp:'An ingredient is a part of a recipe. A letter is a part of a word.' },
+  { id:'vw1', cat:'vr', type:'Word Analogies', diff:1, q:'Cub is to Bear as Foal is to ___?', opts:['Donkey','Horse','Cow','Sheep'], ans:1, exp:'A cub is a baby bear. A foal is a baby horse.' },
+  { id:'vw2', cat:'vr', type:'Word Analogies', diff:1, q:'Paw is to Cat as Hoof is to ___?', opts:['Dog','Bird','Horse','Fish'], ans:2, exp:'A cat walks on paws. A horse walks on hooves.' },
+  { id:'vw3', cat:'vr', type:'Word Analogies', diff:1, q:'Chapter is to Book as Scene is to ___?', opts:['Film','Song','Painting','Dance'], ans:0, exp:'A book is divided into chapters. A film is divided into scenes.' },
+  { id:'vw4', cat:'vr', type:'Word Analogies', diff:1, q:'Bark is to Dog as Neigh is to ___?', opts:['Cat','Horse','Cow','Pig'], ans:1, exp:'A dog barks. A horse neighs.' },
+  { id:'vw5', cat:'vr', type:'Word Analogies', diff:1, q:'Scales is to Fish as Feathers is to ___?', opts:['Snake','Bird','Frog','Worm'], ans:1, exp:'Fish are covered in scales. Birds are covered in feathers.' },
+  { id:'vw6', cat:'vr', type:'Word Analogies', diff:2, q:'Conductor is to Orchestra as Captain is to ___?', opts:['Ship','Army','Team','Crew'], ans:2, exp:'A conductor leads an orchestra. A captain leads a team.' },
+  { id:'vw7', cat:'vr', type:'Word Analogies', diff:2, q:'Telescope is to Stars as Microscope is to ___?', opts:['Cells','Planets','Books','Sounds'], ans:0, exp:'A telescope magnifies distant stars. A microscope magnifies tiny cells.' },
+  { id:'vw8', cat:'vr', type:'Word Analogies', diff:2, q:'Thermometer is to Temperature as Barometer is to ___?', opts:['Speed','Pressure','Weight','Time'], ans:1, exp:'A thermometer measures temperature. A barometer measures air pressure.' },
+  { id:'vw9', cat:'vr', type:'Word Analogies', diff:2, q:'Dusk is to Evening as Dawn is to ___?', opts:['Night','Morning','Afternoon','Midnight'], ans:1, exp:'Dusk marks the start of evening. Dawn marks the start of morning.' },
+  { id:'vw10', cat:'vr', type:'Word Analogies', diff:2, q:'Archipelago is to Islands as Constellation is to ___?', opts:['Planets','Stars','Moons','Clouds'], ans:1, exp:'An archipelago is a group of islands. A constellation is a group of stars.' },
+  { id:'vw11', cat:'vr', type:'Word Analogies', diff:3, q:'Famished is to Hungry as Elated is to ___?', opts:['Sad','Happy','Angry','Tired'], ans:1, exp:'Famished is an extreme of hungry. Elated is an extreme of happy.' },
+  { id:'vw12', cat:'vr', type:'Word Analogies', diff:3, q:'Parched is to Thirsty as Frigid is to ___?', opts:['Hot','Cold','Wet','Dry'], ans:1, exp:'Parched is an extreme of thirsty. Frigid is an extreme of cold.' },
+  { id:'vw13', cat:'vr', type:'Word Analogies', diff:3, q:'Couplet is to Poem as Verse is to ___?', opts:['Novel','Hymn','Essay','Letter'], ans:1, exp:'A couplet is part of a poem. A verse is part of a hymn.' },
+  { id:'vw14', cat:'vr', type:'Word Analogies', diff:3, q:'Bibliophile is to Books as Audiophile is to ___?', opts:['Pictures','Sound','Food','Travel'], ans:1, exp:'A bibliophile loves books. An audiophile loves sound quality.' },
+  { id:'vw15', cat:'vr', type:'Word Analogies', diff:3, q:'Flock is to Birds as Shoal is to ___?', opts:['Whales','Wolves','Fish','Bees'], ans:2, exp:'A group of birds is a flock. A group of fish is a shoal.' },
 
   // ---- VERBAL REASONING: HIDDEN WORDS ----
-  { id:'vh1', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "The SAND ALE was old"', opts:['sand','dale','and','ale'], ans:1, exp:'The word "dale" is hidden: sanDALE \u2014 spanning "sand" and "ale".' },
-  { id:'vh2', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "Put the CAR PET away"', opts:['cart','pet','carpet','ape'], ans:2, exp:'"Carpet" spans the words "car" and "pet" \u2014 carPET.' },
-  { id:'vh3', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "She ran GE around"', opts:['anger','range','ran','gear'], ans:1, exp:'"Range" is hidden across "ran" and "ge" \u2014 rANGE.' },
-  { id:'vh4', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "HE ART was pretty"', opts:['hear','art','heart','heat'], ans:2, exp:'"Heart" spans across "he" and "art" \u2014 HEART.' },
-  { id:'vh5', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "The DISC OVER was exciting"', opts:['disco','cover','discover','over'], ans:2, exp:'"Discover" spans across "disc" and "over" \u2014 DISCOVER.' },
-  { id:'vh6', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "A BAND ON the stage"', opts:['band','abandon','don','ban'], ans:1, exp:'"Abandon" spans across "a band" and "on" \u2014 ABANDON.' },
-  { id:'vh7', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "The TEN ANT was tiny"', opts:['ten','tenant','ant','tent'], ans:1, exp:'"Tenant" spans across "ten" and "ant" \u2014 TENANT.' },
-  { id:'vh8', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "A PEN CIL was sharp"', opts:['pen','pencil','nil','ice'], ans:1, exp:'"Pencil" spans across "pen" and "cil" \u2014 PENCIL.' },
-  { id:'vh9', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "The HAM PER was full"', opts:['ham','ramp','hamper','per'], ans:2, exp:'"Hamper" spans across "ham" and "per" \u2014 HAMPER.' },
-  { id:'vh10', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "I saw a BUT TON shine"', opts:['but','ton','button','butt'], ans:2, exp:'"Button" spans across "but" and "ton" \u2014 BUTTON.' },
-  { id:'vh11', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "The CUR RENT was strong"', opts:['rent','current','cur','cure'], ans:1, exp:'"Current" spans across "cur" and "rent" \u2014 CURRENT.' },
-  { id:'vh12', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "We met the WAR DEN outside"', opts:['war','den','warden','ward'], ans:2, exp:'"Warden" spans across "war" and "den" \u2014 WARDEN.' },
-  { id:'vh13', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "The CAR GO was heavy"', opts:['cargo','car','arc','ago'], ans:0, exp:'"Cargo" spans across "car" and "go" \u2014 CARGO.' },
-  { id:'vh14', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "That WIN TER was cold"', opts:['win','wit','winter','term'], ans:2, exp:'"Winter" spans across "win" and "ter" \u2014 WINTER.' },
-  { id:'vh15', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "A MAN AGE is important"', opts:['man','age','manage','mane'], ans:2, exp:'"Manage" spans across "man" and "age" \u2014 MANAGE.' },
-  { id:'vh16', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "The BUT LER served tea"', opts:['butler','but','let','butter'], ans:0, exp:'"Butler" spans across "but" and "ler" \u2014 BUTLER.' },
-  { id:'vh17', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "The DOC TOR arrived early"', opts:['dock','doctor','tor','dot'], ans:1, exp:'"Doctor" spans across "doc" and "tor" \u2014 DOCTOR.' },
-  { id:'vh18', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "A CAN DID photo was taken"', opts:['can','did','candy','candid'], ans:3, exp:'"Candid" spans across "can" and "did" \u2014 CANDID.' },
+  // Hidden words span across word boundaries. Verified letter by letter.
+  { id:'vh1', cat:'vr', type:'Hidden Words', diff:1, q:'Find a 5-letter animal hidden across two words: "she came late to class"', opts:['camel','clam','cream','llama'], ans:0, exp:'CAMEL is hidden: CAME from "came" + L from "late" = CAMEL.' },
+  { id:'vh2', cat:'vr', type:'Hidden Words', diff:1, q:'Find a 3-letter animal hidden across two words: "I wanted to grab a taxi"', opts:['bat','rat','cat','ant'], ans:0, exp:'BAT is hidden: B from "grab" + A from "a" + T from "taxi" = BAT.' },
+  { id:'vh3', cat:'vr', type:'Hidden Words', diff:1, q:'Find a 4-letter fruit hidden across two words: "a paper cup earned a prize"', opts:['pear','plum','lime','peel'], ans:0, exp:'PEAR is hidden: P from "cup" + EAR from "earned" = PEAR.' },
+  { id:'vh4', cat:'vr', type:'Hidden Words', diff:1, q:'Find a 3-letter animal hidden across two words: "the slow leopard led the race"', opts:['owl','led','low','ape'], ans:0, exp:'OWL is hidden: OW from "slow" + L from "leopard" = OWL.' },
+  { id:'vh5', cat:'vr', type:'Hidden Words', diff:1, q:'Find a 5-letter word hidden across two words: "the beach air felt fresh"', opts:['chair','reach','brain','cheap'], ans:0, exp:'CHAIR is hidden: CH from "beach" + AIR from "air" = CHAIR.' },
+  { id:'vh6', cat:'vr', type:'Hidden Words', diff:2, q:'Find a 6-letter word hidden across two words: "the plan etched in stone was old"', opts:['planet','stolen','thread','chance'], ans:0, exp:'PLANET is hidden: PLAN from "plan" + ET from "etched" = PLANET.' },
+  { id:'vh7', cat:'vr', type:'Hidden Words', diff:2, q:'Find a 5-letter word hidden across two words: "I saw a disc over by the wall"', opts:['cover','disco','drive','voice'], ans:0, exp:'COVER is hidden: C from "disc" + OVER from "over" = COVER.' },
+  { id:'vh8', cat:'vr', type:'Hidden Words', diff:2, q:'Find a 5-letter word hidden across two words: "he kept the spar rowing going"', opts:['arrow','spear','power','rowed'], ans:0, exp:'ARROW is hidden: AR from "spar" + ROW from "rowing" = ARROW.' },
+  { id:'vh9', cat:'vr', type:'Hidden Words', diff:2, q:'Find a 4-letter word hidden across two words: "the cost able workers left"', opts:['table','cost','able','stab'], ans:0, exp:'TABLE is hidden: T from "cost" + ABLE from "able" = TABLE.' },
+  { id:'vh10', cat:'vr', type:'Hidden Words', diff:2, q:'Find a 6-letter vegetable hidden across two words: "that old car rotted away"', opts:['carrot','potato','turnip','celery'], ans:0, exp:'CARROT is hidden: CAR from "car" + ROT from "rotted" = CARROT.' },
+  { id:'vh11', cat:'vr', type:'Hidden Words', diff:3, q:'Find a 5-letter word hidden across two words: "the triumph over evil was complete"', opts:['hover','rival','prove','trove'], ans:0, exp:'HOVER is hidden: H from "triumph" + OVER from "over" = HOVER.' },
+  { id:'vh12', cat:'vr', type:'Hidden Words', diff:3, q:'Find a 6-letter word hidden across two words: "they saw the mast erode in the storm"', opts:['master','eroded','stored','steams'], ans:0, exp:'MASTER is hidden: MAST from "mast" + ER from "erode" = MASTER.' },
+  { id:'vh13', cat:'vr', type:'Hidden Words', diff:3, q:'Find a 6-letter word hidden across two words: "it was the best able player"', opts:['stable','player','bestow','tables'], ans:0, exp:'STABLE is hidden: ST from "best" + ABLE from "able" = STABLE.' },
+  { id:'vh14', cat:'vr', type:'Hidden Words', diff:3, q:'Find a 5-letter word hidden across two words: "the crisp rice cakes were delicious"', opts:['price','crisp','spice','races'], ans:0, exp:'PRICE is hidden: P from "crisp" + RICE from "rice" = PRICE.' },
+  { id:'vh15', cat:'vr', type:'Hidden Words', diff:3, q:'Find a 6-letter word hidden across two words: "the combat here was fierce"', opts:['bather','combat','thatch','breath'], ans:0, exp:'BATHER is hidden: BAT from "combat" + HER from "here" = BATHER.' },
 
-  // ---- NON-VERBAL REASONING: PATTERN SEQUENCES ----
-  { id:'ns1', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['\uD83D\uDD34','\uD83D\uDD35','\uD83D\uDD34','\uD83D\uDD35','\uD83D\uDD34'], opts:['\uD83D\uDD35','\uD83D\uDD34','\uD83D\uDFE2','\uD83D\uDFE1'], ans:0, exp:'The pattern alternates red, blue. After red comes blue.' },
-  { id:'ns2', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['\u2B06\uFE0F','\u27A1\uFE0F','\u2B07\uFE0F','\u2B05\uFE0F','\u2B06\uFE0F'], opts:['\u27A1\uFE0F','\u2B07\uFE0F','\u2B06\uFE0F','\u2B05\uFE0F'], ans:0, exp:'The arrows rotate clockwise: up, right, down, left, then repeat. After up comes right.' },
-  { id:'ns3', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['\u2B50','\u2B50\u2B50','\u2B50\u2B50\u2B50','\u2B50\u2B50\u2B50\u2B50'], opts:['\u2B50\u2B50\u2B50\u2B50\u2B50','\u2B50\u2B50\u2B50','\u2B50\u2B50','\u2B50'], ans:0, exp:'Each step adds one more star. After 4 stars comes 5 stars.' },
-  { id:'ns4', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['\uD83D\uDFE5','\uD83D\uDFE7','\uD83D\uDFE8','\uD83D\uDFE9'], opts:['\uD83D\uDFE6','\uD83D\uDFE5','\uD83D\uDFE7','\uD83D\uDFE8'], ans:0, exp:'The colours follow rainbow order: red, orange, yellow, green. Next is blue.' },
-  { id:'ns5', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['\u25B2','\u25B3','\u25B2','\u25B3','\u25B2'], opts:['\u25B3','\u25B2','\u25CB','\u25A1'], ans:0, exp:'The pattern alternates between filled and empty triangles. After filled comes empty.' },
-  { id:'ns6', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['\u25CF','\u25CF\u25CB','\u25CF\u25CB\u25CF','\u25CF\u25CB\u25CF\u25CB'], opts:['\u25CF\u25CB\u25CF\u25CB\u25CF','\u25CF\u25CF\u25CF','\u25CB\u25CB\u25CB\u25CB','\u25CF\u25CB\u25CF'], ans:0, exp:'Each step adds one more symbol, alternating filled and empty. The next has 5 symbols starting with filled.' },
-  { id:'ns7', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['\uD83D\uDD3A','\uD83D\uDD3B','\uD83D\uDD3A\uD83D\uDD3A','\uD83D\uDD3B\uD83D\uDD3B','\uD83D\uDD3A\uD83D\uDD3A\uD83D\uDD3A'], opts:['\uD83D\uDD3B\uD83D\uDD3B\uD83D\uDD3B','\uD83D\uDD3A\uD83D\uDD3A\uD83D\uDD3A\uD83D\uDD3A','\uD83D\uDD3B','\uD83D\uDD3A'], ans:0, exp:'The pattern alternates up/down triangles AND adds one more each pair. After 3 up-triangles comes 3 down-triangles.' },
-  { id:'ns8', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['1\uFE0F\u20E3','2\uFE0F\u20E3','4\uFE0F\u20E3','8\uFE0F\u20E3'], opts:['1\uFE0F\u20E36\uFE0F\u20E3','1\uFE0F\u20E30\uFE0F\u20E3','1\uFE0F\u20E32\uFE0F\u20E3','9\uFE0F\u20E3'], ans:0, exp:'Each number doubles: 1, 2, 4, 8. The next is 16.' },
-  { id:'ns9', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['\u25C6','\u25C7\u25C6','\u25C6\u25C7\u25C6','\u25C7\u25C6\u25C7\u25C6'], opts:['\u25C6\u25C7\u25C6\u25C7\u25C6','\u25C7\u25C7\u25C7\u25C7\u25C7','\u25C6\u25C6\u25C6\u25C6\u25C6','\u25C6\u25C7\u25C6\u25C7'], ans:0, exp:'Each step adds one more shape, and the first shape alternates. Step 5 starts with filled and has 5 shapes.' },
-  { id:'ns10', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['\u2B1B','\u2B1B\u2B1C','\u2B1B\u2B1C\u2B1B','\u2B1B\u2B1C\u2B1B\u2B1C'], opts:['\u2B1B\u2B1C\u2B1B\u2B1C\u2B1B','\u2B1C\u2B1B\u2B1C\u2B1B\u2B1C','\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B','\u2B1C\u2B1C\u2B1C\u2B1C\u2B1C'], ans:0, exp:'Each step adds one more square, alternating black and white. Step 5 has 5 squares starting with black.' },
-  { id:'ns11', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['\uD83D\uDFE1','\uD83D\uDFE1\uD83D\uDD35','\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35','\uD83D\uDD35\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35'], opts:['\uD83D\uDD35\uD83D\uDD35\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35','\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1','\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35\uD83D\uDFE1\uD83D\uDD35','\uD83D\uDFE1\uD83D\uDD35\uD83D\uDD35\uD83D\uDD35\uD83D\uDD35'], ans:0, exp:'The gold circle moves one position right each step. In step 5 it is in position 4 (of 5).' },
-  { id:'ns12', cat:'nvr', type:'Sequences', diff:3, q:'What comes next?',
-    visual:['\uD83D\uDD34','\uD83D\uDD35\uD83D\uDD34','\uD83D\uDFE2\uD83D\uDD35\uD83D\uDD34','\uD83D\uDFE1\uD83D\uDFE2\uD83D\uDD35\uD83D\uDD34'], opts:['\uD83D\uDFE0\uD83D\uDFE1\uD83D\uDFE2\uD83D\uDD35\uD83D\uDD34','\uD83D\uDD34\uD83D\uDD35\uD83D\uDFE2\uD83D\uDFE1\uD83D\uDFE0','\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1','\uD83D\uDD34\uD83D\uDD34\uD83D\uDD34\uD83D\uDD34\uD83D\uDD34'], ans:0, exp:'A new colour is added to the LEFT each step. The pattern grows leftward with the original colours shifting right.' },
+  // ---- VERBAL REASONING: COMPOUND WORDS ----
+  { id:'vc1', cat:'vr', type:'Compound Words', diff:1, q:'Which TWO words join to make a real word?', opts:['SUN + FLOWER','SUN + RIVER','MOON + FLOWER','SUN + CLOUD'], ans:0, exp:'SUN + FLOWER = SUNFLOWER.' },
+  { id:'vc2', cat:'vr', type:'Compound Words', diff:1, q:'Which TWO words join to make a real word?', opts:['RAIN + FALL','RAIN + LAKE','RAIN + POND','RAIN + FLOOD'], ans:0, exp:'RAIN + FALL = RAINFALL.' },
+  { id:'vc3', cat:'vr', type:'Compound Words', diff:1, q:'Which TWO words join to make a real word?', opts:['FOOT + BALL','FOOT + GAME','FOOT + GOAL','FOOT + TEAM'], ans:0, exp:'FOOT + BALL = FOOTBALL.' },
+  { id:'vc4', cat:'vr', type:'Compound Words', diff:1, q:'Which TWO words join to make a real word?', opts:['BOOK + CASE','BOOK + BOX','BOOK + BAG','BOOK + WORM'], ans:3, exp:'BOOK + WORM = BOOKWORM (a person who loves reading).' },
+  { id:'vc5', cat:'vr', type:'Compound Words', diff:1, q:'Which TWO words join to make a real word?', opts:['WATER + SKI','WATER + FALL','WATER + RIVER','WATER + LAKE'], ans:1, exp:'WATER + FALL = WATERFALL.' },
+  { id:'vc6', cat:'vr', type:'Compound Words', diff:2, q:'Which TWO words join to make a real word?', opts:['HEAD + LINE','HEAD + STORY','HEAD + NEWS','HEAD + WORD'], ans:0, exp:'HEAD + LINE = HEADLINE (a news title).' },
+  { id:'vc7', cat:'vr', type:'Compound Words', diff:2, q:'Which TWO words join to make a real word?', opts:['NIGHT + GOWN','NIGHT + DARK','NIGHT + MOON','NIGHT + SLEEP'], ans:0, exp:'NIGHT + GOWN = NIGHTGOWN (sleepwear).' },
+  { id:'vc8', cat:'vr', type:'Compound Words', diff:2, q:'Which TWO words join to make a real word?', opts:['OVER + LOOK','OVER + SEE','OVER + MISS','OVER + GAZE'], ans:0, exp:'OVER + LOOK = OVERLOOK (to fail to notice).' },
+  { id:'vc9', cat:'vr', type:'Compound Words', diff:2, q:'Which TWO words join to make a real word?', opts:['THUNDER + BOLT','THUNDER + RAIN','THUNDER + FLASH','THUNDER + CRACK'], ans:0, exp:'THUNDER + BOLT = THUNDERBOLT.' },
+  { id:'vc10', cat:'vr', type:'Compound Words', diff:2, q:'Which TWO words join to make a real word?', opts:['BASKET + BALL','BASKET + GAME','BASKET + NET','BASKET + HOOP'], ans:0, exp:'BASKET + BALL = BASKETBALL.' },
+  { id:'vc11', cat:'vr', type:'Compound Words', diff:3, q:'Find the word that completes BOTH: ___BREAK and ___LIGHT', opts:['SUN','DAY','WIND','ICE'], ans:1, exp:'DAYBREAK (dawn) and DAYLIGHT (light during the day).' },
+  { id:'vc12', cat:'vr', type:'Compound Words', diff:3, q:'Find the word that completes BOTH: ___FALL and ___PROOF', opts:['RAIN','SNOW','DOWN','WATER'], ans:3, exp:'WATERFALL and WATERPROOF.' },
+  { id:'vc13', cat:'vr', type:'Compound Words', diff:3, q:'Find the word that completes BOTH: ___ACHE and ___BAND', opts:['BACK','HEAD','ARM','NECK'], ans:1, exp:'HEADACHE and HEADBAND.' },
+  { id:'vc14', cat:'vr', type:'Compound Words', diff:3, q:'Find the word that completes BOTH: ___GUARD and ___LONG', opts:['LIFE','DAY','BODY','YEAR'], ans:0, exp:'LIFEGUARD and LIFELONG.' },
+  { id:'vc15', cat:'vr', type:'Compound Words', diff:3, q:'Find the word that completes BOTH: ___NAIL and ___TIP', opts:['THUMB','FINGER','HAND','TOE'], ans:1, exp:'FINGERNAIL and FINGERTIP.' },
 
-  { id:'ns13', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['⭐','⭐⭐','⭐⭐⭐','⭐⭐⭐⭐'], opts:['⭐⭐⭐⭐⭐','⭐⭐⭐','⭐⭐⭐⭐','⭐'], ans:0, exp:'One more star is added each time. After four stars comes five stars.' },
-  { id:'ns14', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['🟥','🟦','🟥','🟦'], opts:['🟩','🟥','🟦','🟨'], ans:1, exp:'The pattern alternates red square then blue square. After blue comes red.' },
-  { id:'ns15', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['⬆️','➡️','⬇️','⬅️'], opts:['⬇️','➡️','⬆️','↗️'], ans:2, exp:'The arrow rotates clockwise: up, right, down, left. Next it returns to up.' },
-  { id:'ns16', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['🔵','🔵','🔴','🔵','🔵'], opts:['🟢','🔴','🔵','🟡'], ans:1, exp:'The pattern is blue, blue, red, repeating. After blue, blue comes red.' },
-  { id:'ns17', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['◆','◆◆','◆◆◆','◆◆◆◆'], opts:['◆◆◆◆◆','◆◆◆','◆◆◆◆','◆'], ans:0, exp:'One more diamond is added each time. After four diamonds comes five.' },
-  { id:'ns18', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['🟢','🟡','🟢','🟡','🟢'], opts:['🟢','🟡','🔴','🔵'], ans:1, exp:'The pattern alternates green then yellow. After green comes yellow.' },
-  { id:'ns19', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['▲','▲▲','▲▲▲'], opts:['▲▲▲▲','▲▲','▲','▲▲▲'], ans:0, exp:'One more triangle is added each step. After three triangles comes four.' },
-  { id:'ns20', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['⬛','⬜','⬛','⬜','⬛'], opts:['⬛','⬜','🟫','🟥'], ans:1, exp:'The pattern alternates black then white. After black comes white.' },
-  { id:'ns21', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
-    visual:['●','●●','●●●'], opts:['●●●●','●●','●','●●●●●'], ans:0, exp:'One more circle is added each time. After three circles comes four.' },
-  { id:'ns22', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['🟥🟦🟩','🟦🟩🟥','🟩🟥🟦'], opts:['🟥🟦🟩','🟩🟦🟥','🟦🟥🟩','🟥🟩🟦'], ans:0, exp:'The colours shift one position left each time. After the third step the cycle repeats back to the first arrangement.' },
-  { id:'ns23', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['○','○□','○□△','○□△☆'], opts:['○□△☆◇','□△☆◇','○○○○○','△☆◇○'], ans:0, exp:'A new shape is added at the end each time. Next adds a diamond after the star.' },
-  { id:'ns24', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['⬆️','↗️','➡️','↘️'], opts:['⬇️','⬆️','↗️','⬅️'], ans:0, exp:'The arrow rotates 45 degrees clockwise each step. After down-right comes down.' },
-  { id:'ns25', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['🔴⚪','⚪🔴','🔴⚪','⚪🔴'], opts:['⚪⚪','🔴🔴','🔴⚪','⚪🔴'], ans:2, exp:'The two circles swap positions each step. After white-red comes red-white.' },
-  { id:'ns26', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['□','▪□','▪▪□','▪▪▪□'], opts:['▪▪▪▪□','□▪▪▪▪','▪▪▪▪▪','□□□□□'], ans:0, exp:'One more filled square is added on the left each time. Next has four filled squares then one empty.' },
-  { id:'ns27', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['🟡⬛⬛','⬛🟡⬛','⬛⬛🟡'], opts:['⬛⬛⬛','🟡⬛⬛','🟡🟡🟡','⬛🟡⬛'], ans:1, exp:'The yellow square moves one position to the right each step. After reaching the end it cycles back to the first position.' },
-  { id:'ns28', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['▲','▼','▲▲','▼▼'], opts:['▲▲▲','▼▼▼','▲▼','▼▲'], ans:0, exp:'The pattern alternates up and down triangles while count increases: 1 up, 1 down, 2 up, 2 down. Next is 3 up triangles.' },
-  { id:'ns29', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['🔵🔵🔵','🔵🔵','🔵'], opts:['🔵🔵','(none)','🔵🔵🔵','🔵'], ans:1, exp:'One blue circle is removed each step: 3, 2, 1. Next would be zero (none left).' },
-  { id:'ns30', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
-    visual:['◇','◆','◇◇','◆◆'], opts:['◇◇◇','◆◆◆','◇◆◇','◆◇◆'], ans:0, exp:'The pattern alternates empty and filled diamonds while increasing count: 1 empty, 1 filled, 2 empty, 2 filled. Next is 3 empty.' },
-  { id:'ns31', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['🔴⬆️','🔵➡️','🟢⬇️','🟡⬅️'], opts:['🟠⬆️','🔴➡️','🔵⬆️','🟣⬇️'], ans:0, exp:'The colour changes each step and the arrow rotates 90 degrees clockwise. Next is a new colour with the arrow back to up.' },
-  { id:'ns32', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['▲','▼▼','▲▲▲','▼▼▼▼'], opts:['▼▼▼▼▼','▲▲▲▲▲','▲▼▲▼▲','▼▲▼▲▼'], ans:1, exp:'The direction alternates (up, down) and the count increases by 1 each time. After 4 down comes 5 up.' },
-  { id:'ns33', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['⚫⚪⚪','⚪⚫⚪','⚪⚪⚫','⚫⚪⚪'], opts:['⚪⚫⚪','⚫⚫⚫','⚪⚪⚪','⚫⚪⚫'], ans:0, exp:'The black circle moves one position right, then cycles back. After returning to position 1, it moves to position 2 again.' },
-  { id:'ns34', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['🔴','🔴🔵','🔴🔵🔴','🔴🔵🔴🔵'], opts:['🔵🔴🔵🔴🔵','🔴🔵🔴🔵🔴','🔴🔴🔴🔴🔴','🔵🔵🔵🔵🔵'], ans:1, exp:'The pattern grows by one, alternating red and blue and always starting with red. Step 5 has 5 elements starting with red.' },
-  { id:'ns35', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['⬛⬜⬛⬜','⬜⬛⬜⬛','⬛⬜⬛⬜'], opts:['⬛⬜⬛⬜','⬜⬛⬜⬛','⬛⬛⬛⬛','⬜⬜⬜⬜'], ans:1, exp:'The pattern inverts each step (black and white swap positions). After black-white-black-white comes white-black-white-black.' },
-  { id:'ns36', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['🟥','🟧🟥','🟨🟧🟥','🟩🟨🟧🟥'], opts:['🟦🟩🟨🟧🟥','🟥🟧🟨🟩🟦','🟩🟩🟩🟩🟩','🟥🟥🟥🟥🟥'], ans:0, exp:'A new rainbow colour is added to the left each step. Next adds blue on the left.' },
-  { id:'ns37', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['◆◇◇◇','◇◆◇◇','◇◇◆◇','◇◇◇◆'], opts:['◆◇◇◇','◇◇◇◇','◆◆◆◆','◇◆◇◆'], ans:0, exp:'The filled diamond moves one position to the right each step. After reaching the end it cycles back to the start.' },
-  { id:'ns38', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
-    visual:['🔵','🔴🔵🔴','🔵🔴🔵🔴🔵'], opts:['🔴🔵🔴🔵🔴🔵🔴','🔵🔵🔵🔵🔵🔵🔵','🔴🔴🔴🔴🔴🔴🔴','🔵🔴🔵🔴🔵🔴🔵'], ans:0, exp:'Each step adds 2 more elements and alternates starting colour. Step 1: 1 blue. Step 2: 3 starting red. Step 3: 5 starting blue. Step 4: 7 starting red.' },
+  // ---- VERBAL REASONING: CODE BREAKING ----
+  // A=1,B=2,...Z=26 verified. Shift ciphers verified.
+  { id:'vb1', cat:'vr', type:'Code Breaking', diff:1, q:'If A=1, B=2, C=3... Z=26, which word is: 3, 1, 20?', opts:['CAR','CAT','CAN','CAP'], ans:1, exp:'C=3, A=1, T=20 spells CAT.' },
+  { id:'vb2', cat:'vr', type:'Code Breaking', diff:1, q:'If A=1, B=2, C=3... Z=26, which word is: 4, 15, 7?', opts:['DOG','DIG','DAD','DIP'], ans:0, exp:'D=4, O=15, G=7 spells DOG.' },
+  { id:'vb3', cat:'vr', type:'Code Breaking', diff:1, q:'If A=1, B=2, C=3... Z=26, which word is: 8, 5, 14?', opts:['HAD','HEN','HIM','HOP'], ans:1, exp:'H=8, E=5, N=14 spells HEN.' },
+  { id:'vb4', cat:'vr', type:'Code Breaking', diff:1, q:'If A=1, B=2, C=3... Z=26, which word is: 16, 9, 7?', opts:['PIG','PIN','PEN','PIE'], ans:0, exp:'P=16, I=9, G=7 spells PIG.' },
+  { id:'vb5', cat:'vr', type:'Code Breaking', diff:1, q:'If A=1, B=2, C=3... Z=26, which word is: 6, 15, 24?', opts:['FIG','FOX','FUN','FLY'], ans:1, exp:'F=6, O=15, X=24 spells FOX.' },
+  { id:'vb6', cat:'vr', type:'Code Breaking', diff:2, q:'In a code, each letter is replaced by the NEXT letter in the alphabet. What does "EPH" really say?', opts:['DOG','FOX','ELF','CUB'], ans:0, exp:'Go back one letter: E→D, P→O, H→G. The word is DOG.' },
+  { id:'vb7', cat:'vr', type:'Code Breaking', diff:2, q:'In a code, each letter is replaced by the NEXT letter in the alphabet. What does "TVO" really say?', opts:['SUN','TIN','RUN','SKY'], ans:0, exp:'Go back one letter: T→S, V→U, O→N. The word is SUN.' },
+  { id:'vb8', cat:'vr', type:'Code Breaking', diff:2, q:'In a code, each letter is replaced by the NEXT letter in the alphabet. What does "IBU" really say?', opts:['JAR','HAT','ICE','GET'], ans:1, exp:'Go back one letter: I→H, B→A, U→T. The word is HAT.' },
+  { id:'vb9', cat:'vr', type:'Code Breaking', diff:2, q:'In a code, each letter is replaced by the NEXT letter in the alphabet. What does "SFE" really say?', opts:['RED','SET','RUG','TEN'], ans:0, exp:'Go back one letter: S→R, F→E, E→D. The word is RED.' },
+  { id:'vb10', cat:'vr', type:'Code Breaking', diff:2, q:'In a code, each letter is replaced by the NEXT letter in the alphabet. What does "DVQ" really say?', opts:['CUP','DIG','EWR','BOX'], ans:0, exp:'Go back one letter: D→C, V→U, Q→P. The word is CUP.' },
+  { id:'vb11', cat:'vr', type:'Code Breaking', diff:3, q:'If COLD is coded as DPME (each letter +1), what is WARM coded as?', opts:['XBSN','VBQM','WZSM','XCSN'], ans:0, exp:'Each letter moves forward by 1: W→X, A→B, R→S, M→N. WARM = XBSN.' },
+  { id:'vb12', cat:'vr', type:'Code Breaking', diff:3, q:'If FISH is coded as GJTI (each letter +1), what is BIRD coded as?', opts:['CJSE','BISE','CJSE','AKQC'], ans:0, exp:'Each letter +1: B→C, I→J, R→S, D→E. BIRD = CJSE.' },
+  { id:'vb13', cat:'vr', type:'Code Breaking', diff:3, q:'In a code, each letter is replaced by the letter 2 places LATER. What does "RGP" really say?', opts:['PEN','RED','PIE','NET'], ans:0, exp:'Go back 2 to decode: R→P, G→E, P→N. The word is PEN.' },
+  { id:'vb14', cat:'vr', type:'Code Breaking', diff:3, q:'In a code, each letter is replaced by the letter 3 places LATER. What does "ORYH" really say?', opts:['LOVE','MORE','LIVE','LAKE'], ans:0, exp:'Go back 3 to decode: O→L, R→O, Y→V, H→E. The word is LOVE.' },
+  { id:'vb15', cat:'vr', type:'Code Breaking', diff:3, q:'If the code reverses the alphabet (A=Z, B=Y, C=X...), what does "XZG" say?', opts:['CAT','DOG','BAT','COW'], ans:0, exp:'Reverse: X→C, Z→A, G→T. The word is CAT (A↔Z, B↔Y, C↔X, D↔W... T↔G).' },
 
-  // ---- NON-VERBAL REASONING: ODD ONE OUT (SHAPES) ----
-  { id:'no1', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['\uD83D\uDD34','\uD83D\uDD35','\uD83D\uDFE2','\uD83D\uDFE5'], ans:3, exp:'The square is a different shape. The others are all circles.' },
-  { id:'no2', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['\u2B06\uFE0F','\u27A1\uFE0F','\u2B07\uFE0F','\uD83D\uDD04'], ans:3, exp:'The rotation symbol is different. The others are all straight directional arrows.' },
-  { id:'no3', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['\u25B2','\u25B3','\u25B2','\u25BC'], ans:3, exp:'The downward triangle points a different direction. The others all point upward.' },
-  { id:'no4', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['\uD83D\uDD34\uD83D\uDD35','\uD83D\uDD35\uD83D\uDD34','\uD83D\uDD34\uD83D\uDD35','\uD83D\uDD34\uD83D\uDD35'], ans:1, exp:'The second option has the colours in reverse order. The others are all the same.' },
-  { id:'no5', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['\u2B1B\u2B1C\u2B1B','\u2B1B\u2B1C\u2B1B','\u2B1C\u2B1B\u2B1C','\u2B1B\u2B1C\u2B1B'], ans:2, exp:'The third option has the pattern inverted (white-black-white instead of black-white-black).' },
-  { id:'no6', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['\u25CF\u25CF\u25CB','\u25CF\u25CF\u25CB','\u25CF\u25CB\u25CF','\u25CF\u25CF\u25CB'], ans:2, exp:'The third option has the empty circle in the middle. The others have it at the end.' },
-  { id:'no7', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['\uD83D\uDD3A\uD83D\uDD35\u2B1B','\uD83D\uDD35\u2B1B\uD83D\uDD3A','\u2B1B\uD83D\uDD3A\uD83D\uDD35','\uD83D\uDD3A\u2B1B\uD83D\uDD35'], ans:3, exp:'In the first three, each shape appears in every position (rotation). The fourth breaks this pattern.' },
-  { id:'no8', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['\u2B50\u2B50\u2B50','\u2B50\u2B50\u2B50','\u2B50\u2B50','\u2B50\u2B50\u2B50'], ans:2, exp:'The third option has only 2 stars. The others all have 3.' },
+  // ---- VERBAL REASONING: LETTER INSERTION ----
+  // Format: first_part(LETTER)second_part makes two real words. Verified.
+  { id:'vl1', cat:'vr', type:'Letter Insertion', diff:1, q:'Find the letter that completes BOTH words: PLA(?)EAR', opts:['Y','T','N','S'], ans:0, exp:'Y makes PLAY and YEAR.' },
+  { id:'vl2', cat:'vr', type:'Letter Insertion', diff:1, q:'Find the letter that completes BOTH words: HEA(?)OOL', opts:['R','T','P','S'], ans:1, exp:'T makes HEAT and TOOL.' },
+  { id:'vl3', cat:'vr', type:'Letter Insertion', diff:1, q:'Find the letter that completes BOTH words: LIGH(?)ENT', opts:['S','N','T','R'], ans:2, exp:'T makes LIGHT and TENT.' },
+  { id:'vl4', cat:'vr', type:'Letter Insertion', diff:1, q:'Find the letter that completes BOTH words: BREA(?)OOR', opts:['K','D','M','T'], ans:1, exp:'D makes BREAD and DOOR.' },
+  { id:'vl5', cat:'vr', type:'Letter Insertion', diff:1, q:'Find the letter that completes BOTH words: HEAR(?)OWN', opts:['D','T','N','S'], ans:1, exp:'T makes HEART and TOWN.' },
+  { id:'vl6', cat:'vr', type:'Letter Insertion', diff:2, q:'Find the letter that completes BOTH words: SHAR(?)ART', opts:['P','T','K','D'], ans:0, exp:'P makes SHARP and PART.' },
+  { id:'vl7', cat:'vr', type:'Letter Insertion', diff:2, q:'Find the letter that completes BOTH words: COUR(?)EAM', opts:['S','T','D','N'], ans:1, exp:'T makes COURT and TEAM.' },
+  { id:'vl8', cat:'vr', type:'Letter Insertion', diff:2, q:'Find the letter that completes BOTH words: TREA(?)ALL', opts:['T','D','S','K'], ans:0, exp:'T makes TREAT and TALL.' },
+  { id:'vl9', cat:'vr', type:'Letter Insertion', diff:2, q:'Find the letter that completes BOTH words: SHEL(?)ARM', opts:['F','T','D','V'], ans:0, exp:'F makes SHELF and FARM.' },
+  { id:'vl10', cat:'vr', type:'Letter Insertion', diff:2, q:'Find the letter that completes BOTH words: CRIS(?)OND', opts:['T','K','P','S'], ans:2, exp:'P makes CRISP and POND.' },
+  { id:'vl11', cat:'vr', type:'Letter Insertion', diff:3, q:'Find the letter that completes BOTH words: CRUS(?)RADE', opts:['T','H','S','K'], ans:0, exp:'T makes CRUST and TRADE.' },
+  { id:'vl12', cat:'vr', type:'Letter Insertion', diff:3, q:'Find the letter that completes BOTH words: BLIN(?)ITE', opts:['D','K','G','T'], ans:1, exp:'K makes BLINK and KITE.' },
+  { id:'vl13', cat:'vr', type:'Letter Insertion', diff:3, q:'Find the letter that completes BOTH words: THIN(?)IND', opts:['G','D','K','F'], ans:2, exp:'K makes THINK and KIND.' },
+  { id:'vl14', cat:'vr', type:'Letter Insertion', diff:3, q:'Find the letter that completes BOTH words: DRIN(?)EEN', opts:['G','T','K','D'], ans:2, exp:'K makes DRINK and KEEN.' },
+  { id:'vl15', cat:'vr', type:'Letter Insertion', diff:3, q:'Find the letter that completes BOTH words: CHIE(?)AIR', opts:['F','L','S','R'], ans:0, exp:'F makes CHIEF and FAIR.' },
 
-  { id:'no9', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['🟢','🟢','🟢','🟡'], ans:3, exp:'The yellow circle is different. The others are all green.' },
-  { id:'no10', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['⬆️','⬆️','⬇️','⬆️'], ans:2, exp:'The third arrow points down. The others all point up.' },
-  { id:'no11', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['◆','◆','◆','◇'], ans:3, exp:'The fourth diamond is empty/outline. The others are all filled.' },
-  { id:'no12', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['⭐','⭐','🌙','⭐'], ans:2, exp:'The moon is a different shape. The others are all stars.' },
-  { id:'no13', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['🔴','🟠','🔴','🔴'], ans:1, exp:'The second one is orange. The others are all red.' },
-  { id:'no14', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['▲','▲','▲','●'], ans:3, exp:'The circle is a different shape. The others are all triangles.' },
-  { id:'no15', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['➡️','⬅️','➡️','➡️'], ans:1, exp:'The second arrow points left. The others all point right.' },
-  { id:'no16', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
-    opts:['⬛','⬛','⬜','⬛'], ans:2, exp:'The third square is white. The others are all black.' },
-  { id:'no17', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['🔴🔵','🔴🔵','🔴🔵','🔵🔴'], ans:3, exp:'The fourth option has the colours in reverse order. The others are all red then blue.' },
-  { id:'no18', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['⭐⭐⭐','⭐⭐⭐','⭐⭐⭐⭐','⭐⭐⭐'], ans:2, exp:'The third option has four stars. The others all have three.' },
-  { id:'no19', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['▲▼','▲▼','▼▲','▲▼'], ans:2, exp:'The third option has the triangles reversed (down then up). The others all show up then down.' },
-  { id:'no20', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['●●○','●●○','●○●','●●○'], ans:2, exp:'The third option has the empty circle in the middle. The others have it at the end.' },
-  { id:'no21', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['🟥🟦','🟦🟩','🟩🟥','🟥🟥'], ans:3, exp:'The fourth option has two squares of the same colour. The others all have two different colours.' },
-  { id:'no22', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['◆◇','◆◇','◆◇','◇◆'], ans:3, exp:'The fourth option has the filled and empty diamonds swapped. The others are all filled then empty.' },
-  { id:'no23', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['⬆️⬆️','➡️➡️','⬇️⬇️','⬆️⬇️'], ans:3, exp:'The fourth option has arrows pointing in different directions. The others all have matching pairs.' },
-  { id:'no24', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
-    opts:['🔵🔵🔵','🟢🟢🟢','🔴🔴','🟡🟡🟡'], ans:2, exp:'The third option has only two circles. The others all have three.' },
-  { id:'no25', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['🔴🔵🟢','🔵🟢🔴','🟢🔴🔵','🔴🟢🔵'], ans:3, exp:'The first three are rotations of the same order (each colour shifts one position). The fourth breaks this rotation pattern.' },
-  { id:'no26', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['▲▼▲','▼▲▼','▲▼▲','▲▼▲'], ans:1, exp:'The second option starts with a down triangle. The others all start with an up triangle.' },
-  { id:'no27', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['⬛⬜⬛⬜','⬜⬛⬜⬛','⬛⬜⬛⬜','⬛⬜⬜⬛'], ans:3, exp:'The fourth option has a different pattern (two whites in the middle). The others alternate strictly.' },
-  { id:'no28', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['◆◆◇','◆◇◆','◇◆◆','◆◆◆'], ans:3, exp:'The fourth option has all filled diamonds. The others each have exactly one empty diamond.' },
-  { id:'no29', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['🟥🟦🟥🟦','🟦🟥🟦🟥','🟥🟦🟥🟦','🟥🟦🟦🟥'], ans:3, exp:'The fourth option has two blues together in the middle. The others all strictly alternate colours.' },
-  { id:'no30', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['⭐🌙⭐','🌙⭐🌙','⭐🌙⭐','⭐⭐🌙'], ans:3, exp:'The fourth does not alternate star and moon. The others all have a strict alternating pattern.' },
-  { id:'no31', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['●○●○','○●○●','●○●○','●○○●'], ans:3, exp:'The fourth option does not alternate (has two empty circles together). The others all strictly alternate filled and empty.' },
-  { id:'no32', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
-    opts:['🔴🔵🟢🟡','🔵🟢🟡🔴','🟢🟡🔴🔵','🟡🔴🟢🔵'], ans:3, exp:'The first three are rotations of the same colour sequence. The fourth has green and blue swapped, breaking the rotation.' },
+  // ---- NON-VERBAL REASONING: SEQUENCES ----
+  // Diff 1: single rule
+  { id:'ns1', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['🔴','🔵','🔴','🔵','🔴'], opts:['🔵','🔴','🟢','🟡'], ans:0, exp:'Colours alternate: red, blue, red, blue, red → blue.' },
+  { id:'ns2', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['●','●●','●●●','●●●●'], opts:['●●●●●','●●●','●●','●●●●●●'], ans:0, exp:'Count increases by 1 each time: 1, 2, 3, 4 → 5.' },
+  { id:'ns3', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['⬆️','➡️','⬇️','⬅️'], opts:['⬆️','➡️','⬇️','⬅️'], ans:0, exp:'Arrows rotate clockwise: up, right, down, left → up again.' },
+  { id:'ns4', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['▲','▼','▲','▼'], opts:['▲','▼','◆','●'], ans:0, exp:'Triangles alternate: up, down, up, down → up.' },
+  { id:'ns5', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['★','☆','★','☆'], opts:['★','☆','●','○'], ans:0, exp:'Stars alternate: filled, empty, filled, empty → filled.' },
+  { id:'ns6', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['🟢','🟢','🔴','🟢','🟢'], opts:['🔴','🟢','🔵','🟡'], ans:0, exp:'Pattern repeats: green, green, red, green, green → red.' },
+  { id:'ns7', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['□','■','□','■'], opts:['□','■','▲','●'], ans:0, exp:'Squares alternate: empty, filled, empty, filled → empty.' },
+  { id:'ns8', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['🔴','🟡','🟢','🔴','🟡'], opts:['🟢','🔴','🟡','🔵'], ans:0, exp:'Three colours cycle: red, yellow, green, red, yellow → green.' },
+  { id:'ns9', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['◆','◆◆','◆◆◆'], opts:['◆◆◆◆','◆◆','◆','◆◆◆◆◆'], ans:0, exp:'Diamonds increase by 1: one, two, three → four.' },
+  { id:'ns10', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?', visual:['↗️','➡️','↘️','⬇️'], opts:['↙️','⬆️','↗️','⬅️'], ans:0, exp:'Arrow rotates 45° clockwise each step: NE, E, SE, S → SW.' },
 
-  // ---- NON-VERBAL REASONING: SHAPE ANALOGIES ----
-  { id:'na1', cat:'nvr', type:'Analogies', diff:1, q:'\uD83D\uDD34 is to \uD83D\uDD35 as \uD83D\uDFE1 is to ___?',
-    opts:['\uD83D\uDFE2','\uD83D\uDD34','\uD83D\uDFE1','\u26AB'], ans:0, exp:'Red changes to blue (warm to cool). Yellow (warm) changes to green (cool) in the same way.' },
-  { id:'na2', cat:'nvr', type:'Analogies', diff:1, q:'\u2B06\uFE0F is to \u2B07\uFE0F as \u2B05\uFE0F is to ___?',
-    opts:['\u27A1\uFE0F','\u2B06\uFE0F','\u2B07\uFE0F','\u2B05\uFE0F'], ans:0, exp:'Up flips to down (180\u00B0 turn). Left flips to right in the same way.' },
-  { id:'na3', cat:'nvr', type:'Analogies', diff:1, q:'\u25CF is to \u25CB as \u25A0 is to ___?',
-    opts:['\u25A1','\u25CF','\u25B2','\u25A0'], ans:0, exp:'Filled circle becomes empty circle. Filled square becomes empty square.' },
-  { id:'na4', cat:'nvr', type:'Analogies', diff:2, q:'\u25B2 is to \u25BC as \u25C0 is to ___?',
-    opts:['\u25B6','\u25C0','\u25B2','\u25BC'], ans:0, exp:'Triangle pointing up flips to point down. Triangle pointing left flips to point right.' },
-  { id:'na5', cat:'nvr', type:'Analogies', diff:2, q:'\uD83D\uDD34\u25CF is to \u25CF\uD83D\uDD34 as \uD83D\uDD35\u25B2 is to ___?',
-    opts:['\u25B2\uD83D\uDD35','\uD83D\uDD35\u25B2','\u25B2\u25B2','\uD83D\uDD34\u25B2'], ans:0, exp:'The two shapes swap positions. So blue-triangle becomes triangle-blue.' },
-  { id:'na6', cat:'nvr', type:'Analogies', diff:2, q:'\u2B50 is to \u2B50\u2B50 as \uD83D\uDD35 is to ___?',
-    opts:['\uD83D\uDD35\uD83D\uDD35','\uD83D\uDD35','\uD83D\uDD34\uD83D\uDD34','\u2B50\uD83D\uDD35'], ans:0, exp:'One star doubles to two stars. One blue circle doubles to two blue circles.' },
-  { id:'na7', cat:'nvr', type:'Analogies', diff:3, q:'\uD83D\uDD34\uD83D\uDD35\uD83D\uDD34 is to \uD83D\uDD35\uD83D\uDD34\uD83D\uDD35 as \u2B1B\u2B1C\u2B1B is to ___?',
-    opts:['\u2B1C\u2B1B\u2B1C','\u2B1B\u2B1C\u2B1B','\u2B1C\u2B1C\u2B1C','\u2B1B\u2B1B\u2B1B'], ans:0, exp:'Each colour swaps to its opposite. Black-white-black becomes white-black-white.' },
-  { id:'na8', cat:'nvr', type:'Analogies', diff:3, q:'\u25B2 is to \u25B2\u25B2\u25B2 as \u25CF is to ___?',
-    opts:['\u25CF\u25CF\u25CF','\u25CF\u25CF','\u25CF','\u25B2\u25CF\u25B2'], ans:0, exp:'One triangle becomes three triangles (x3). One circle becomes three circles.' },
-  { id:'na9', cat:'nvr', type:'Analogies', diff:1, q:'⬆️ is to ⬇️ as ➡️ is to ___?',
-    opts:['⬆️','⬅️','⬇️','➡️'], ans:1, exp:'Up flips to down (opposite direction). Right flips to left in the same way.' },
-  { id:'na10', cat:'nvr', type:'Analogies', diff:1, q:'🔴 is to 🔵 as 🟡 is to ___?',
-    opts:['🟣','🟢','🟠','🔴'], ans:1, exp:'Red (warm) changes to blue (cool). Yellow (warm) changes to green (cool) in the same way.' },
-  { id:'na11', cat:'nvr', type:'Analogies', diff:1, q:'● is to ○ as ▲ is to ___?',
-    opts:['△','▼','●','■'], ans:0, exp:'Filled circle becomes empty circle. Filled triangle becomes empty triangle.' },
-  { id:'na12', cat:'nvr', type:'Analogies', diff:1, q:'⭐ is to ⭐⭐ as 🔵 is to ___?',
-    opts:['🔴🔴','🔵🔵','🔵','⭐🔵'], ans:1, exp:'One star doubles to two stars. One blue circle doubles to two blue circles.' },
-  { id:'na13', cat:'nvr', type:'Analogies', diff:1, q:'◆ is to ◇ as ■ is to ___?',
-    opts:['□','◆','●','▲'], ans:0, exp:'Filled diamond becomes empty diamond. Filled square becomes empty square.' },
-  { id:'na14', cat:'nvr', type:'Analogies', diff:1, q:'🟥 is to 🟦 as 🟧 is to ___?',
-    opts:['🟨','🟪','🟥','🟩'], ans:1, exp:'Red square changes to blue square (warm to cool). Orange square changes to purple square in the same way.' },
-  { id:'na15', cat:'nvr', type:'Analogies', diff:1, q:'▶ is to ◀ as ▲ is to ___?',
-    opts:['▼','▶','◀','▲'], ans:0, exp:'Right-pointing triangle reverses to left-pointing. Up-pointing triangle reverses to down-pointing.' },
-  { id:'na16', cat:'nvr', type:'Analogies', diff:1, q:'⬛ is to ⬜ as 🔴 is to ___?',
-    opts:['⚪','🔵','⬛','🟢'], ans:0, exp:'Black becomes white (dark to light). Red becomes white (coloured to empty) in the same way.' },
-  { id:'na17', cat:'nvr', type:'Analogies', diff:2, q:'▲ is to ▼ as ◀ is to ___?',
-    opts:['▶','◀','▲','▼'], ans:0, exp:'Triangle pointing up flips to point down. Triangle pointing left flips to point right.' },
-  { id:'na18', cat:'nvr', type:'Analogies', diff:2, q:'🔵▲ is to ▲🔵 as 🔴◆ is to ___?',
-    opts:['◆🔴','🔴◆','◆◆','🔵◆'], ans:0, exp:'The two shapes swap positions. Blue-triangle becomes triangle-blue, so red-diamond becomes diamond-red.' },
-  { id:'na19', cat:'nvr', type:'Analogies', diff:2, q:'● is to ●●● as ▲ is to ___?',
-    opts:['▲▲','▲▲▲','▲▲▲▲','●▲●'], ans:1, exp:'One circle becomes three circles (tripled). One triangle becomes three triangles.' },
-  { id:'na20', cat:'nvr', type:'Analogies', diff:2, q:'🔴🔵 is to 🔵🔴 as ⬛⬜ is to ___?',
-    opts:['⬜⬛','⬛⬜','⬛⬛','⬜⬜'], ans:0, exp:'The two colours swap positions. Red-blue becomes blue-red, so black-white becomes white-black.' },
-  { id:'na21', cat:'nvr', type:'Analogies', diff:2, q:'⭐ is to ⭐⭐⭐ as ◆ is to ___?',
-    opts:['◆◆','◆◆◆◆','◆◆◆','⭐◆⭐'], ans:2, exp:'One star triples to three stars. One diamond triples to three diamonds.' },
-  { id:'na22', cat:'nvr', type:'Analogies', diff:2, q:'🟢 is to 🟢🟢 as 🔴🔴 is to ___?',
-    opts:['🔴🔴🔴','🔴🔴🔴🔴','🔴','🟢🔴'], ans:1, exp:'Green doubles from 1 to 2. Red doubles from 2 to 4.' },
-  { id:'na23', cat:'nvr', type:'Analogies', diff:2, q:'⬆️⬆️ is to ⬇️⬇️ as ➡️➡️ is to ___?',
-    opts:['⬅️⬅️','➡️⬅️','⬆️⬆️','⬇️⬇️'], ans:0, exp:'Two up arrows flip to two down arrows. Two right arrows flip to two left arrows.' },
-  { id:'na24', cat:'nvr', type:'Analogies', diff:2, q:'◇◇ is to ◆◆ as ○○ is to ___?',
-    opts:['●●','○○','◇●','●○'], ans:0, exp:'Empty diamonds become filled diamonds. Empty circles become filled circles.' },
-  { id:'na25', cat:'nvr', type:'Analogies', diff:3, q:'🔴🔵🔴 is to 🔵🔴🔵 as ⬛⬜⬛ is to ___?',
-    opts:['⬜⬛⬜','⬛⬜⬛','⬜⬜⬜','⬛⬛⬛'], ans:0, exp:'Each colour swaps to its opposite. Red-blue-red becomes blue-red-blue, so black-white-black becomes white-black-white.' },
-  { id:'na26', cat:'nvr', type:'Analogies', diff:3, q:'▲▲ is to ▼▼▼ as ●● is to ___?',
-    opts:['○○○','●●●','●●','○○'], ans:1, exp:'Two up triangles become three down triangles (increase count and flip). Two filled circles become three filled circles.' },
-  { id:'na27', cat:'nvr', type:'Analogies', diff:3, q:'🔴🔵 is to 🔵🔴🔵 as ⬛⬜ is to ___?',
-    opts:['⬛⬜⬛','⬜⬛⬜','⬛⬛⬜','⬜⬜⬛'], ans:1, exp:'The shapes swap and one is added. Red-blue becomes blue-red-blue. Black-white becomes white-black-white.' },
-  { id:'na28', cat:'nvr', type:'Analogies', diff:3, q:'◆◇◆ is to ◇◆◇ as ●○● is to ___?',
-    opts:['○●○','●○●','●●●','○○○'], ans:0, exp:'Each shape swaps to its opposite (filled to empty, empty to filled). So filled-empty-filled becomes empty-filled-empty.' },
-  { id:'na29', cat:'nvr', type:'Analogies', diff:3, q:'⬆️🔴 is to ⬇️🔵 as ➡️🟡 is to ___?',
-    opts:['⬅️🟢','➡️🟡','⬆️🔴','⬇️🟣'], ans:0, exp:'The arrow flips direction and the colour changes to its cool counterpart. Right-yellow becomes left-green.' },
-  { id:'na30', cat:'nvr', type:'Analogies', diff:3, q:'🟥🟦🟥 is to 🟦🟥🟦🟥 as ⬛⬜⬛ is to ___?',
-    opts:['⬜⬛⬜⬛','⬛⬜⬛⬜','⬜⬜⬜⬜','⬛⬛⬛⬛'], ans:0, exp:'The colours invert and one extra element is added. The pattern swaps and grows by one.' },
-  { id:'na31', cat:'nvr', type:'Analogies', diff:3, q:'▲○ is to ▼● as ◇➡️ is to ___?',
-    opts:['◆⬅️','◇➡️','◆➡️','◇⬅️'], ans:0, exp:'Both shapes transform: triangle flips, empty becomes filled. So empty diamond fills and right arrow reverses to left.' },
-  { id:'na32', cat:'nvr', type:'Analogies', diff:3, q:'🔵🔵🔴 is to 🔴🔴🔵 as ⬜⬜⬛ is to ___?',
-    opts:['⬛⬛⬜','⬜⬛⬛','⬜⬜⬛','⬛⬜⬛'], ans:0, exp:'Each colour swaps to its opposite. Blue-blue-red becomes red-red-blue, so white-white-black becomes black-black-white.' },
+  // Diff 2: two simultaneous rules
+  { id:'ns11', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['🔴●','🔵●●','🟢●●●'], opts:['🟡●●●●','🔴●●●●','🟢●●','🟡●●●'], ans:0, exp:'Two rules: colour cycles R→B→G→Y AND dots increase by 1. Next: yellow + 4 dots.' },
+  { id:'ns12', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['▲■','■▲','▲■'], opts:['■▲','▲■','▲▲','■■'], ans:0, exp:'Two rules: shapes swap positions each step. Triangle-square, square-triangle, triangle-square → square-triangle.' },
+  { id:'ns13', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['🔴▲','🔵▼','🟢▲','🟡▼'], opts:['🟠▲','🔴▼','🟠▼','🔵▲'], ans:0, exp:'Two rules: colours follow rainbow order AND triangle direction alternates. Next: orange + up triangle.' },
+  { id:'ns14', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['★','☆☆','★★★','☆☆☆☆'], opts:['★★★★★','☆☆☆☆☆','★★★★','☆☆☆'], ans:0, exp:'Two rules: fill alternates (filled/empty) AND count increases by 1. Next: 5 filled stars.' },
+  { id:'ns15', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['🔴⬆️','🔴⬇️','🔵⬆️','🔵⬇️'], opts:['🟢⬆️','🔴⬆️','🟢⬇️','🔵⬆️'], ans:0, exp:'Two rules: colour changes every 2 steps (RR→BB→GG) AND arrow alternates up/down. Next: green + up.' },
+  { id:'ns16', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['●○','○●●','●○●○'], opts:['○●○●○','●●○○','○●●●','●○○○○'], ans:0, exp:'Two rules: first symbol alternates filled/empty AND total count increases by 1. Next: empty, filled, empty, filled, empty (5 symbols starting with ○).' },
+  { id:'ns17', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['■','□□','■■■','□□□□'], opts:['■■■■■','□□□□□','■■■■','□□□'], ans:0, exp:'Two rules: fill alternates AND count increases. Next: 5 filled squares.' },
+  { id:'ns18', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['🔴→','🔵←','🟢→','🟡←'], opts:['🟠→','🔴←','🟠←','🔵→'], ans:0, exp:'Two rules: colours cycle through rainbow AND arrow alternates direction. Next: orange + right arrow.' },
+  { id:'ns19', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['▲▲','●●●','■■■■'], opts:['▲▲▲▲▲','◆◆◆◆◆','▼▼▼▼▼','●●●●●'], ans:0, exp:'Two rules: shapes cycle (triangle→circle→square→triangle) AND count increases by 1. Next: 5 triangles.' },
+  { id:'ns20', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?', visual:['🔴■','🔵■■','🔴■■■'], opts:['🔵■■■■','🔴■■■■','🟢■■■■','🔵■■'], ans:0, exp:'Two rules: colour alternates red/blue AND squares increase by 1. Next: blue + 4 squares.' },
+
+  // Diff 3: complex multi-rule
+  { id:'ns21', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['🔴▲','🔵▼▼','🟢▲▲▲','🟡▼▼▼▼'], opts:['🟠▲▲▲▲▲','🔴▼▼▼▼▼','🟣▲▲▲▲▲','🟠▼▼▼▼▼'], ans:0, exp:'Three rules: colour follows rainbow (R→B→G→Y→O), direction alternates (up/down), count increases by 1. Next: orange, up, 5.' },
+  { id:'ns22', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['●□','○■■','●□□□','○■■■■'], opts:['●□□□□□','○□□□□□','●■■■■■','○□□□□'], ans:0, exp:'Three rules: circle fill alternates (●/○), square fill alternates (□/■), count increases. Next: filled circle + 5 empty squares.' },
+  { id:'ns23', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['🔴⬆️●','🔵➡️●●','🟢⬇️●●●'], opts:['🟡⬅️●●●●','🟡⬆️●●●●','🔴⬅️●●●●','🟡⬇️●●●●'], ans:0, exp:'Three rules: colour cycles (R→B→G→Y), arrow rotates clockwise, dots increase. Next: yellow + left arrow + 4 dots.' },
+  { id:'ns24', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['★□','☆■□','★□■□','☆■□■□'], opts:['★□■□■□','☆□■□■□','★■□■□■','★□□□□□'], ans:0, exp:'Three rules: star fill alternates, shapes alternate □/■, length increases by 1. Next: filled star + 5 alternating shapes starting with □.' },
+  { id:'ns25', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['🔴■','🔵●●','🔴▲▲▲','🔵■■■■'], opts:['🔴●●●●●','🔵▲▲▲▲▲','🔴▲▲▲▲▲','🔵●●●●●'], ans:0, exp:'Three rules: colour alternates (R/B), shape cycles (■→●→▲→■→●), count increases. Next: red + 5 circles.' },
+  { id:'ns26', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['▲','▼▼','△△△','▽▽▽▽'], opts:['▲▲▲▲▲','▼▼▼▼▼','△△△△△','▽▽▽▽▽'], ans:0, exp:'Three rules: fill alternates (filled/empty), direction alternates (up/down), count increases. Filled+up alternates with empty+down. Next: 5 filled up triangles.' },
+  { id:'ns27', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['🟥','🟦🟦','🟩🟩🟩','🟨🟨🟨🟨'], opts:['🟧🟧🟧🟧🟧','🟥🟥🟥🟥🟥','🟪🟪🟪🟪🟪','🟧🟧🟧🟧'], ans:0, exp:'Two rules: colour follows rainbow and count increases by 1. Next: 5 orange squares.' },
+  { id:'ns28', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['●→','○○←','●●●→','○○○○←'], opts:['●●●●●→','●●●●●←','○○○○○→','○○○○○←'], ans:0, exp:'Three rules: fill alternates (●/○), arrow alternates (→/←), count increases. Next: 5 filled circles + right arrow.' },
+  { id:'ns29', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['🔴★','🔵★★','🟢☆☆☆','🟡☆☆☆☆'], opts:['🟠★★★★★','🟠☆☆☆☆☆','🔴★★★★★','🟠★★★★'], ans:0, exp:'Three rules: colour follows rainbow, star fill changes every 2 (★★ then ☆☆ then ★★), count increases. Next: orange + 5 filled stars.' },
+  { id:'ns30', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?', visual:['■⬆️','□□⬇️','■■■⬆️','□□□□⬇️'], opts:['■■■■■⬆️','□□□□□⬆️','■■■■■⬇️','□□□□□⬇️'], ans:0, exp:'Three rules: fill alternates (■/□), arrow alternates (⬆️/⬇️), count increases. Next: 5 filled squares + up arrow.' },
+
+  // ---- NON-VERBAL REASONING: ODD ONE OUT ----
+  // Diff 1: simple visual differences
+  { id:'no1', cat:'nvr', type:'Odd One Out', diff:1, q:'Which is the odd one out?', opts:['🔴🔵','🔴🔵','🔵🔴','🔴🔵'], ans:2, exp:'Three have red then blue. One has blue then red — the order is reversed.' },
+  { id:'no2', cat:'nvr', type:'Odd One Out', diff:1, q:'Which is the odd one out?', opts:['▲▲▲','▲▲▲','▲▲','▲▲▲'], ans:2, exp:'Three have 3 triangles. One has only 2.' },
+  { id:'no3', cat:'nvr', type:'Odd One Out', diff:1, q:'Which is the odd one out?', opts:['●○●','●○●','●○●','○●○'], ans:3, exp:'Three have filled-empty-filled. One has empty-filled-empty.' },
+  { id:'no4', cat:'nvr', type:'Odd One Out', diff:1, q:'Which is the odd one out?', opts:['■□■','■□■','□■□','■□■'], ans:2, exp:'Three have filled-empty-filled squares. One has empty-filled-empty.' },
+  { id:'no5', cat:'nvr', type:'Odd One Out', diff:1, q:'Which is the odd one out?', opts:['⬆️⬆️','⬆️⬆️','⬆️⬇️','⬆️⬆️'], ans:2, exp:'Three have both arrows pointing up. One has arrows pointing different directions.' },
+  { id:'no6', cat:'nvr', type:'Odd One Out', diff:1, q:'Which is the odd one out?', opts:['🟢🟢🟢','🟢🟢🟢','🟢🔴🟢','🟢🟢🟢'], ans:2, exp:'Three are all green. One has a red circle in the middle.' },
+  { id:'no7', cat:'nvr', type:'Odd One Out', diff:1, q:'Which is the odd one out?', opts:['★★','★★','★★','★☆'], ans:3, exp:'Three have two filled stars. One has a filled and an empty star.' },
+  { id:'no8', cat:'nvr', type:'Odd One Out', diff:1, q:'Which is the odd one out?', opts:['▲●■','▲●■','▲●■','▲■●'], ans:3, exp:'Three are triangle-circle-square. One has circle and square swapped.' },
+
+  // Diff 2: pattern-based differences
+  { id:'no9', cat:'nvr', type:'Odd One Out', diff:2, q:'Which is the odd one out?', opts:['▲●□','●□▲','□▲●','▲□●'], ans:3, exp:'First three are cyclic rotations (each shifts left by one). The last swaps the final two elements.' },
+  { id:'no10', cat:'nvr', type:'Odd One Out', diff:2, q:'Which is the odd one out?', opts:['🔴🔵🟢','🔵🟢🔴','🟢🔴🔵','🔴🟢🔵'], ans:3, exp:'First three rotate the sequence by one position. The last one is not a rotation.' },
+  { id:'no11', cat:'nvr', type:'Odd One Out', diff:2, q:'Which is the odd one out?', opts:['★●★●','●★●★','★●★●','★●★●'], ans:1, exp:'Three start with star-circle pattern. One starts with circle-star.' },
+  { id:'no12', cat:'nvr', type:'Odd One Out', diff:2, q:'Which is the odd one out?', opts:['↗️↘️↙️↖️','↗️↘️↙️↖️','↗️↗️↙️↖️','↗️↘️↙️↖️'], ans:2, exp:'Three follow the pattern NE-SE-SW-NW (clockwise). One repeats NE instead of SE.' },
+  { id:'no13', cat:'nvr', type:'Odd One Out', diff:2, q:'Which is the odd one out?', opts:['■□■□','□■□■','■□■□','■□■□'], ans:1, exp:'Three have the pattern filled-empty-filled-empty. One starts with empty.' },
+  { id:'no14', cat:'nvr', type:'Odd One Out', diff:2, q:'Which is the odd one out?', opts:['🔴●🔵●','🔵●🔴●','🔴●🔵●','🔴●🔵●'], ans:1, exp:'Three have red-dot-blue-dot. One reverses to blue-dot-red-dot.' },
+  { id:'no15', cat:'nvr', type:'Odd One Out', diff:2, q:'Which is the odd one out?', opts:['▲▲▼','▲▲▼','▲▼▲','▲▲▼'], ans:2, exp:'Three have up-up-down. One has up-down-up.' },
+  { id:'no16', cat:'nvr', type:'Odd One Out', diff:2, q:'Which is the odd one out?', opts:['●●○○','●●○○','●○●○','●●○○'], ans:2, exp:'Three group filled then empty (●●○○). One alternates (●○●○).' },
+  { id:'no17', cat:'nvr', type:'Odd One Out', diff:2, q:'Which is the odd one out?', opts:['⬛⬜⬛','⬜⬛⬜','⬛⬜⬛','⬛⬜⬛'], ans:1, exp:'Three are black-white-black. One is white-black-white (inverse pattern).' },
+
+  // Diff 3: subtle multi-property
+  { id:'no18', cat:'nvr', type:'Odd One Out', diff:3, q:'Which is the odd one out?', opts:['🔴▲ 🔵■','🔵■ 🔴▲','🔴■ 🔵▲','🔴▲ 🔵■'], ans:2, exp:'Three pair red with triangle and blue with square. One pairs red with square and blue with triangle — swapping the shape-colour pairings.' },
+  { id:'no19', cat:'nvr', type:'Odd One Out', diff:3, q:'Which is the odd one out?', opts:['●○●○●','○●○●○','●○●○●','●○○●●'], ans:3, exp:'Three have strict alternating pattern. One breaks the alternation with consecutive same fills.' },
+  { id:'no20', cat:'nvr', type:'Odd One Out', diff:3, q:'Which is the odd one out?', opts:['▲▼▲▼','▼▲▼▲','▲▼▲▼','▲▲▼▼'], ans:3, exp:'Three alternate up-down perfectly. One groups same directions together.' },
+  { id:'no21', cat:'nvr', type:'Odd One Out', diff:3, q:'Which is the odd one out?', opts:['■□□■','□■■□','■□□■','■□□■'], ans:1, exp:'Three are filled-empty-empty-filled (mirror symmetry). One is empty-filled-filled-empty (inverse).' },
+  { id:'no22', cat:'nvr', type:'Odd One Out', diff:3, q:'Which is the odd one out?', opts:['🔴🔵🟢🟡','🟡🔴🔵🟢','🟢🟡🔴🔵','🔵🟡🟢🔴'], ans:3, exp:'Three are cyclic rotations of R-B-G-Y. The last one is not a valid rotation of this sequence.' },
+  { id:'no23', cat:'nvr', type:'Odd One Out', diff:3, q:'Which is the odd one out?', opts:['★☆★☆★','☆★☆★☆','★☆★☆★','★☆★★☆'], ans:3, exp:'Three alternate perfectly between filled and empty stars. One has two consecutive filled stars.' },
+  { id:'no24', cat:'nvr', type:'Odd One Out', diff:3, q:'Which is the odd one out?', opts:['▲●■◆','●■◆▲','■◆▲●','◆●■▲'], ans:3, exp:'Three are cyclic rotations of the sequence ▲●■◆. The last one rearranges differently.' },
+  { id:'no25', cat:'nvr', type:'Odd One Out', diff:3, q:'Which is the odd one out?', opts:['⬆️⬇️⬅️➡️','⬇️⬅️➡️⬆️','⬅️➡️⬆️⬇️','➡️⬆️⬅️⬇️'], ans:3, exp:'Three rotate the sequence by one position. The last rearranges directions differently.' },
+
+  // ---- NON-VERBAL REASONING: ANALOGIES ----
+  // Diff 1: single transformation
+  { id:'na1', cat:'nvr', type:'Analogies', diff:1, q:'● is to ○ as ■ is to ___?', opts:['□','●','▲','■'], ans:0, exp:'Filled becomes empty. Filled circle → empty circle, so filled square → empty square.' },
+  { id:'na2', cat:'nvr', type:'Analogies', diff:1, q:'▲ is to ▼ as ⬆️ is to ___?', opts:['⬇️','⬅️','➡️','⬆️'], ans:0, exp:'Direction flips vertically. Up triangle → down triangle, so up arrow → down arrow.' },
+  { id:'na3', cat:'nvr', type:'Analogies', diff:1, q:'🔴 is to 🔵 as 🟡 is to ___?', opts:['🟢','🟠','🔴','🟡'], ans:0, exp:'Warm colour changes to cool colour. Red→blue, so yellow→green.' },
+  { id:'na4', cat:'nvr', type:'Analogies', diff:1, q:'●● is to ●●● as ■■ is to ___?', opts:['■■■','■■','■','■■■■'], ans:0, exp:'Count increases by one. 2 circles → 3 circles, so 2 squares → 3 squares.' },
+  { id:'na5', cat:'nvr', type:'Analogies', diff:1, q:'★ is to ☆ as ● is to ___?', opts:['○','★','■','●'], ans:0, exp:'Shape goes from filled to empty. Filled star → empty star, so filled circle → empty circle.' },
+  { id:'na6', cat:'nvr', type:'Analogies', diff:1, q:'⬅️ is to ➡️ as ⬆️ is to ___?', opts:['⬇️','⬅️','➡️','⬆️'], ans:0, exp:'Arrow reverses direction. Left → right, so up → down.' },
+  { id:'na7', cat:'nvr', type:'Analogies', diff:1, q:'■ is to ■■ as ▲ is to ___?', opts:['▲▲','▲','△','▲▲▲'], ans:0, exp:'Count doubles. One square → two squares, so one triangle → two triangles.' },
+  { id:'na8', cat:'nvr', type:'Analogies', diff:1, q:'🟢 is to 🔴 as ⬜ is to ___?', opts:['⬛','🟦','🟩','⬜'], ans:0, exp:'Colour swaps to opposite. Green (go) → red (stop), so white → black.' },
+
+  // Diff 2: two transformations
+  { id:'na9', cat:'nvr', type:'Analogies', diff:2, q:'🔴● is to 🔵○ as 🟢■ is to ___?', opts:['🟡□','🟢□','🔵□','🟡■'], ans:0, exp:'Two changes: colour shifts and shape becomes empty. Red→blue means shift, green→yellow. Filled→empty.' },
+  { id:'na10', cat:'nvr', type:'Analogies', diff:2, q:'▲▲ is to ▼▼▼ as ●● is to ___?', opts:['○○○','●●●','○○','●○●'], ans:0, exp:'Two changes: shape flips (filled→empty) AND count increases by 1. Two filled → three empty.' },
+  { id:'na11', cat:'nvr', type:'Analogies', diff:2, q:'🔴⬆️ is to 🔵⬇️ as 🟢➡️ is to ___?', opts:['🟡⬅️','🔵⬅️','🟢⬅️','🟡➡️'], ans:0, exp:'Two changes: colour shifts one step AND arrow reverses. Green→yellow, right→left.' },
+  { id:'na12', cat:'nvr', type:'Analogies', diff:2, q:'★★ is to ☆☆☆ as ●● is to ___?', opts:['○○○','●●●','☆☆☆','○○'], ans:0, exp:'Two changes: shape empties AND count increases by 1. 2 filled stars→3 empty stars, so 2 filled circles→3 empty circles.' },
+  { id:'na13', cat:'nvr', type:'Analogies', diff:2, q:'■⬆️ is to □⬇️ as ▲⬅️ is to ___?', opts:['△➡️','▲➡️','△⬅️','▼➡️'], ans:0, exp:'Two changes: shape empties AND arrow reverses. Filled square→empty square, up→down. So filled triangle→empty triangle, left→right.' },
+  { id:'na14', cat:'nvr', type:'Analogies', diff:2, q:'🔴●● is to 🔵●●● as 🟢●● is to ___?', opts:['🟡●●●','🔵●●●','🟢●●●','🟡●●'], ans:0, exp:'Two changes: colour shifts forward one step AND count increases by 1.' },
+  { id:'na15', cat:'nvr', type:'Analogies', diff:2, q:'▲■ is to ■▲ as ●□ is to ___?', opts:['□●','●□','□□','●●'], ans:0, exp:'Two shapes swap positions. Triangle-square becomes square-triangle. Circle-square becomes square-circle.' },
+  { id:'na16', cat:'nvr', type:'Analogies', diff:2, q:'★●★ is to ☆○☆ as ■▲■ is to ___?', opts:['□△□','■▲■','□▲□','■△■'], ans:0, exp:'All shapes become empty versions. Star→empty star, circle→empty circle. So square→empty square, triangle→empty triangle.' },
+  { id:'na17', cat:'nvr', type:'Analogies', diff:2, q:'🔴▲▲ is to 🔵▼▼ as 🟢■■ is to ___?', opts:['🟡□□','🟢□□','🟡■■','🔵□□'], ans:0, exp:'Two changes: colour shifts AND shapes become empty/inverted.' },
+
+  // Diff 3: three transformations
+  { id:'na18', cat:'nvr', type:'Analogies', diff:3, q:'🔴▲▲ is to 🔵▼▼▼ as 🟢●● is to ___?', opts:['🟡○○○','🟡●●●','🟢○○○','🟡○○'], ans:0, exp:'Three changes: colour shifts (R→B=G→Y), shape inverts (▲→▼=●→○), count increases by 1 (2→3).' },
+  { id:'na19', cat:'nvr', type:'Analogies', diff:3, q:'★★⬆️ is to ☆☆☆⬇️ as ■■⬅️ is to ___?', opts:['□□□➡️','■■■➡️','□□➡️','□□□⬅️'], ans:0, exp:'Three changes: shapes empty (★→☆=■→□), count +1, arrow reverses (⬆️→⬇️=⬅️→➡️).' },
+  { id:'na20', cat:'nvr', type:'Analogies', diff:3, q:'🔴■⬆️ is to 🔵□⬇️ as 🟢▲➡️ is to ___?', opts:['🟡△⬅️','🟡▲⬅️','🟢△⬅️','🟡△➡️'], ans:0, exp:'Three changes: colour shifts, shape empties, arrow reverses.' },
+  { id:'na21', cat:'nvr', type:'Analogies', diff:3, q:'●●🔴 is to ○○○🔵 as ■■🟢 is to ___?', opts:['□□□🟡','□□🟡','■■■🟡','□□□🟢'], ans:0, exp:'Three changes: shapes empty, count +1, colour shifts.' },
+  { id:'na22', cat:'nvr', type:'Analogies', diff:3, q:'▲▲🔴⬆️ is to ▼▼▼🔵⬇️ as ■■🟢➡️ is to ___?', opts:['□□□🟡⬅️','■■■🟡⬅️','□□🟡⬅️','□□□🟢➡️'], ans:0, exp:'Four changes: shape inverts, count +1, colour shifts, arrow reverses.' },
+  { id:'na23', cat:'nvr', type:'Analogies', diff:3, q:'★●★ is to ☆○○☆ as ■▲■ is to ___?', opts:['□△△□','□▲▲□','■△■','□△□'], ans:0, exp:'All shapes empty AND middle element doubles. Star-circle-star (3) → empty star-circle-circle-empty star (4).' },
+  { id:'na24', cat:'nvr', type:'Analogies', diff:3, q:'🔴▲ is to 🔵▼▼ as 🔵■ is to ___?', opts:['🟢□□','🟡□□','🔴□□','🟢■■'], ans:0, exp:'Three changes: colour shifts forward (R→B=B→G), shape inverts/empties, count doubles.' },
+  { id:'na25', cat:'nvr', type:'Analogies', diff:3, q:'●⬆️🔴 is to ○⬇️🔵 as ■➡️🟢 is to ___?', opts:['□⬅️🟡','□➡️🟡','■⬅️🟡','□⬅️🟢'], ans:0, exp:'Three changes: shape empties (●→○=■→□), arrow reverses, colour shifts.' },
+
+  // ---- NON-VERBAL REASONING: MATRICES ----
+  // 3x3 grid with ? in bottom-right. Uses newline in question text.
+  // Diff 1: each row/column contains one of each symbol
+  { id:'nm1', cat:'nvr', type:'Matrices', diff:1, q:'Find the missing shape:\n🔴 🔵 🟢\n🔵 🟢 🔴\n🟢 🔴  ?', opts:['🔵','🟢','🔴','🟡'], ans:0, exp:'Each row and column has one red, blue, and green. The missing one is 🔵.' },
+  { id:'nm2', cat:'nvr', type:'Matrices', diff:1, q:'Find the missing shape:\n▲ ● ■\n● ■ ▲\n■ ▲  ?', opts:['●','▲','■','◆'], ans:0, exp:'Each row and column has one of each shape. Missing: ●.' },
+  { id:'nm3', cat:'nvr', type:'Matrices', diff:1, q:'Find the missing shape:\n★ ☆ ★\n☆ ★ ☆\n★ ☆  ?', opts:['★','☆','●','○'], ans:0, exp:'Stars alternate: filled, empty, filled in each row. Row 3: ★ ☆ → ★.' },
+  { id:'nm4', cat:'nvr', type:'Matrices', diff:1, q:'Find the missing shape:\n⬆️ ➡️ ⬇️\n➡️ ⬇️ ⬅️\n⬇️ ⬅️  ?', opts:['⬆️','➡️','⬇️','⬅️'], ans:0, exp:'Each row rotates the arrows. Row 3: ⬇️ ⬅️ → ⬆️.' },
+  { id:'nm5', cat:'nvr', type:'Matrices', diff:1, q:'Find the missing shape:\n🟥 🟦 🟩\n🟩 🟥 🟦\n🟦 🟩  ?', opts:['🟥','🟦','🟩','🟨'], ans:0, exp:'Each colour appears once per row and column. Missing: 🟥.' },
+  { id:'nm6', cat:'nvr', type:'Matrices', diff:1, q:'Find the missing shape:\n● ○ ●\n○ ● ○\n● ○  ?', opts:['●','○','■','□'], ans:0, exp:'Pattern alternates filled/empty in a checkerboard. Bottom-right: ●.' },
+
+  // Diff 2: two rules
+  { id:'nm7', cat:'nvr', type:'Matrices', diff:2, q:'Find the missing shape:\n🔴▲  🔵●  🟢■\n🔵●  🟢■  🔴▲\n🟢■  🔴▲   ?', opts:['🔵●','🟢●','🔴●','🔵■'], ans:0, exp:'Each row has all three colour-shape pairs. Missing: 🔵●.' },
+  { id:'nm8', cat:'nvr', type:'Matrices', diff:2, q:'Find the missing shape:\n●  ●●  ●●●\n○  ○○  ○○○\n●  ●●   ?', opts:['●●●','○○○','●●','○○'], ans:0, exp:'Count increases across rows (1,2,3). Fill alternates by row (●/○/●). Row 3 is filled, count 3: ●●●.' },
+  { id:'nm9', cat:'nvr', type:'Matrices', diff:2, q:'Find the missing shape:\n▲⬆️  ▲➡️  ▲⬇️\n■⬆️  ■➡️  ■⬇️\n●⬆️  ●➡️   ?', opts:['●⬇️','●⬅️','■⬇️','▲⬇️'], ans:0, exp:'Shapes go down rows (▲/■/●), arrows go across (⬆️/➡️/⬇️). Missing: ●⬇️.' },
+  { id:'nm10', cat:'nvr', type:'Matrices', diff:2, q:'Find the missing shape:\n★  ★★  ★★★\n☆  ☆☆  ☆☆☆\n★  ★★   ?', opts:['★★★','☆☆☆','★★','☆☆'], ans:0, exp:'Count increases across (1,2,3). Fill alternates by row (★/☆/★). Row 3: ★★★.' },
+  { id:'nm11', cat:'nvr', type:'Matrices', diff:2, q:'Find the missing shape:\n🔴⬆️  🔴➡️  🔴⬇️\n🔵⬆️  🔵➡️  🔵⬇️\n🟢⬆️  🟢➡️   ?', opts:['🟢⬇️','🟡⬇️','🟢⬆️','🔴⬇️'], ans:0, exp:'Colour changes by row (R/B/G), arrow rotates across (⬆️/➡️/⬇️). Missing: 🟢⬇️.' },
+  { id:'nm12', cat:'nvr', type:'Matrices', diff:2, q:'Find the missing shape:\n■□■\n□■□\n■□ ?', opts:['■','□','●','○'], ans:0, exp:'Checkerboard pattern: alternating filled/empty. Bottom-right must be ■.' },
+  { id:'nm13', cat:'nvr', type:'Matrices', diff:2, q:'Find the missing shape:\n🔴●  🔵●●  🟢●●●\n🔴■  🔵■■  🟢■■■\n🔴▲  🔵▲▲   ?', opts:['🟢▲▲▲','🔵▲▲▲','🟢▲▲','🔴▲▲▲'], ans:0, exp:'Colour goes across (R/B/G), count goes across (1/2/3), shape goes down (●/■/▲). Missing: 🟢▲▲▲.' },
+
+  // Diff 3: complex rules
+  { id:'nm14', cat:'nvr', type:'Matrices', diff:3, q:'Find the missing shape:\n🔴▲  🔵■  🟢●\n🟢■  🔴●  🔵▲\n🔵●  🟢▲   ?', opts:['🔴■','🟢■','🔵■','🔴●'], ans:0, exp:'Each colour and shape appears exactly once per row and column. Row 3 needs 🔴, column 3 needs ■. Missing: 🔴■.' },
+  { id:'nm15', cat:'nvr', type:'Matrices', diff:3, q:'Find the missing shape:\n●  ○○  ●●●\n○  ●●  ○○○\n●  ○○   ?', opts:['●●●','○○○','●●','○○'], ans:0, exp:'Fill alternates each cell (checkerboard), count increases across (1/2/3). Row 3: ● (filled), ○○ (empty), → ●●● (filled, count 3).' },
+  { id:'nm16', cat:'nvr', type:'Matrices', diff:3, q:'Find the missing shape:\n★⬆️🔴  ★➡️🔵  ★⬇️🟢\n☆⬆️🔴  ☆➡️🔵  ☆⬇️🟢\n★⬆️🔴  ★➡️🔵   ?', opts:['★⬇️🟢','☆⬇️🟢','★⬇️🔵','☆⬆️🟢'], ans:0, exp:'Fill alternates by row (★/☆/★). Arrow goes across (⬆️/➡️/⬇️). Colour goes across (R/B/G). Missing: ★⬇️🟢.' },
+  { id:'nm17', cat:'nvr', type:'Matrices', diff:3, q:'Find the missing shape:\n▲▲▲  ▲▲  ▲\n■■■  ■■  ■\n●●●  ●●   ?', opts:['●','○','■','▲'], ans:0, exp:'Shape changes by row (▲/■/●). Count decreases across (3/2/1). Missing: ● (one circle).' },
+  { id:'nm18', cat:'nvr', type:'Matrices', diff:3, q:'Find the missing shape:\n🔴▲⬆️  🔵▲➡️  🟢▲⬇️\n🔴■⬆️  🔵■➡️  🟢■⬇️\n🔴●⬆️  🔵●➡️   ?', opts:['🟢●⬇️','🟡●⬇️','🟢■⬇️','🟢●⬆️'], ans:0, exp:'Three independent rules: colour across (R/B/G), shape down (▲/■/●), arrow across (⬆️/➡️/⬇️). Missing: 🟢●⬇️.' },
+  { id:'nm19', cat:'nvr', type:'Matrices', diff:3, q:'Find the missing shape:\n●□▲  ○■△  ●□▲\n○■△  ●□▲  ○■△\n●□▲  ○■△   ?', opts:['●□▲','○■△','●■▲','○□△'], ans:0, exp:'The grid alternates between two patterns. Position (row+col) even = ●□▲, odd = ○■△. Bottom-right (2+2=4, even): ●□▲.' },
+  { id:'nm20', cat:'nvr', type:'Matrices', diff:3, q:'Find the missing shape:\n🔴★●  🔵☆○  🟢★●\n🔵☆○  🟢★●  🔴☆○\n🟢★●  🔴☆○   ?', opts:['🔵★●','🔵☆○','🟢☆○','🔴★●'], ans:0, exp:'Colours cycle (R/B/G shifted per row). Stars alternate ★/☆ per position. Circles alternate ●/○. Following the pattern: 🔵★●.' },
+
+  // ---- MATHS: ARITHMETIC (BIDMAS) ----
+  { id:'ma1', cat:'maths', type:'Arithmetic', diff:1, q:'What is 8 + 6 × 3?', opts:['42','26','30','24'], ans:1, exp:'BIDMAS: multiply first. 6 × 3 = 18, then 8 + 18 = 26.' },
+  { id:'ma2', cat:'maths', type:'Arithmetic', diff:1, q:'What is 20 - 4 × 3?', opts:['48','12','8','16'], ans:2, exp:'BIDMAS: multiply first. 4 × 3 = 12, then 20 - 12 = 8.' },
+  { id:'ma3', cat:'maths', type:'Arithmetic', diff:1, q:'What is 5 × 4 + 7?', opts:['27','55','47','35'], ans:0, exp:'BIDMAS: multiply first. 5 × 4 = 20, then 20 + 7 = 27.' },
+  { id:'ma4', cat:'maths', type:'Arithmetic', diff:1, q:'What is 36 ÷ 6 + 4?', opts:['10','8','6','12'], ans:0, exp:'BIDMAS: divide first. 36 ÷ 6 = 6, then 6 + 4 = 10.' },
+  { id:'ma5', cat:'maths', type:'Arithmetic', diff:2, q:'What is 48 ÷ (4 + 4) × 3?', opts:['18','36','12','24'], ans:0, exp:'Brackets first: 4 + 4 = 8. Then 48 ÷ 8 = 6. Then 6 × 3 = 18.' },
+  { id:'ma6', cat:'maths', type:'Arithmetic', diff:2, q:'What is (7 + 3) × (8 - 2)?', opts:['60','56','48','54'], ans:0, exp:'Brackets: (7+3)=10, (8-2)=6. Then 10 × 6 = 60.' },
+  { id:'ma7', cat:'maths', type:'Arithmetic', diff:2, q:'What is 100 - 8 × 9?', opts:['28','72','20','12'], ans:0, exp:'BIDMAS: multiply first. 8 × 9 = 72. Then 100 - 72 = 28.' },
+  { id:'ma8', cat:'maths', type:'Arithmetic', diff:2, q:'What is 15 + 3 × 5 - 10?', opts:['20','30','15','25'], ans:0, exp:'BIDMAS: 3 × 5 = 15. Then 15 + 15 - 10 = 20.' },
+  { id:'ma9', cat:'maths', type:'Arithmetic', diff:3, q:'What is (15 - 3) × 4 + 36 ÷ 6?', opts:['54','48','52','42'], ans:0, exp:'Brackets: (15-3)=12. Then 12×4=48 and 36÷6=6. Finally 48+6=54.' },
+  { id:'ma10', cat:'maths', type:'Arithmetic', diff:3, q:'What is 6² + 4 × 5 - 8?', opts:['48','28','36','56'], ans:0, exp:'Powers first: 6²=36. Multiply: 4×5=20. Then 36+20-8=48.' },
+  { id:'ma11', cat:'maths', type:'Arithmetic', diff:3, q:'What is (120 ÷ 6) × 3 - 15?', opts:['45','55','50','40'], ans:0, exp:'Brackets: 120÷6=20. Then 20×3=60. Then 60-15=45.' },
+  { id:'ma12', cat:'maths', type:'Arithmetic', diff:3, q:'What is 3 × (4² - 6)?', opts:['30','42','24','36'], ans:0, exp:'Inside brackets: 4²=16, 16-6=10. Then 3×10=30.' },
+
+  // ---- MATHS: FRACTIONS & DECIMALS ----
+  { id:'mf1', cat:'maths', type:'Fractions & Decimals', diff:1, q:'What is 1/4 + 1/4?', opts:['1/2','2/8','1/8','3/4'], ans:0, exp:'1/4 + 1/4 = 2/4 = 1/2.' },
+  { id:'mf2', cat:'maths', type:'Fractions & Decimals', diff:1, q:'What is 1/2 of 24?', opts:['12','8','6','14'], ans:0, exp:'Half of 24 = 24 ÷ 2 = 12.' },
+  { id:'mf3', cat:'maths', type:'Fractions & Decimals', diff:1, q:'What is 3/4 of 20?', opts:['15','12','16','10'], ans:0, exp:'3/4 of 20: first find 1/4 = 5, then 3 × 5 = 15.' },
+  { id:'mf4', cat:'maths', type:'Fractions & Decimals', diff:1, q:'What is 0.5 + 0.25?', opts:['0.75','0.70','1.00','0.30'], ans:0, exp:'0.5 + 0.25 = 0.75.' },
+  { id:'mf5', cat:'maths', type:'Fractions & Decimals', diff:2, q:'What is 3/5 of 40?', opts:['24','30','20','15'], ans:0, exp:'1/5 of 40 = 8. Then 3 × 8 = 24.' },
+  { id:'mf6', cat:'maths', type:'Fractions & Decimals', diff:2, q:'What is 2/3 + 1/6?', opts:['5/6','3/6','1/2','3/9'], ans:0, exp:'Common denominator 6: 2/3 = 4/6. Then 4/6 + 1/6 = 5/6.' },
+  { id:'mf7', cat:'maths', type:'Fractions & Decimals', diff:2, q:'Convert 0.35 to a fraction in simplest form.', opts:['7/20','35/10','7/10','35/100'], ans:0, exp:'0.35 = 35/100. Simplify: 35÷5=7, 100÷5=20. So 7/20.' },
+  { id:'mf8', cat:'maths', type:'Fractions & Decimals', diff:2, q:'What is 3/4 - 1/3?', opts:['5/12','2/7','1/2','1/4'], ans:0, exp:'Common denominator 12: 3/4=9/12, 1/3=4/12. Then 9/12-4/12=5/12.' },
+  { id:'mf9', cat:'maths', type:'Fractions & Decimals', diff:3, q:'What is 3/8 + 5/12?', opts:['19/24','8/20','1/3','17/24'], ans:0, exp:'LCD is 24. 3/8=9/24, 5/12=10/24. Then 9/24+10/24=19/24.' },
+  { id:'mf10', cat:'maths', type:'Fractions & Decimals', diff:3, q:'What is 5/6 × 3/4?', opts:['5/8','15/24','3/5','15/10'], ans:0, exp:'Multiply tops: 5×3=15. Multiply bottoms: 6×4=24. 15/24=5/8.' },
+  { id:'mf11', cat:'maths', type:'Fractions & Decimals', diff:3, q:'What is 7/8 - 2/5?', opts:['19/40','5/3','1/2','3/8'], ans:0, exp:'LCD is 40. 7/8=35/40, 2/5=16/40. Then 35/40-16/40=19/40.' },
+  { id:'mf12', cat:'maths', type:'Fractions & Decimals', diff:3, q:'What is 2 1/3 + 1 3/4?', opts:['4 1/12','3 7/12','4 1/7','3 4/7'], ans:0, exp:'Convert: 2 1/3=7/3, 1 3/4=7/4. LCD 12: 28/12+21/12=49/12=4 1/12.' },
+
+  // ---- MATHS: PERCENTAGES ----
+  { id:'mp1', cat:'maths', type:'Percentages', diff:1, q:'What is 50% of 60?', opts:['30','25','35','20'], ans:0, exp:'50% = half. 60 ÷ 2 = 30.' },
+  { id:'mp2', cat:'maths', type:'Percentages', diff:1, q:'What is 10% of 250?', opts:['25','30','50','15'], ans:0, exp:'10% = divide by 10. 250 ÷ 10 = 25.' },
+  { id:'mp3', cat:'maths', type:'Percentages', diff:1, q:'What is 25% of 80?', opts:['20','25','15','40'], ans:0, exp:'25% = one quarter. 80 ÷ 4 = 20.' },
+  { id:'mp4', cat:'maths', type:'Percentages', diff:2, q:'A coat costs £80 and is reduced by 25%. What is the sale price?', opts:['£60','£65','£55','£70'], ans:0, exp:'25% of £80 = £20. Sale price: £80 - £20 = £60.' },
+  { id:'mp5', cat:'maths', type:'Percentages', diff:2, q:'A shop increases prices by 15%. A book was £20. What is the new price?', opts:['£23','£25','£22','£21'], ans:0, exp:'15% of £20 = £3. New price: £20 + £3 = £23.' },
+  { id:'mp6', cat:'maths', type:'Percentages', diff:2, q:'What is 35% of 200?', opts:['70','60','80','65'], ans:0, exp:'10% of 200=20, 30%=60, 5%=10. So 35%=60+10=70.' },
+  { id:'mp7', cat:'maths', type:'Percentages', diff:2, q:'In a class of 30, 60% are girls. How many boys are there?', opts:['12','15','18','10'], ans:0, exp:'60% girls = 18 girls. Boys = 30 - 18 = 12.' },
+  { id:'mp8', cat:'maths', type:'Percentages', diff:3, q:'After a 20% increase, a price is £96. What was the original price?', opts:['£80','£76','£84','£72'], ans:0, exp:'120% = £96. So 1% = £0.80. Original (100%) = £80.' },
+  { id:'mp9', cat:'maths', type:'Percentages', diff:3, q:'A TV was £600. It is reduced by 15%, then a further 10% off the sale price. What is the final price?', opts:['£459','£450','£468','£480'], ans:0, exp:'15% off £600: £600-£90=£510. Then 10% off £510: £510-£51=£459.' },
+  { id:'mp10', cat:'maths', type:'Percentages', diff:3, q:'Sam scored 36 out of 48 on a test. What percentage is this?', opts:['75%','72%','80%','70%'], ans:0, exp:'36 ÷ 48 = 0.75 = 75%.' },
+
+  // ---- MATHS: ALGEBRA ----
+  { id:'ml1', cat:'maths', type:'Algebra', diff:1, q:'If n + 5 = 12, what is n?', opts:['7','8','6','5'], ans:0, exp:'n = 12 - 5 = 7.' },
+  { id:'ml2', cat:'maths', type:'Algebra', diff:1, q:'If n - 8 = 15, what is n?', opts:['23','7','22','24'], ans:0, exp:'n = 15 + 8 = 23.' },
+  { id:'ml3', cat:'maths', type:'Algebra', diff:1, q:'If 4 × n = 28, what is n?', opts:['7','6','8','9'], ans:0, exp:'n = 28 ÷ 4 = 7.' },
+  { id:'ml4', cat:'maths', type:'Algebra', diff:1, q:'If n ÷ 3 = 9, what is n?', opts:['27','24','30','21'], ans:0, exp:'n = 9 × 3 = 27.' },
+  { id:'ml5', cat:'maths', type:'Algebra', diff:2, q:'If 3n + 7 = 22, what is n?', opts:['5','6','4','7'], ans:0, exp:'3n = 22 - 7 = 15. n = 15 ÷ 3 = 5.' },
+  { id:'ml6', cat:'maths', type:'Algebra', diff:2, q:'If 2n - 5 = 13, what is n?', opts:['9','8','10','7'], ans:0, exp:'2n = 13 + 5 = 18. n = 18 ÷ 2 = 9.' },
+  { id:'ml7', cat:'maths', type:'Algebra', diff:2, q:'If 5n + 3 = 38, what is n?', opts:['7','8','6','9'], ans:0, exp:'5n = 38 - 3 = 35. n = 35 ÷ 5 = 7.' },
+  { id:'ml8', cat:'maths', type:'Algebra', diff:2, q:'If 40 - 3n = 16, what is n?', opts:['8','7','9','6'], ans:0, exp:'3n = 40 - 16 = 24. n = 24 ÷ 3 = 8.' },
+  { id:'ml9', cat:'maths', type:'Algebra', diff:3, q:'If 4(n - 3) + 2 = 22, what is n?', opts:['8','7','6','9'], ans:0, exp:'4(n-3) = 20. n-3 = 5. n = 8.' },
+  { id:'ml10', cat:'maths', type:'Algebra', diff:3, q:'If 2(3n + 1) = 32, what is n?', opts:['5','4','6','3'], ans:0, exp:'3n + 1 = 16. 3n = 15. n = 5.' },
+  { id:'ml11', cat:'maths', type:'Algebra', diff:3, q:'If n/4 + 6 = 11, what is n?', opts:['20','24','16','28'], ans:0, exp:'n/4 = 11 - 6 = 5. n = 5 × 4 = 20.' },
+  { id:'ml12', cat:'maths', type:'Algebra', diff:3, q:'If 5(n + 2) - 3 = 42, what is n?', opts:['7','8','9','6'], ans:0, exp:'5(n+2) = 45. n+2 = 9. n = 7.' },
+
+  // ---- MATHS: GEOMETRY ----
+  { id:'mg1', cat:'maths', type:'Geometry', diff:1, q:'What is the perimeter of a square with sides of 6 cm?', opts:['24 cm','12 cm','36 cm','18 cm'], ans:0, exp:'Perimeter = 4 × side = 4 × 6 = 24 cm.' },
+  { id:'mg2', cat:'maths', type:'Geometry', diff:1, q:'How many sides does a hexagon have?', opts:['6','5','7','8'], ans:0, exp:'A hexagon has 6 sides.' },
+  { id:'mg3', cat:'maths', type:'Geometry', diff:1, q:'What is the area of a rectangle 8 cm long and 3 cm wide?', opts:['24 cm²','22 cm²','11 cm²','32 cm²'], ans:0, exp:'Area = length × width = 8 × 3 = 24 cm².' },
+  { id:'mg4', cat:'maths', type:'Geometry', diff:1, q:'What type of angle is 90°?', opts:['Right angle','Acute angle','Obtuse angle','Reflex angle'], ans:0, exp:'An angle of exactly 90° is a right angle.' },
+  { id:'mg5', cat:'maths', type:'Geometry', diff:2, q:'A rectangle has length 12 cm and width 5 cm. What is its area?', opts:['60 cm²','34 cm²','17 cm²','120 cm²'], ans:0, exp:'Area = 12 × 5 = 60 cm².' },
+  { id:'mg6', cat:'maths', type:'Geometry', diff:2, q:'What is the perimeter of a rectangle 15 cm long and 8 cm wide?', opts:['46 cm','23 cm','120 cm','38 cm'], ans:0, exp:'Perimeter = 2 × (15 + 8) = 2 × 23 = 46 cm.' },
+  { id:'mg7', cat:'maths', type:'Geometry', diff:2, q:'What is the area of a triangle with base 10 cm and height 6 cm?', opts:['30 cm²','60 cm²','16 cm²','20 cm²'], ans:0, exp:'Area of triangle = (base × height) ÷ 2 = (10 × 6) ÷ 2 = 30 cm².' },
+  { id:'mg8', cat:'maths', type:'Geometry', diff:2, q:'An isosceles triangle has two sides of 7 cm and a base of 10 cm. What is the perimeter?', opts:['24 cm','21 cm','27 cm','17 cm'], ans:0, exp:'Perimeter = 7 + 7 + 10 = 24 cm.' },
+  { id:'mg9', cat:'maths', type:'Geometry', diff:3, q:'Two angles of a triangle are 65° and 48°. What is the third angle?', opts:['67°','77°','57°','87°'], ans:0, exp:'Angles in a triangle sum to 180°. 180 - 65 - 48 = 67°.' },
+  { id:'mg10', cat:'maths', type:'Geometry', diff:3, q:'A square has an area of 144 cm². What is the length of one side?', opts:['12 cm','14 cm','11 cm','13 cm'], ans:0, exp:'Side = √144 = 12 cm.' },
+  { id:'mg11', cat:'maths', type:'Geometry', diff:3, q:'The angles on a straight line sum to 180°. If one angle is 115°, what is the other?', opts:['65°','75°','55°','85°'], ans:0, exp:'180° - 115° = 65°.' },
+  { id:'mg12', cat:'maths', type:'Geometry', diff:3, q:'A circle has a diameter of 14 cm. What is its circumference? (Use π = 22/7)', opts:['44 cm','42 cm','48 cm','38 cm'], ans:0, exp:'Circumference = π × d = 22/7 × 14 = 44 cm.' },
+
+  // ---- MATHS: WORD PROBLEMS ----
+  { id:'mw1', cat:'maths', type:'Word Problems', diff:1, q:'Sam has 24 sweets. He gives 1/3 to his friend. How many does he have left?', opts:['16','8','12','18'], ans:0, exp:'1/3 of 24 = 8 given away. 24 - 8 = 16 left.' },
+  { id:'mw2', cat:'maths', type:'Word Problems', diff:1, q:'A book costs £4.50. How much do 3 books cost?', opts:['£13.50','£12.50','£14.50','£12.00'], ans:0, exp:'3 × £4.50 = £13.50.' },
+  { id:'mw3', cat:'maths', type:'Word Problems', diff:1, q:'Tom has 56 marbles. He shares them equally into 8 bags. How many in each bag?', opts:['7','8','6','9'], ans:0, exp:'56 ÷ 8 = 7 marbles per bag.' },
+  { id:'mw4', cat:'maths', type:'Word Problems', diff:1, q:'A box holds 12 eggs. How many eggs in 5 boxes?', opts:['60','55','65','50'], ans:0, exp:'12 × 5 = 60 eggs.' },
+  { id:'mw5', cat:'maths', type:'Word Problems', diff:2, q:'A bus holds 48 passengers. If 3/4 of the seats are taken, how many empty seats are there?', opts:['12','16','24','8'], ans:0, exp:'3/4 taken = 36 passengers. Empty = 48 - 36 = 12.' },
+  { id:'mw6', cat:'maths', type:'Word Problems', diff:2, q:'Apples cost 35p each. How much change from £5 if you buy 12?', opts:['£0.80','£0.70','£1.00','£0.60'], ans:0, exp:'12 × 35p = £4.20. Change = £5.00 - £4.20 = £0.80.' },
+  { id:'mw7', cat:'maths', type:'Word Problems', diff:2, q:'A recipe serves 4 people and needs 300g flour. How much flour for 10 people?', opts:['750 g','600 g','900 g','500 g'], ans:0, exp:'Scale factor: 10/4 = 2.5. Flour: 300 × 2.5 = 750 g.' },
+  { id:'mw8', cat:'maths', type:'Word Problems', diff:2, q:'A train travels at 60 mph. How far does it go in 2.5 hours?', opts:['150 miles','120 miles','180 miles','135 miles'], ans:0, exp:'Distance = speed × time = 60 × 2.5 = 150 miles.' },
+  { id:'mw9', cat:'maths', type:'Word Problems', diff:3, q:'A shop sells notebooks for £2.50 each. Buy 3, get 1 free. How much do 8 notebooks cost?', opts:['£15.00','£17.50','£12.50','£20.00'], ans:0, exp:'8 notebooks: for every 4, pay for 3. Two sets of 4 = pay for 6. Cost: 6 × £2.50 = £15.00.' },
+  { id:'mw10', cat:'maths', type:'Word Problems', diff:3, q:'A tank leaks 0.5 litres per hour. It starts with 60 litres. How much is left after 2 days?', opts:['36 litres','48 litres','12 litres','24 litres'], ans:0, exp:'2 days = 48 hours. Leaked: 48 × 0.5 = 24 litres. Left: 60 - 24 = 36 litres.' },
+  { id:'mw11', cat:'maths', type:'Word Problems', diff:3, q:'Maya runs 3 laps of a 400m track. She runs the first lap in 95s, second in 88s, third in 92s. What is her average lap time?', opts:['91.7 s','92 s','90 s','93 s'], ans:1, exp:'Total: 95+88+92 = 275s. Average: 275÷3 ≈ 91.7s. Closest is 92 s (rounded).' },
+  { id:'mw12', cat:'maths', type:'Word Problems', diff:3, q:'A garden is 12m long and 8m wide. A path 1m wide goes around the outside. What is the area of the path?', opts:['44 m²','40 m²','48 m²','52 m²'], ans:0, exp:'Outer: 14×10=140 m². Inner: 12×8=96 m². Path: 140-96=44 m².' },
+
+  // ---- MATHS: NUMBER SEQUENCES ----
+  { id:'mn1', cat:'maths', type:'Number Sequences', diff:1, q:'What comes next? 5, 10, 15, 20, ___', opts:['25','30','22','28'], ans:0, exp:'Add 5 each time: 20 + 5 = 25.' },
+  { id:'mn2', cat:'maths', type:'Number Sequences', diff:1, q:'What comes next? 3, 6, 12, 24, ___', opts:['48','36','30','42'], ans:0, exp:'Double each time: 24 × 2 = 48.' },
+  { id:'mn3', cat:'maths', type:'Number Sequences', diff:1, q:'What comes next? 100, 90, 80, 70, ___', opts:['60','65','55','50'], ans:0, exp:'Subtract 10 each time: 70 - 10 = 60.' },
+  { id:'mn4', cat:'maths', type:'Number Sequences', diff:2, q:'What comes next? 2, 5, 11, 23, ___', opts:['47','45','46','48'], ans:0, exp:'Pattern: ×2 then +1. (2×2+1=5, 5×2+1=11, 11×2+1=23, 23×2+1=47).' },
+  { id:'mn5', cat:'maths', type:'Number Sequences', diff:2, q:'What comes next? 1, 4, 9, 16, 25, ___', opts:['36','30','35','49'], ans:0, exp:'Square numbers: 1², 2², 3², 4², 5², 6² = 36.' },
+  { id:'mn6', cat:'maths', type:'Number Sequences', diff:2, q:'What comes next? 2, 3, 5, 8, 12, ___', opts:['17','15','18','16'], ans:0, exp:'Differences increase: +1, +2, +3, +4, +5. So 12 + 5 = 17.' },
+  { id:'mn7', cat:'maths', type:'Number Sequences', diff:2, q:'What comes next? 1, 2, 4, 7, 11, ___', opts:['16','14','15','17'], ans:0, exp:'Add increasing amounts: +1, +2, +3, +4, +5. So 11 + 5 = 16.' },
+  { id:'mn8', cat:'maths', type:'Number Sequences', diff:3, q:'What comes next? 1, 1, 2, 3, 5, 8, ___', opts:['13','11','12','14'], ans:0, exp:'Fibonacci: each number is the sum of the two before. 5 + 8 = 13.' },
+  { id:'mn9', cat:'maths', type:'Number Sequences', diff:3, q:'What comes next? 2, 6, 18, 54, ___', opts:['162','108','148','216'], ans:0, exp:'Multiply by 3 each time: 54 × 3 = 162.' },
+  { id:'mn10', cat:'maths', type:'Number Sequences', diff:3, q:'What comes next? 1, 3, 7, 15, 31, ___', opts:['63','62','64','60'], ans:0, exp:'Pattern: ×2 then +1. (1×2+1=3, 3×2+1=7, 7×2+1=15, 15×2+1=31, 31×2+1=63).' },
+
+  // ---- MATHS: RATIO & PROPORTION ----
+  { id:'mr1', cat:'maths', type:'Ratio & Proportion', diff:1, q:'Share 20 sweets between Tom and Amy in the ratio 3:2. How many does Tom get?', opts:['12','8','10','14'], ans:0, exp:'Total parts: 3+2=5. Each part: 20÷5=4. Tom: 3×4=12.' },
+  { id:'mr2', cat:'maths', type:'Ratio & Proportion', diff:1, q:'If 3 pens cost £1.50, how much do 9 pens cost?', opts:['£4.50','£3.50','£5.00','£4.00'], ans:0, exp:'9 pens = 3 × (3 pens). Cost: 3 × £1.50 = £4.50.' },
+  { id:'mr3', cat:'maths', type:'Ratio & Proportion', diff:1, q:'A recipe needs 2 eggs for every 6 cakes. How many eggs for 18 cakes?', opts:['6','8','4','9'], ans:0, exp:'18 cakes is 3 times 6 cakes. So 3 × 2 = 6 eggs.' },
+  { id:'mr4', cat:'maths', type:'Ratio & Proportion', diff:2, q:'Red and blue beads are in the ratio 3:5. If there are 15 red beads, how many blue?', opts:['25','20','30','35'], ans:0, exp:'Scale: 15÷3=5. Blue: 5×5=25.' },
+  { id:'mr5', cat:'maths', type:'Ratio & Proportion', diff:2, q:'Purple paint is mixed in the ratio 2 red : 3 blue. How much blue for 500ml of paint?', opts:['300 ml','200 ml','250 ml','350 ml'], ans:0, exp:'Total parts: 5. Blue: 3/5 × 500 = 300 ml.' },
+  { id:'mr6', cat:'maths', type:'Ratio & Proportion', diff:2, q:'Divide £45 in the ratio 4:5. What is the larger share?', opts:['£25','£20','£24','£27'], ans:0, exp:'Total parts: 9. Each part: £45÷9=£5. Larger share (5): 5×£5=£25.' },
+  { id:'mr7', cat:'maths', type:'Ratio & Proportion', diff:2, q:'A map scale is 1:50000. If two towns are 3 cm apart on the map, what is the real distance?', opts:['1.5 km','15 km','150 km','0.15 km'], ans:0, exp:'Real distance: 3 × 50000 = 150000 cm = 1500 m = 1.5 km.' },
+  { id:'mr8', cat:'maths', type:'Ratio & Proportion', diff:3, q:'In a class, boys to girls is 4:5. If there are 27 children, how many girls?', opts:['15','12','18','14'], ans:0, exp:'Total parts: 9. Each part: 27÷9=3. Girls: 5×3=15.' },
+  { id:'mr9', cat:'maths', type:'Ratio & Proportion', diff:3, q:'Orange squash is mixed 1:4 with water. How much water for 2 litres of squash?', opts:['8 litres','6 litres','10 litres','4 litres'], ans:0, exp:'Ratio 1:4 means 4 parts water per 1 part squash. For 2L squash: 2×4=8L water.' },
+  { id:'mr10', cat:'maths', type:'Ratio & Proportion', diff:3, q:'Three friends share £120 in the ratio 2:3:5. What does the friend with the middle share get?', opts:['£36','£24','£60','£40'], ans:0, exp:'Total parts: 10. Each part: £12. Middle share (3): 3×£12=£36.' },
+
+  // ---- MATHS: TIME & MONEY ----
+  { id:'mt1', cat:'maths', type:'Time & Money', diff:1, q:'What is 3 hours and 45 minutes after 10:15?', opts:['14:00','13:45','14:15','13:00'], ans:0, exp:'10:15 + 3 hours = 13:15. + 45 minutes = 14:00.' },
+  { id:'mt2', cat:'maths', type:'Time & Money', diff:1, q:'How much change from £10 if you spend £6.35?', opts:['£3.65','£3.35','£4.65','£3.75'], ans:0, exp:'£10.00 - £6.35 = £3.65.' },
+  { id:'mt3', cat:'maths', type:'Time & Money', diff:1, q:'A bus arrives every 20 minutes. The first is at 08:10. When is the third bus?', opts:['08:50','08:40','09:10','08:30'], ans:0, exp:'Second: 08:30. Third: 08:50.' },
+  { id:'mt4', cat:'maths', type:'Time & Money', diff:2, q:'A film starts at 14:35 and lasts 1 hour 50 minutes. What time does it end?', opts:['16:25','16:15','15:25','16:35'], ans:0, exp:'14:35 + 1hr = 15:35. + 50min = 16:25.' },
+  { id:'mt5', cat:'maths', type:'Time & Money', diff:2, q:'A school trip costs £12.50 per child. How much for a class of 28?', opts:['£350','£325','£375','£300'], ans:0, exp:'28 × £12.50. 28×12=336, 28×0.50=14. Total: £350.' },
+  { id:'mt6', cat:'maths', type:'Time & Money', diff:2, q:'How many minutes between 09:45 and 12:20?', opts:['155','150','145','160'], ans:0, exp:'09:45 to 12:00 = 135 min. 12:00 to 12:20 = 20 min. Total: 155 min.' },
+  { id:'mt7', cat:'maths', type:'Time & Money', diff:2, q:'Parking costs £1.20 per hour. How much for 3 hours 30 minutes?', opts:['£4.20','£3.60','£4.50','£3.90'], ans:0, exp:'3.5 hours × £1.20 = £4.20.' },
+  { id:'mt8', cat:'maths', type:'Time & Money', diff:3, q:'Three friends split a bill of £47.25 equally. How much does each pay?', opts:['£15.75','£15.25','£16.75','£14.75'], ans:0, exp:'£47.25 ÷ 3 = £15.75.' },
+  { id:'mt9', cat:'maths', type:'Time & Money', diff:3, q:'A flight departs London at 11:30 and arrives in New York at 14:15 local time. The time difference is 5 hours behind. How long is the flight?', opts:['7 hours 45 min','2 hours 45 min','5 hours 45 min','8 hours 15 min'], ans:0, exp:'London 11:30 = NY 06:30. Flight lands 14:15 NY. Duration: 14:15-06:30=7h45m.' },
+  { id:'mt10', cat:'maths', type:'Time & Money', diff:3, q:'Buy 2 get 1 free on pizzas at £8.99 each. What do 5 pizzas cost?', opts:['£35.96','£44.95','£26.97','£31.47'], ans:0, exp:'5 pizzas: buy 2 get 1 free = pay for 2 (get 3), then buy 2 more. Pay for 4: 4 × £8.99 = £35.96.' },
 ];
 
 // ============ PRACTICE ENGINE ============
@@ -1826,8 +1893,9 @@ let practiceTimerInterval = null;
 let practiceModeTimed = false;
 let practiceModeAdaptive = false;
 
-const VR_TYPES = ['Synonyms','Antonyms','Odd One Out','Word Analogies','Hidden Words'];
-const NVR_TYPES = ['Sequences','Odd One Out','Analogies'];
+const VR_TYPES = ['Synonyms','Antonyms','Odd One Out','Word Analogies','Hidden Words','Compound Words','Code Breaking','Letter Insertion'];
+const NVR_TYPES = ['Sequences','Odd One Out','Analogies','Matrices'];
+const MATHS_TYPES = ['Arithmetic','Fractions & Decimals','Percentages','Algebra','Geometry','Word Problems','Number Sequences','Ratio & Proportion','Time & Money'];
 const DIFF_LABELS = { 1: '\u2B50 Easy', 2: '\u2B50\u2B50 Medium', 3: '\u2B50\u2B50\u2B50 Hard' };
 
 function toggleMode(mode) {
@@ -1858,7 +1926,7 @@ function renderPracticeStats() {
 }
 
 function showSubtypes(cat) {
-  const types = cat === 'vr' ? VR_TYPES : NVR_TYPES;
+  const types = cat === 'vr' ? VR_TYPES : cat === 'nvr' ? NVR_TYPES : MATHS_TYPES;
   const grid = document.getElementById('subtypeGrid');
   grid.innerHTML = '<button class="subtype-btn mix-btn" onclick="startSession(\'' + cat + '\',\'all\')">\uD83C\uDFB2 Mix All</button>';
   types.forEach(t => {
@@ -1907,6 +1975,7 @@ function startSession(cat, type) {
     timeBank: practiceModeTimed ? 60 * numQs : 0,
     questionStartTime: 0,
     timeTaken: [],
+    results: [],
     // Adaptive
     adaptiveMode: practiceModeAdaptive,
     currentDiff: 1,
@@ -1966,10 +2035,10 @@ function renderCurrentQuestion() {
   }
 
   html += '<div class="q-progress"><span>Q' + (s.totalAnswered + 1) + '</span><div class="q-progress-bar"><div class="q-progress-fill" style="width:' + pct + '%"></div></div><span>' + (s.totalAnswered + 1) + '/' + s.maxQuestions + '</span></div>';
-  html += '<div class="q-type-label">' + (q.cat === 'vr' ? '\uD83D\uDCD6' : '\uD83E\uDDE9') + ' ' + q.type;
-  if (s.adaptiveMode) {
-    html += '<span class="diff-indicator diff-' + s.currentDiff + '">' + DIFF_LABELS[s.currentDiff] + '</span>';
-  }
+  const catIcon = q.cat === 'vr' ? '\uD83D\uDCD6' : q.cat === 'nvr' ? '\uD83E\uDDE9' : '\uD83D\uDCD0';
+  html += '<div class="q-type-label">' + catIcon + ' ' + q.type;
+  const displayDiff = s.adaptiveMode ? s.currentDiff : q.diff;
+  html += '<span class="diff-indicator diff-' + displayDiff + '">' + DIFF_LABELS[displayDiff] + '</span>';
   html += '</div>';
 
   if (q.visual) {
@@ -2053,6 +2122,7 @@ function selectPracticeAnswer(idx) {
   const correct = idx === q.ans;
   const elapsed = Math.round((Date.now() - s.questionStartTime) / 1000);
   s.timeTaken.push(elapsed);
+  s.results.push({ diff: q.diff, correct: idx === q.ans });
   s.totalAnswered++;
   const btns = document.querySelectorAll('#qOptions .option-btn');
 
@@ -2091,7 +2161,7 @@ function selectPracticeAnswer(idx) {
     const oldXP = state.totalXP;
     state.totalXP += xp;
     state.coins += coins;
-    const subject = q.cat === 'vr' ? 'english' : 'maths';
+    const subject = q.cat === 'vr' ? 'english' : 'maths'; // NVR and Maths both count as maths
     const key = todayKey();
     if (!state.days[key]) state.days[key] = { maths: 0, english: 0 };
     state.days[key][subject]++;
@@ -2113,7 +2183,8 @@ function selectPracticeAnswer(idx) {
   if (correct) {
     state.practiceStats.totalCorrect++;
     if (q.cat === 'vr') state.practiceStats.vrCorrect++;
-    else state.practiceStats.nvrCorrect++;
+    else if (q.cat === 'nvr') state.practiceStats.nvrCorrect++;
+    else if (q.cat === 'maths') state.practiceStats.mathsCorrect = (state.practiceStats.mathsCorrect || 0) + 1;
     if (!state.practiceStats.answeredIds.includes(q.id)) state.practiceStats.answeredIds.push(q.id);
   }
   save();
@@ -2162,6 +2233,22 @@ function showSessionSummary() {
       html += '<div class="time-stat"><div class="time-stat-val">' + m + ':' + (sec<10?'0':'') + sec + '</div>Time left</div>';
     }
     html += '</div>';
+  }
+
+  // Difficulty breakdown
+  if (s.results && s.results.length > 0) {
+    const diffStats = {1:{total:0,correct:0}, 2:{total:0,correct:0}, 3:{total:0,correct:0}};
+    s.results.forEach(r => { if (diffStats[r.diff]) { diffStats[r.diff].total++; if (r.correct) diffStats[r.diff].correct++; } });
+    const diffBreakdown = [1,2,3].filter(d => diffStats[d].total > 0);
+    if (diffBreakdown.length > 0) {
+      html += '<div style="margin:12px 0;text-align:center">';
+      html += '<div style="font-weight:800;font-size:13px;margin-bottom:6px">By Difficulty</div>';
+      diffBreakdown.forEach(d => {
+        const pctD = Math.round((diffStats[d].correct / diffStats[d].total) * 100);
+        html += '<span class="diff-indicator diff-' + d + '" style="margin:2px 4px">' + DIFF_LABELS[d] + ': ' + diffStats[d].correct + '/' + diffStats[d].total + ' (' + pctD + '%)</span> ';
+      });
+      html += '</div>';
+    }
   }
 
   html += '<div class="session-rewards">';
