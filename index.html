@@ -1112,6 +1112,53 @@
   .shape-cell svg { width: 44px; height: 44px; }
   .option-btn .shape-cell { width: 40px; height: 40px; margin: 0 auto; }
   .option-btn .shape-cell svg { width: 36px; height: 36px; }
+
+  /* Mode Toggles */
+  .mode-toggles { display: flex; gap: 8px; justify-content: center; margin: 16px 0 8px; }
+  .mode-toggle {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border: 2px solid #e5e7eb; border-radius: 14px;
+    background: white; font-family: 'Nunito', sans-serif; font-weight: 700;
+    font-size: 12px; cursor: pointer; transition: all 0.2s; color: #6b7280;
+  }
+  .mode-toggle.active { border-color: var(--primary); background: #f5f3ff; color: var(--primary); }
+  .mode-toggle .toggle-dot {
+    width: 18px; height: 18px; border-radius: 50%; border: 2px solid #d1d5db;
+    transition: all 0.2s; position: relative;
+  }
+  .mode-toggle.active .toggle-dot { border-color: var(--primary); background: var(--primary); }
+  .mode-toggle.active .toggle-dot::after {
+    content: '✓'; color: white; font-size: 11px;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  }
+  .timer-section { margin-bottom: 12px; }
+  .timer-display {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; font-weight: 800; margin-bottom: 4px;
+  }
+  .timer-time { font-variant-numeric: tabular-nums; min-width: 48px; text-align: right; }
+  .timer-time.warning { color: var(--accent); }
+  .timer-time.danger { color: var(--red); animation: timerPulse 0.5s infinite; }
+  @keyframes timerPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .timer-bar { height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; }
+  .timer-bar-fill {
+    height: 100%; border-radius: 3px; transition: width 1s linear, background-color 0.5s;
+    background: var(--green);
+  }
+  .timer-bar-fill.warning { background: var(--accent); }
+  .timer-bar-fill.danger { background: var(--red); }
+  .diff-indicator {
+    display: inline-flex; align-items: center; gap: 3px; padding: 3px 10px;
+    border-radius: 8px; font-size: 11px; font-weight: 800; margin-left: 8px;
+  }
+  .diff-indicator.diff-1 { background: #ecfdf5; color: var(--green); }
+  .diff-indicator.diff-2 { background: #fef3c7; color: #d97706; }
+  .diff-indicator.diff-3 { background: #fef2f2; color: var(--red); }
+  .diff-up { animation: diffBounce 0.4s; }
+  @keyframes diffBounce { 0%{transform:scale(1)} 40%{transform:scale(1.3)} 100%{transform:scale(1)} }
+  .time-stats { display: flex; justify-content: center; gap: 16px; margin: 8px 0; font-size: 12px; font-weight: 700; color: var(--text-light); }
+  .time-stat { text-align: center; }
+  .time-stat-val { font-size: 18px; color: var(--primary); font-weight: 900; }
 </style>
 </head>
 <body>
@@ -1331,6 +1378,14 @@
             </button>
           </div>
           <div class="subtype-grid" id="subtypeGrid"></div>
+          <div class="mode-toggles">
+            <button class="mode-toggle" id="timedToggle" onclick="toggleMode('timed')">
+              <span class="toggle-dot"></span>⏱️ Exam Mode
+            </button>
+            <button class="mode-toggle" id="adaptiveToggle" onclick="toggleMode('adaptive')">
+              <span class="toggle-dot"></span>🧠 Adaptive
+            </button>
+          </div>
         </div>
         <div id="practiceContent"></div>
       </div>
@@ -1451,6 +1506,18 @@ const PRACTICE_QUESTIONS = [
   { id:'vs8', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as WEALTHY?', opts:['Poor','Affluent','Weak','Young'], ans:1, exp:'"Affluent" means having a great deal of money \u2014 the same as wealthy.' },
   { id:'vs9', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as PECULIAR?', opts:['Ordinary','Bizarre','Beautiful','Rapid'], ans:1, exp:'"Bizarre" means very strange \u2014 the same as peculiar.' },
   { id:'vs10', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as TRANQUIL?', opts:['Chaotic','Serene','Furious','Bold'], ans:1, exp:'"Serene" means calm and peaceful \u2014 the same as tranquil.' },
+  { id:'vs11', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as SWIFT?', opts:['Slow','Heavy','Speedy','Quiet'], ans:2, exp:'"Speedy" means moving fast \u2014 the same as swift.' },
+  { id:'vs12', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as ENORMOUS?', opts:['Huge','Tiny','Narrow','Flat'], ans:0, exp:'"Huge" means extremely large \u2014 the same as enormous.' },
+  { id:'vs13', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as JOYFUL?', opts:['Angry','Tired','Sad','Delighted'], ans:3, exp:'"Delighted" means very pleased and happy \u2014 the same as joyful.' },
+  { id:'vs14', cat:'vr', type:'Synonyms', diff:1, q:'Which word means the same as FRAIL?', opts:['Strong','Fragile','Bold','Tall'], ans:1, exp:'"Fragile" means easily broken or weak \u2014 the same as frail.' },
+  { id:'vs15', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as CUNNING?', opts:['Honest','Loud','Crafty','Gentle'], ans:2, exp:'"Crafty" means clever at achieving things in a sly way \u2014 the same as cunning.' },
+  { id:'vs16', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as FIERCE?', opts:['Ferocious','Calm','Quiet','Gentle'], ans:0, exp:'"Ferocious" means savagely violent \u2014 the same as fierce.' },
+  { id:'vs17', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as SCARCE?', opts:['Common','Bright','Heavy','Rare'], ans:3, exp:'"Rare" means not found in large numbers \u2014 the same as scarce.' },
+  { id:'vs18', cat:'vr', type:'Synonyms', diff:2, q:'Which word means the same as WEARY?', opts:['Alert','Exhausted','Angry','Young'], ans:1, exp:'"Exhausted" means extremely tired \u2014 the same as weary.' },
+  { id:'vs19', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as TIMID?', opts:['Bold','Loud','Shy','Rude'], ans:2, exp:'"Shy" means nervous and lacking confidence \u2014 the same as timid.' },
+  { id:'vs20', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as MAGNIFICENT?', opts:['Ordinary','Tiny','Dull','Splendid'], ans:3, exp:'"Splendid" means extremely impressive \u2014 the same as magnificent.' },
+  { id:'vs21', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as GENUINE?', opts:['Authentic','Fake','Broken','Rough'], ans:0, exp:'"Authentic" means real and not a copy \u2014 the same as genuine.' },
+  { id:'vs22', cat:'vr', type:'Synonyms', diff:3, q:'Which word means the same as ABUNDANT?', opts:['Empty','Narrow','Plentiful','Scarce'], ans:2, exp:'"Plentiful" means existing in great quantities \u2014 the same as abundant.' },
 
   // ---- VERBAL REASONING: ANTONYMS ----
   { id:'va1', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to HOT?', opts:['Warm','Cold','Bright','Soft'], ans:1, exp:'Cold is the opposite of hot.' },
@@ -1463,6 +1530,18 @@ const PRACTICE_QUESTIONS = [
   { id:'va8', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to VICTORY?', opts:['Win','Defeat','Battle','Pride'], ans:1, exp:'Defeat means losing \u2014 the opposite of victory.' },
   { id:'va9', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to ABUNDANT?', opts:['Plenty','Scarce','Rich','Wide'], ans:1, exp:'Scarce means in short supply \u2014 the opposite of abundant.' },
   { id:'va10', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to CONCEALED?', opts:['Hidden','Exposed','Quiet','Lost'], ans:1, exp:'Exposed means uncovered and visible \u2014 the opposite of concealed.' },
+  { id:'va11', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to EXPAND?', opts:['Grow','Stretch','Widen','Shrink'], ans:3, exp:'Shrink means to become smaller \u2014 the opposite of expand.' },
+  { id:'va12', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to BOLD?', opts:['Timid','Strong','Loud','Brave'], ans:0, exp:'Timid means shy and lacking courage \u2014 the opposite of bold.' },
+  { id:'va13', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to CAPTURE?', opts:['Trap','Grab','Release','Seize'], ans:2, exp:'Release means to set free \u2014 the opposite of capture.' },
+  { id:'va14', cat:'vr', type:'Antonyms', diff:1, q:'Which word is OPPOSITE to ASCEND?', opts:['Climb','Rise','Soar','Descend'], ans:3, exp:'Descend means to go down \u2014 the opposite of ascend.' },
+  { id:'va15', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to TRANSPARENT?', opts:['Clear','Opaque','Thin','Bright'], ans:1, exp:'Opaque means not see-through \u2014 the opposite of transparent.' },
+  { id:'va16', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to TEMPORARY?', opts:['Brief','Short','Permanent','Quick'], ans:2, exp:'Permanent means lasting forever \u2014 the opposite of temporary.' },
+  { id:'va17', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to FLEXIBLE?', opts:['Bendy','Soft','Elastic','Rigid'], ans:3, exp:'Rigid means stiff and unbending \u2014 the opposite of flexible.' },
+  { id:'va18', cat:'vr', type:'Antonyms', diff:2, q:'Which word is OPPOSITE to INCLUDE?', opts:['Exclude','Contain','Accept','Add'], ans:0, exp:'Exclude means to leave out \u2014 the opposite of include.' },
+  { id:'va19', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to SUPERIOR?', opts:['Better','Greater','Inferior','Higher'], ans:2, exp:'Inferior means lower in quality or rank \u2014 the opposite of superior.' },
+  { id:'va20', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to TRANQUIL?', opts:['Peaceful','Calm','Chaotic','Quiet'], ans:2, exp:'Chaotic means completely disordered \u2014 the opposite of tranquil.' },
+  { id:'va21', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to COURAGEOUS?', opts:['Cowardly','Brave','Strong','Fierce'], ans:0, exp:'Cowardly means lacking bravery \u2014 the opposite of courageous.' },
+  { id:'va22', cat:'vr', type:'Antonyms', diff:3, q:'Which word is OPPOSITE to SHALLOW?', opts:['Flat','Thin','Low','Profound'], ans:3, exp:'Profound means very deep \u2014 the opposite of shallow.' },
 
   // ---- VERBAL REASONING: ODD ONE OUT ----
   { id:'vo1', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Apple','Banana','Carrot','Grape'], ans:2, exp:'Carrot is a vegetable. The others are all fruits.' },
@@ -1473,6 +1552,18 @@ const PRACTICE_QUESTIONS = [
   { id:'vo6', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Nurse','Doctor','Teacher','Surgeon'], ans:2, exp:'Teacher works in education. The others all work in healthcare.' },
   { id:'vo7', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Whisper','Shout','Listen','Yell'], ans:2, exp:'Listen means to hear. The others are all ways of speaking.' },
   { id:'vo8', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Oak','Pine','Tulip','Willow'], ans:2, exp:'Tulip is a flower. The others are all types of tree.' },
+  { id:'vo9', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Bus','Train','Bicycle','Aeroplane'], ans:2, exp:'A bicycle is human-powered. The others are all motorised transport.' },
+  { id:'vo10', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Rain','Snow','Sunshine','Hail'], ans:2, exp:'Sunshine is dry weather. The others all involve water falling from the sky.' },
+  { id:'vo11', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Elbow','Knee','Shoulder','Stomach'], ans:3, exp:'Stomach is an organ. The others are all joints in the body.' },
+  { id:'vo12', cat:'vr', type:'Odd One Out', diff:1, q:'Which word does NOT belong with the others?', opts:['Cotton','Silk','Wool','Steel'], ans:3, exp:'Steel is a metal. The others are all fabrics or textiles.' },
+  { id:'vo13', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Anger','Happiness','Sadness','Running'], ans:3, exp:'Running is a physical activity. The others are all emotions.' },
+  { id:'vo14', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Cricket','Tennis','Football','Chess'], ans:3, exp:'Chess is a board game. The others are all physical sports.' },
+  { id:'vo15', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Flute','Trumpet','Drum','Trombone'], ans:2, exp:'Drum is a percussion instrument. The others are all wind instruments.' },
+  { id:'vo16', cat:'vr', type:'Odd One Out', diff:2, q:'Which word does NOT belong with the others?', opts:['Paris','London','Germany','Tokyo'], ans:2, exp:'Germany is a country. The others are all capital cities.' },
+  { id:'vo17', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['History','Geography','Paintbrush','Science'], ans:2, exp:'Paintbrush is a tool. The others are all school subjects.' },
+  { id:'vo18', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Hammer','Screwdriver','Spanner','Curtain'], ans:3, exp:'Curtain is a household item. The others are all tools.' },
+  { id:'vo19', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Scarf','Gloves','Bookshelf','Jacket'], ans:2, exp:'Bookshelf is furniture. The others are all items of clothing.' },
+  { id:'vo20', cat:'vr', type:'Odd One Out', diff:3, q:'Which word does NOT belong with the others?', opts:['Wardrobe','Desk','Chair','Trumpet'], ans:3, exp:'Trumpet is a musical instrument. The others are all pieces of furniture.' },
 
   // ---- VERBAL REASONING: WORD ANALOGIES ----
   { id:'vw1', cat:'vr', type:'Word Analogies', diff:1, q:'Hot is to Cold as Day is to ___?', opts:['Light','Night','Sun','Morning'], ans:1, exp:'Hot and Cold are opposites. Day and Night are also opposites.' },
@@ -1483,6 +1574,18 @@ const PRACTICE_QUESTIONS = [
   { id:'vw6', cat:'vr', type:'Word Analogies', diff:2, q:'Glove is to Hand as Boot is to ___?', opts:['Sock','Foot','Lace','Coat'], ans:1, exp:'A glove covers your hand. A boot covers your foot.' },
   { id:'vw7', cat:'vr', type:'Word Analogies', diff:3, q:'Chapter is to Book as Scene is to ___?', opts:['Actor','Play','Stage','Curtain'], ans:1, exp:'A chapter is a part of a book. A scene is a part of a play.' },
   { id:'vw8', cat:'vr', type:'Word Analogies', diff:3, q:'Petal is to Flower as Feather is to ___?', opts:['Wing','Bird','Nest','Fly'], ans:1, exp:'A petal is a part of a flower. A feather is a part of a bird.' },
+  { id:'vw9', cat:'vr', type:'Word Analogies', diff:1, q:'Page is to Book as Brick is to ___?', opts:['Cement','Stone','Wall','Floor'], ans:2, exp:'A page is a part of a book. A brick is a part of a wall.' },
+  { id:'vw10', cat:'vr', type:'Word Analogies', diff:1, q:'Lamb is to Sheep as Calf is to ___?', opts:['Horse','Cow','Pig','Goat'], ans:1, exp:'A lamb is a baby sheep. A calf is a baby cow.' },
+  { id:'vw11', cat:'vr', type:'Word Analogies', diff:1, q:'Brush is to Painter as Stethoscope is to ___?', opts:['Nurse','Doctor','Teacher','Dentist'], ans:1, exp:'A painter uses a brush. A doctor uses a stethoscope.' },
+  { id:'vw12', cat:'vr', type:'Word Analogies', diff:1, q:'Bark is to Dog as Meow is to ___?', opts:['Cat','Bird','Mouse','Fish'], ans:0, exp:'A dog makes a bark sound. A cat makes a meow sound.' },
+  { id:'vw13', cat:'vr', type:'Word Analogies', diff:2, q:'Oven is to Baking as Pool is to ___?', opts:['Water','Diving','Swimming','Towel'], ans:2, exp:'An oven is where you do baking. A pool is where you do swimming.' },
+  { id:'vw14', cat:'vr', type:'Word Analogies', diff:2, q:'Wheel is to Car as Wing is to ___?', opts:['Sky','Bird','Feather','Aeroplane'], ans:3, exp:'A wheel is a part of a car. A wing is a part of an aeroplane.' },
+  { id:'vw15', cat:'vr', type:'Word Analogies', diff:2, q:'Tadpole is to Frog as Caterpillar is to ___?', opts:['Worm','Butterfly','Beetle','Ant'], ans:1, exp:'A tadpole grows into a frog. A caterpillar grows into a butterfly.' },
+  { id:'vw16', cat:'vr', type:'Word Analogies', diff:2, q:'Knife is to Cut as Pen is to ___?', opts:['Ink','Paper','Write','Draw'], ans:2, exp:'You use a knife to cut. You use a pen to write.' },
+  { id:'vw17', cat:'vr', type:'Word Analogies', diff:3, q:'Wood is to Table as Glass is to ___?', opts:['Cup','Window','Sand','Mirror'], ans:1, exp:'A table is made from wood. A window is made from glass.' },
+  { id:'vw18', cat:'vr', type:'Word Analogies', diff:3, q:'Stadium is to Sport as Theatre is to ___?', opts:['Film','Stage','Play','Audience'], ans:2, exp:'A stadium is where you watch sport. A theatre is where you watch a play.' },
+  { id:'vw19', cat:'vr', type:'Word Analogies', diff:3, q:'Flock is to Birds as Pack is to ___?', opts:['Cats','Wolves','Fish','Cows'], ans:1, exp:'A group of birds is called a flock. A group of wolves is called a pack.' },
+  { id:'vw20', cat:'vr', type:'Word Analogies', diff:3, q:'Ingredient is to Recipe as Letter is to ___?', opts:['Envelope','Stamp','Alphabet','Word'], ans:3, exp:'An ingredient is a part of a recipe. A letter is a part of a word.' },
 
   // ---- VERBAL REASONING: HIDDEN WORDS ----
   { id:'vh1', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "The SAND ALE was old"', opts:['sand','dale','and','ale'], ans:1, exp:'The word "dale" is hidden: sanDALE \u2014 spanning "sand" and "ale".' },
@@ -1491,6 +1594,18 @@ const PRACTICE_QUESTIONS = [
   { id:'vh4', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "HE ART was pretty"', opts:['hear','art','heart','heat'], ans:2, exp:'"Heart" spans across "he" and "art" \u2014 HEART.' },
   { id:'vh5', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "The DISC OVER was exciting"', opts:['disco','cover','discover','over'], ans:2, exp:'"Discover" spans across "disc" and "over" \u2014 DISCOVER.' },
   { id:'vh6', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "A BAND ON the stage"', opts:['band','abandon','don','ban'], ans:1, exp:'"Abandon" spans across "a band" and "on" \u2014 ABANDON.' },
+  { id:'vh7', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "The TEN ANT was tiny"', opts:['ten','tenant','ant','tent'], ans:1, exp:'"Tenant" spans across "ten" and "ant" \u2014 TENANT.' },
+  { id:'vh8', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "A PEN CIL was sharp"', opts:['pen','pencil','nil','ice'], ans:1, exp:'"Pencil" spans across "pen" and "cil" \u2014 PENCIL.' },
+  { id:'vh9', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "The HAM PER was full"', opts:['ham','ramp','hamper','per'], ans:2, exp:'"Hamper" spans across "ham" and "per" \u2014 HAMPER.' },
+  { id:'vh10', cat:'vr', type:'Hidden Words', diff:1, q:'Find a word hidden across two words: "I saw a BUT TON shine"', opts:['but','ton','button','butt'], ans:2, exp:'"Button" spans across "but" and "ton" \u2014 BUTTON.' },
+  { id:'vh11', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "The CUR RENT was strong"', opts:['rent','current','cur','cure'], ans:1, exp:'"Current" spans across "cur" and "rent" \u2014 CURRENT.' },
+  { id:'vh12', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "We met the WAR DEN outside"', opts:['war','den','warden','ward'], ans:2, exp:'"Warden" spans across "war" and "den" \u2014 WARDEN.' },
+  { id:'vh13', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "The CAR GO was heavy"', opts:['cargo','car','arc','ago'], ans:0, exp:'"Cargo" spans across "car" and "go" \u2014 CARGO.' },
+  { id:'vh14', cat:'vr', type:'Hidden Words', diff:2, q:'Find a word hidden across two words: "That WIN TER was cold"', opts:['win','wit','winter','term'], ans:2, exp:'"Winter" spans across "win" and "ter" \u2014 WINTER.' },
+  { id:'vh15', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "A MAN AGE is important"', opts:['man','age','manage','mane'], ans:2, exp:'"Manage" spans across "man" and "age" \u2014 MANAGE.' },
+  { id:'vh16', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "The BUT LER served tea"', opts:['butler','but','let','butter'], ans:0, exp:'"Butler" spans across "but" and "ler" \u2014 BUTLER.' },
+  { id:'vh17', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "The DOC TOR arrived early"', opts:['dock','doctor','tor','dot'], ans:1, exp:'"Doctor" spans across "doc" and "tor" \u2014 DOCTOR.' },
+  { id:'vh18', cat:'vr', type:'Hidden Words', diff:3, q:'Find a word hidden across two words: "A CAN DID photo was taken"', opts:['can','did','candy','candid'], ans:3, exp:'"Candid" spans across "can" and "did" \u2014 CANDID.' },
 
   // ---- NON-VERBAL REASONING: PATTERN SEQUENCES ----
   { id:'ns1', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
@@ -1518,6 +1633,59 @@ const PRACTICE_QUESTIONS = [
   { id:'ns12', cat:'nvr', type:'Sequences', diff:3, q:'What comes next?',
     visual:['\uD83D\uDD34','\uD83D\uDD35\uD83D\uDD34','\uD83D\uDFE2\uD83D\uDD35\uD83D\uDD34','\uD83D\uDFE1\uD83D\uDFE2\uD83D\uDD35\uD83D\uDD34'], opts:['\uD83D\uDFE0\uD83D\uDFE1\uD83D\uDFE2\uD83D\uDD35\uD83D\uDD34','\uD83D\uDD34\uD83D\uDD35\uD83D\uDFE2\uD83D\uDFE1\uD83D\uDFE0','\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1\uD83D\uDFE1','\uD83D\uDD34\uD83D\uDD34\uD83D\uDD34\uD83D\uDD34\uD83D\uDD34'], ans:0, exp:'A new colour is added to the LEFT each step. The pattern grows leftward with the original colours shifting right.' },
 
+  { id:'ns13', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['⭐','⭐⭐','⭐⭐⭐','⭐⭐⭐⭐'], opts:['⭐⭐⭐⭐⭐','⭐⭐⭐','⭐⭐⭐⭐','⭐'], ans:0, exp:'One more star is added each time. After four stars comes five stars.' },
+  { id:'ns14', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['🟥','🟦','🟥','🟦'], opts:['🟩','🟥','🟦','🟨'], ans:1, exp:'The pattern alternates red square then blue square. After blue comes red.' },
+  { id:'ns15', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['⬆️','➡️','⬇️','⬅️'], opts:['⬇️','➡️','⬆️','↗️'], ans:2, exp:'The arrow rotates clockwise: up, right, down, left. Next it returns to up.' },
+  { id:'ns16', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['🔵','🔵','🔴','🔵','🔵'], opts:['🟢','🔴','🔵','🟡'], ans:1, exp:'The pattern is blue, blue, red, repeating. After blue, blue comes red.' },
+  { id:'ns17', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['◆','◆◆','◆◆◆','◆◆◆◆'], opts:['◆◆◆◆◆','◆◆◆','◆◆◆◆','◆'], ans:0, exp:'One more diamond is added each time. After four diamonds comes five.' },
+  { id:'ns18', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['🟢','🟡','🟢','🟡','🟢'], opts:['🟢','🟡','🔴','🔵'], ans:1, exp:'The pattern alternates green then yellow. After green comes yellow.' },
+  { id:'ns19', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['▲','▲▲','▲▲▲'], opts:['▲▲▲▲','▲▲','▲','▲▲▲'], ans:0, exp:'One more triangle is added each step. After three triangles comes four.' },
+  { id:'ns20', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['⬛','⬜','⬛','⬜','⬛'], opts:['⬛','⬜','🟫','🟥'], ans:1, exp:'The pattern alternates black then white. After black comes white.' },
+  { id:'ns21', cat:'nvr', type:'Sequences', diff:1, q:'What comes next in the pattern?',
+    visual:['●','●●','●●●'], opts:['●●●●','●●','●','●●●●●'], ans:0, exp:'One more circle is added each time. After three circles comes four.' },
+  { id:'ns22', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['🟥🟦🟩','🟦🟩🟥','🟩🟥🟦'], opts:['🟥🟦🟩','🟩🟦🟥','🟦🟥🟩','🟥🟩🟦'], ans:0, exp:'The colours shift one position left each time. After the third step the cycle repeats back to the first arrangement.' },
+  { id:'ns23', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['○','○□','○□△','○□△☆'], opts:['○□△☆◇','□△☆◇','○○○○○','△☆◇○'], ans:0, exp:'A new shape is added at the end each time. Next adds a diamond after the star.' },
+  { id:'ns24', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['⬆️','↗️','➡️','↘️'], opts:['⬇️','⬆️','↗️','⬅️'], ans:0, exp:'The arrow rotates 45 degrees clockwise each step. After down-right comes down.' },
+  { id:'ns25', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['🔴⚪','⚪🔴','🔴⚪','⚪🔴'], opts:['⚪⚪','🔴🔴','🔴⚪','⚪🔴'], ans:2, exp:'The two circles swap positions each step. After white-red comes red-white.' },
+  { id:'ns26', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['□','▪□','▪▪□','▪▪▪□'], opts:['▪▪▪▪□','□▪▪▪▪','▪▪▪▪▪','□□□□□'], ans:0, exp:'One more filled square is added on the left each time. Next has four filled squares then one empty.' },
+  { id:'ns27', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['🟡⬛⬛','⬛🟡⬛','⬛⬛🟡'], opts:['⬛⬛⬛','🟡⬛⬛','🟡🟡🟡','⬛🟡⬛'], ans:1, exp:'The yellow square moves one position to the right each step. After reaching the end it cycles back to the first position.' },
+  { id:'ns28', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['▲','▼','▲▲','▼▼'], opts:['▲▲▲','▼▼▼','▲▼','▼▲'], ans:0, exp:'The pattern alternates up and down triangles while count increases: 1 up, 1 down, 2 up, 2 down. Next is 3 up triangles.' },
+  { id:'ns29', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['🔵🔵🔵','🔵🔵','🔵'], opts:['🔵🔵','(none)','🔵🔵🔵','🔵'], ans:1, exp:'One blue circle is removed each step: 3, 2, 1. Next would be zero (none left).' },
+  { id:'ns30', cat:'nvr', type:'Sequences', diff:2, q:'What comes next in the pattern?',
+    visual:['◇','◆','◇◇','◆◆'], opts:['◇◇◇','◆◆◆','◇◆◇','◆◇◆'], ans:0, exp:'The pattern alternates empty and filled diamonds while increasing count: 1 empty, 1 filled, 2 empty, 2 filled. Next is 3 empty.' },
+  { id:'ns31', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['🔴⬆️','🔵➡️','🟢⬇️','🟡⬅️'], opts:['🟠⬆️','🔴➡️','🔵⬆️','🟣⬇️'], ans:0, exp:'The colour changes each step and the arrow rotates 90 degrees clockwise. Next is a new colour with the arrow back to up.' },
+  { id:'ns32', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['▲','▼▼','▲▲▲','▼▼▼▼'], opts:['▼▼▼▼▼','▲▲▲▲▲','▲▼▲▼▲','▼▲▼▲▼'], ans:1, exp:'The direction alternates (up, down) and the count increases by 1 each time. After 4 down comes 5 up.' },
+  { id:'ns33', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['⚫⚪⚪','⚪⚫⚪','⚪⚪⚫','⚫⚪⚪'], opts:['⚪⚫⚪','⚫⚫⚫','⚪⚪⚪','⚫⚪⚫'], ans:0, exp:'The black circle moves one position right, then cycles back. After returning to position 1, it moves to position 2 again.' },
+  { id:'ns34', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['🔴','🔴🔵','🔴🔵🔴','🔴🔵🔴🔵'], opts:['🔵🔴🔵🔴🔵','🔴🔵🔴🔵🔴','🔴🔴🔴🔴🔴','🔵🔵🔵🔵🔵'], ans:1, exp:'The pattern grows by one, alternating red and blue and always starting with red. Step 5 has 5 elements starting with red.' },
+  { id:'ns35', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['⬛⬜⬛⬜','⬜⬛⬜⬛','⬛⬜⬛⬜'], opts:['⬛⬜⬛⬜','⬜⬛⬜⬛','⬛⬛⬛⬛','⬜⬜⬜⬜'], ans:1, exp:'The pattern inverts each step (black and white swap positions). After black-white-black-white comes white-black-white-black.' },
+  { id:'ns36', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['🟥','🟧🟥','🟨🟧🟥','🟩🟨🟧🟥'], opts:['🟦🟩🟨🟧🟥','🟥🟧🟨🟩🟦','🟩🟩🟩🟩🟩','🟥🟥🟥🟥🟥'], ans:0, exp:'A new rainbow colour is added to the left each step. Next adds blue on the left.' },
+  { id:'ns37', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['◆◇◇◇','◇◆◇◇','◇◇◆◇','◇◇◇◆'], opts:['◆◇◇◇','◇◇◇◇','◆◆◆◆','◇◆◇◆'], ans:0, exp:'The filled diamond moves one position to the right each step. After reaching the end it cycles back to the start.' },
+  { id:'ns38', cat:'nvr', type:'Sequences', diff:3, q:'What comes next in the pattern?',
+    visual:['🔵','🔴🔵🔴','🔵🔴🔵🔴🔵'], opts:['🔴🔵🔴🔵🔴🔵🔴','🔵🔵🔵🔵🔵🔵🔵','🔴🔴🔴🔴🔴🔴🔴','🔵🔴🔵🔴🔵🔴🔵'], ans:0, exp:'Each step adds 2 more elements and alternates starting colour. Step 1: 1 blue. Step 2: 3 starting red. Step 3: 5 starting blue. Step 4: 7 starting red.' },
+
   // ---- NON-VERBAL REASONING: ODD ONE OUT (SHAPES) ----
   { id:'no1', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
     opts:['\uD83D\uDD34','\uD83D\uDD35','\uD83D\uDFE2','\uD83D\uDFE5'], ans:3, exp:'The square is a different shape. The others are all circles.' },
@@ -1536,6 +1704,55 @@ const PRACTICE_QUESTIONS = [
   { id:'no8', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
     opts:['\u2B50\u2B50\u2B50','\u2B50\u2B50\u2B50','\u2B50\u2B50','\u2B50\u2B50\u2B50'], ans:2, exp:'The third option has only 2 stars. The others all have 3.' },
 
+  { id:'no9', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['🟢','🟢','🟢','🟡'], ans:3, exp:'The yellow circle is different. The others are all green.' },
+  { id:'no10', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['⬆️','⬆️','⬇️','⬆️'], ans:2, exp:'The third arrow points down. The others all point up.' },
+  { id:'no11', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['◆','◆','◆','◇'], ans:3, exp:'The fourth diamond is empty/outline. The others are all filled.' },
+  { id:'no12', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['⭐','⭐','🌙','⭐'], ans:2, exp:'The moon is a different shape. The others are all stars.' },
+  { id:'no13', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['🔴','🟠','🔴','🔴'], ans:1, exp:'The second one is orange. The others are all red.' },
+  { id:'no14', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['▲','▲','▲','●'], ans:3, exp:'The circle is a different shape. The others are all triangles.' },
+  { id:'no15', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['➡️','⬅️','➡️','➡️'], ans:1, exp:'The second arrow points left. The others all point right.' },
+  { id:'no16', cat:'nvr', type:'Odd One Out', diff:1, q:'Which one is the odd one out?',
+    opts:['⬛','⬛','⬜','⬛'], ans:2, exp:'The third square is white. The others are all black.' },
+  { id:'no17', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['🔴🔵','🔴🔵','🔴🔵','🔵🔴'], ans:3, exp:'The fourth option has the colours in reverse order. The others are all red then blue.' },
+  { id:'no18', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['⭐⭐⭐','⭐⭐⭐','⭐⭐⭐⭐','⭐⭐⭐'], ans:2, exp:'The third option has four stars. The others all have three.' },
+  { id:'no19', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['▲▼','▲▼','▼▲','▲▼'], ans:2, exp:'The third option has the triangles reversed (down then up). The others all show up then down.' },
+  { id:'no20', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['●●○','●●○','●○●','●●○'], ans:2, exp:'The third option has the empty circle in the middle. The others have it at the end.' },
+  { id:'no21', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['🟥🟦','🟦🟩','🟩🟥','🟥🟥'], ans:3, exp:'The fourth option has two squares of the same colour. The others all have two different colours.' },
+  { id:'no22', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['◆◇','◆◇','◆◇','◇◆'], ans:3, exp:'The fourth option has the filled and empty diamonds swapped. The others are all filled then empty.' },
+  { id:'no23', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['⬆️⬆️','➡️➡️','⬇️⬇️','⬆️⬇️'], ans:3, exp:'The fourth option has arrows pointing in different directions. The others all have matching pairs.' },
+  { id:'no24', cat:'nvr', type:'Odd One Out', diff:2, q:'Which one is the odd one out?',
+    opts:['🔵🔵🔵','🟢🟢🟢','🔴🔴','🟡🟡🟡'], ans:2, exp:'The third option has only two circles. The others all have three.' },
+  { id:'no25', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['🔴🔵🟢','🔵🟢🔴','🟢🔴🔵','🔴🟢🔵'], ans:3, exp:'The first three are rotations of the same order (each colour shifts one position). The fourth breaks this rotation pattern.' },
+  { id:'no26', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['▲▼▲','▼▲▼','▲▼▲','▲▼▲'], ans:1, exp:'The second option starts with a down triangle. The others all start with an up triangle.' },
+  { id:'no27', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['⬛⬜⬛⬜','⬜⬛⬜⬛','⬛⬜⬛⬜','⬛⬜⬜⬛'], ans:3, exp:'The fourth option has a different pattern (two whites in the middle). The others alternate strictly.' },
+  { id:'no28', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['◆◆◇','◆◇◆','◇◆◆','◆◆◆'], ans:3, exp:'The fourth option has all filled diamonds. The others each have exactly one empty diamond.' },
+  { id:'no29', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['🟥🟦🟥🟦','🟦🟥🟦🟥','🟥🟦🟥🟦','🟥🟦🟦🟥'], ans:3, exp:'The fourth option has two blues together in the middle. The others all strictly alternate colours.' },
+  { id:'no30', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['⭐🌙⭐','🌙⭐🌙','⭐🌙⭐','⭐⭐🌙'], ans:3, exp:'The fourth does not alternate star and moon. The others all have a strict alternating pattern.' },
+  { id:'no31', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['●○●○','○●○●','●○●○','●○○●'], ans:3, exp:'The fourth option does not alternate (has two empty circles together). The others all strictly alternate filled and empty.' },
+  { id:'no32', cat:'nvr', type:'Odd One Out', diff:3, q:'Which one is the odd one out?',
+    opts:['🔴🔵🟢🟡','🔵🟢🟡🔴','🟢🟡🔴🔵','🟡🔴🟢🔵'], ans:3, exp:'The first three are rotations of the same colour sequence. The fourth has green and blue swapped, breaking the rotation.' },
+
   // ---- NON-VERBAL REASONING: SHAPE ANALOGIES ----
   { id:'na1', cat:'nvr', type:'Analogies', diff:1, q:'\uD83D\uDD34 is to \uD83D\uDD35 as \uD83D\uDFE1 is to ___?',
     opts:['\uD83D\uDFE2','\uD83D\uDD34','\uD83D\uDFE1','\u26AB'], ans:0, exp:'Red changes to blue (warm to cool). Yellow (warm) changes to green (cool) in the same way.' },
@@ -1553,13 +1770,75 @@ const PRACTICE_QUESTIONS = [
     opts:['\u2B1C\u2B1B\u2B1C','\u2B1B\u2B1C\u2B1B','\u2B1C\u2B1C\u2B1C','\u2B1B\u2B1B\u2B1B'], ans:0, exp:'Each colour swaps to its opposite. Black-white-black becomes white-black-white.' },
   { id:'na8', cat:'nvr', type:'Analogies', diff:3, q:'\u25B2 is to \u25B2\u25B2\u25B2 as \u25CF is to ___?',
     opts:['\u25CF\u25CF\u25CF','\u25CF\u25CF','\u25CF','\u25B2\u25CF\u25B2'], ans:0, exp:'One triangle becomes three triangles (x3). One circle becomes three circles.' },
+  { id:'na9', cat:'nvr', type:'Analogies', diff:1, q:'⬆️ is to ⬇️ as ➡️ is to ___?',
+    opts:['⬆️','⬅️','⬇️','➡️'], ans:1, exp:'Up flips to down (opposite direction). Right flips to left in the same way.' },
+  { id:'na10', cat:'nvr', type:'Analogies', diff:1, q:'🔴 is to 🔵 as 🟡 is to ___?',
+    opts:['🟣','🟢','🟠','🔴'], ans:1, exp:'Red (warm) changes to blue (cool). Yellow (warm) changes to green (cool) in the same way.' },
+  { id:'na11', cat:'nvr', type:'Analogies', diff:1, q:'● is to ○ as ▲ is to ___?',
+    opts:['△','▼','●','■'], ans:0, exp:'Filled circle becomes empty circle. Filled triangle becomes empty triangle.' },
+  { id:'na12', cat:'nvr', type:'Analogies', diff:1, q:'⭐ is to ⭐⭐ as 🔵 is to ___?',
+    opts:['🔴🔴','🔵🔵','🔵','⭐🔵'], ans:1, exp:'One star doubles to two stars. One blue circle doubles to two blue circles.' },
+  { id:'na13', cat:'nvr', type:'Analogies', diff:1, q:'◆ is to ◇ as ■ is to ___?',
+    opts:['□','◆','●','▲'], ans:0, exp:'Filled diamond becomes empty diamond. Filled square becomes empty square.' },
+  { id:'na14', cat:'nvr', type:'Analogies', diff:1, q:'🟥 is to 🟦 as 🟧 is to ___?',
+    opts:['🟨','🟪','🟥','🟩'], ans:1, exp:'Red square changes to blue square (warm to cool). Orange square changes to purple square in the same way.' },
+  { id:'na15', cat:'nvr', type:'Analogies', diff:1, q:'▶ is to ◀ as ▲ is to ___?',
+    opts:['▼','▶','◀','▲'], ans:0, exp:'Right-pointing triangle reverses to left-pointing. Up-pointing triangle reverses to down-pointing.' },
+  { id:'na16', cat:'nvr', type:'Analogies', diff:1, q:'⬛ is to ⬜ as 🔴 is to ___?',
+    opts:['⚪','🔵','⬛','🟢'], ans:0, exp:'Black becomes white (dark to light). Red becomes white (coloured to empty) in the same way.' },
+  { id:'na17', cat:'nvr', type:'Analogies', diff:2, q:'▲ is to ▼ as ◀ is to ___?',
+    opts:['▶','◀','▲','▼'], ans:0, exp:'Triangle pointing up flips to point down. Triangle pointing left flips to point right.' },
+  { id:'na18', cat:'nvr', type:'Analogies', diff:2, q:'🔵▲ is to ▲🔵 as 🔴◆ is to ___?',
+    opts:['◆🔴','🔴◆','◆◆','🔵◆'], ans:0, exp:'The two shapes swap positions. Blue-triangle becomes triangle-blue, so red-diamond becomes diamond-red.' },
+  { id:'na19', cat:'nvr', type:'Analogies', diff:2, q:'● is to ●●● as ▲ is to ___?',
+    opts:['▲▲','▲▲▲','▲▲▲▲','●▲●'], ans:1, exp:'One circle becomes three circles (tripled). One triangle becomes three triangles.' },
+  { id:'na20', cat:'nvr', type:'Analogies', diff:2, q:'🔴🔵 is to 🔵🔴 as ⬛⬜ is to ___?',
+    opts:['⬜⬛','⬛⬜','⬛⬛','⬜⬜'], ans:0, exp:'The two colours swap positions. Red-blue becomes blue-red, so black-white becomes white-black.' },
+  { id:'na21', cat:'nvr', type:'Analogies', diff:2, q:'⭐ is to ⭐⭐⭐ as ◆ is to ___?',
+    opts:['◆◆','◆◆◆◆','◆◆◆','⭐◆⭐'], ans:2, exp:'One star triples to three stars. One diamond triples to three diamonds.' },
+  { id:'na22', cat:'nvr', type:'Analogies', diff:2, q:'🟢 is to 🟢🟢 as 🔴🔴 is to ___?',
+    opts:['🔴🔴🔴','🔴🔴🔴🔴','🔴','🟢🔴'], ans:1, exp:'Green doubles from 1 to 2. Red doubles from 2 to 4.' },
+  { id:'na23', cat:'nvr', type:'Analogies', diff:2, q:'⬆️⬆️ is to ⬇️⬇️ as ➡️➡️ is to ___?',
+    opts:['⬅️⬅️','➡️⬅️','⬆️⬆️','⬇️⬇️'], ans:0, exp:'Two up arrows flip to two down arrows. Two right arrows flip to two left arrows.' },
+  { id:'na24', cat:'nvr', type:'Analogies', diff:2, q:'◇◇ is to ◆◆ as ○○ is to ___?',
+    opts:['●●','○○','◇●','●○'], ans:0, exp:'Empty diamonds become filled diamonds. Empty circles become filled circles.' },
+  { id:'na25', cat:'nvr', type:'Analogies', diff:3, q:'🔴🔵🔴 is to 🔵🔴🔵 as ⬛⬜⬛ is to ___?',
+    opts:['⬜⬛⬜','⬛⬜⬛','⬜⬜⬜','⬛⬛⬛'], ans:0, exp:'Each colour swaps to its opposite. Red-blue-red becomes blue-red-blue, so black-white-black becomes white-black-white.' },
+  { id:'na26', cat:'nvr', type:'Analogies', diff:3, q:'▲▲ is to ▼▼▼ as ●● is to ___?',
+    opts:['○○○','●●●','●●','○○'], ans:1, exp:'Two up triangles become three down triangles (increase count and flip). Two filled circles become three filled circles.' },
+  { id:'na27', cat:'nvr', type:'Analogies', diff:3, q:'🔴🔵 is to 🔵🔴🔵 as ⬛⬜ is to ___?',
+    opts:['⬛⬜⬛','⬜⬛⬜','⬛⬛⬜','⬜⬜⬛'], ans:1, exp:'The shapes swap and one is added. Red-blue becomes blue-red-blue. Black-white becomes white-black-white.' },
+  { id:'na28', cat:'nvr', type:'Analogies', diff:3, q:'◆◇◆ is to ◇◆◇ as ●○● is to ___?',
+    opts:['○●○','●○●','●●●','○○○'], ans:0, exp:'Each shape swaps to its opposite (filled to empty, empty to filled). So filled-empty-filled becomes empty-filled-empty.' },
+  { id:'na29', cat:'nvr', type:'Analogies', diff:3, q:'⬆️🔴 is to ⬇️🔵 as ➡️🟡 is to ___?',
+    opts:['⬅️🟢','➡️🟡','⬆️🔴','⬇️🟣'], ans:0, exp:'The arrow flips direction and the colour changes to its cool counterpart. Right-yellow becomes left-green.' },
+  { id:'na30', cat:'nvr', type:'Analogies', diff:3, q:'🟥🟦🟥 is to 🟦🟥🟦🟥 as ⬛⬜⬛ is to ___?',
+    opts:['⬜⬛⬜⬛','⬛⬜⬛⬜','⬜⬜⬜⬜','⬛⬛⬛⬛'], ans:0, exp:'The colours invert and one extra element is added. The pattern swaps and grows by one.' },
+  { id:'na31', cat:'nvr', type:'Analogies', diff:3, q:'▲○ is to ▼● as ◇➡️ is to ___?',
+    opts:['◆⬅️','◇➡️','◆➡️','◇⬅️'], ans:0, exp:'Both shapes transform: triangle flips, empty becomes filled. So empty diamond fills and right arrow reverses to left.' },
+  { id:'na32', cat:'nvr', type:'Analogies', diff:3, q:'🔵🔵🔴 is to 🔴🔴🔵 as ⬜⬜⬛ is to ___?',
+    opts:['⬛⬛⬜','⬜⬛⬛','⬜⬜⬛','⬛⬜⬛'], ans:0, exp:'Each colour swaps to its opposite. Blue-blue-red becomes red-red-blue, so white-white-black becomes black-black-white.' },
 ];
 
 // ============ PRACTICE ENGINE ============
 let practiceSession = null;
+let practiceTimerInterval = null;
+let practiceModeTimed = false;
+let practiceModeAdaptive = false;
 
 const VR_TYPES = ['Synonyms','Antonyms','Odd One Out','Word Analogies','Hidden Words'];
 const NVR_TYPES = ['Sequences','Odd One Out','Analogies'];
+const DIFF_LABELS = { 1: '\u2B50 Easy', 2: '\u2B50\u2B50 Medium', 3: '\u2B50\u2B50\u2B50 Hard' };
+
+function toggleMode(mode) {
+  if (mode === 'timed') {
+    practiceModeTimed = !practiceModeTimed;
+    document.getElementById('timedToggle').classList.toggle('active', practiceModeTimed);
+  } else {
+    practiceModeAdaptive = !practiceModeAdaptive;
+    document.getElementById('adaptiveToggle').classList.toggle('active', practiceModeAdaptive);
+  }
+}
 
 function switchView(view) {
   document.querySelector('.view-tracker').style.display = view === 'tracker' ? 'block' : 'none';
@@ -1581,7 +1860,7 @@ function renderPracticeStats() {
 function showSubtypes(cat) {
   const types = cat === 'vr' ? VR_TYPES : NVR_TYPES;
   const grid = document.getElementById('subtypeGrid');
-  grid.innerHTML = '<button class="subtype-btn mix-btn" onclick="startSession(\'' + cat + '\',\'all\')">&#x1F3B2; Mix All</button>';
+  grid.innerHTML = '<button class="subtype-btn mix-btn" onclick="startSession(\'' + cat + '\',\'all\')">\uD83C\uDFB2 Mix All</button>';
   types.forEach(t => {
     grid.innerHTML += '<button class="subtype-btn" onclick="startSession(\'' + cat + '\',\'' + t + '\')">' + t + '</button>';
   });
@@ -1597,53 +1876,109 @@ function shuffleArray(arr) {
 }
 
 function startSession(cat, type) {
+  stopTimer();
   let qs = PRACTICE_QUESTIONS.filter(q => q.cat === cat);
   if (type !== 'all') qs = qs.filter(q => q.type === type);
   qs = shuffleArray(qs);
-  // Prioritise unanswered questions
   const answered = (state.practiceStats && state.practiceStats.answeredIds) || [];
-  qs.sort((a, b) => {
-    const aAns = answered.includes(a.id) ? 1 : 0;
-    const bAns = answered.includes(b.id) ? 1 : 0;
-    return aAns - bAns;
-  });
-  qs = qs.slice(0, 10); // 10 questions per session
+  qs.sort((a, b) => (answered.includes(a.id) ? 1 : 0) - (answered.includes(b.id) ? 1 : 0));
+
+  // Adaptive mode: load more questions, start at diff 1
+  if (practiceModeAdaptive) {
+    qs = qs.slice(0, 30); // larger pool for adaptive
+  } else {
+    qs = qs.slice(0, 10);
+  }
+
+  const numQs = practiceModeAdaptive ? 10 : qs.length;
   practiceSession = {
     cat, type,
-    questions: qs,
+    pool: qs,
+    questions: practiceModeAdaptive ? [] : qs,
     current: 0,
     correct: 0,
+    totalAnswered: 0,
+    maxQuestions: numQs,
     xpEarned: 0,
     coinsEarned: 0,
-    answered: false
+    answered: false,
+    // Timer
+    timedMode: practiceModeTimed,
+    timeBank: practiceModeTimed ? 60 * numQs : 0,
+    questionStartTime: 0,
+    timeTaken: [],
+    // Adaptive
+    adaptiveMode: practiceModeAdaptive,
+    currentDiff: 1,
+    adaptiveStreak: 0
   };
   document.getElementById('practicePicker').style.display = 'none';
   document.getElementById('subtypeGrid').innerHTML = '';
   renderCurrentQuestion();
 }
 
+function getNextAdaptiveQuestion() {
+  const s = practiceSession;
+  // Find a question at the current difficulty from the pool
+  let q = s.pool.find(p => p.diff === s.currentDiff && !s.questions.includes(p));
+  if (!q) {
+    // Try adjacent difficulties
+    q = s.pool.find(p => Math.abs(p.diff - s.currentDiff) <= 1 && !s.questions.includes(p));
+  }
+  if (!q) q = s.pool.find(p => !s.questions.includes(p));
+  if (q) s.questions.push(q);
+  return q;
+}
+
 function renderCurrentQuestion() {
   const s = practiceSession;
-  if (!s || s.current >= s.questions.length) { showSessionSummary(); return; }
+
+  // Adaptive: pick next question dynamically
+  if (s.adaptiveMode && s.totalAnswered >= s.questions.length && s.totalAnswered < s.maxQuestions) {
+    getNextAdaptiveQuestion();
+  }
+
+  if (!s || s.totalAnswered >= s.maxQuestions || (!s.adaptiveMode && s.current >= s.questions.length)) {
+    showSessionSummary();
+    return;
+  }
+  // In adaptive mode, current = totalAnswered
+  if (s.adaptiveMode) s.current = s.totalAnswered;
   const q = s.questions[s.current];
+  if (!q) { showSessionSummary(); return; }
   s.answered = false;
-  const pct = Math.round((s.current / s.questions.length) * 100);
+  s.questionStartTime = Date.now();
+  const pct = Math.round((s.totalAnswered / s.maxQuestions) * 100);
 
   const content = document.getElementById('practiceContent');
   let html = '<div class="question-card">';
-  html += '<div class="q-progress"><span>Q' + (s.current + 1) + '</span><div class="q-progress-bar"><div class="q-progress-fill" style="width:' + pct + '%"></div></div><span>' + (s.current + 1) + '/' + s.questions.length + '</span></div>';
-  html += '<div class="q-type-label">' + (q.cat === 'vr' ? '&#x1F4D6;' : '&#x1F9E9;') + ' ' + q.type + '</div>';
 
-  // Visual for NVR sequences
+  // Timer bar
+  if (s.timedMode) {
+    const totalTime = 60 * s.maxQuestions;
+    const pctTime = Math.max(0, (s.timeBank / totalTime) * 100);
+    const cls = s.timeBank <= 30 ? 'danger' : s.timeBank <= 90 ? 'warning' : '';
+    const mins = Math.floor(s.timeBank / 60);
+    const secs = s.timeBank % 60;
+    const timeStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    html += '<div class="timer-section"><div class="timer-display"><span>\u23F1\uFE0F Time</span><span class="timer-time ' + cls + '" id="timerText">' + timeStr + '</span></div>';
+    html += '<div class="timer-bar"><div class="timer-bar-fill ' + cls + '" id="timerFill" style="width:' + pctTime + '%"></div></div></div>';
+  }
+
+  html += '<div class="q-progress"><span>Q' + (s.totalAnswered + 1) + '</span><div class="q-progress-bar"><div class="q-progress-fill" style="width:' + pct + '%"></div></div><span>' + (s.totalAnswered + 1) + '/' + s.maxQuestions + '</span></div>';
+  html += '<div class="q-type-label">' + (q.cat === 'vr' ? '\uD83D\uDCD6' : '\uD83E\uDDE9') + ' ' + q.type;
+  if (s.adaptiveMode) {
+    html += '<span class="diff-indicator diff-' + s.currentDiff + '">' + DIFF_LABELS[s.currentDiff] + '</span>';
+  }
+  html += '</div>';
+
   if (q.visual) {
-    html += '<div class="q-instruction">' + q.q + '</div>';
-    html += '<div class="q-visual">';
+    html += '<div class="q-instruction">' + q.q + '</div><div class="q-visual">';
     q.visual.forEach((v, i) => {
       html += '<span>' + v + '</span>';
       if (i < q.visual.length - 1) html += '<span class="arrow">\u2192</span>';
     });
-    html += '<span class="arrow">\u2192</span><span class="q-mark">?</span>';
-    html += '</div>';
+    html += '<span class="arrow">\u2192</span><span class="q-mark">?</span></div>';
   } else {
     html += '<div class="q-text">' + q.q + '</div>';
   }
@@ -1652,19 +1987,73 @@ function renderCurrentQuestion() {
   q.opts.forEach((opt, i) => {
     html += '<button class="option-btn" onclick="selectPracticeAnswer(' + i + ')">' + opt + '</button>';
   });
-  html += '</div>';
-  html += '<div id="qFeedback"></div>';
+  html += '</div><div id="qFeedback"></div>';
   html += '<div id="qActions" style="display:none"><button class="q-next-btn" onclick="nextPracticeQuestion()">Next Question \u27A1\uFE0F</button></div>';
   html += '</div>';
   content.innerHTML = html;
+
+  // Start timer
+  if (s.timedMode) startTimer();
+}
+
+function startTimer() {
+  stopTimer();
+  practiceTimerInterval = setInterval(function() {
+    const s = practiceSession;
+    if (!s || !s.timedMode) { stopTimer(); return; }
+    s.timeBank--;
+    // Update display
+    const el = document.getElementById('timerText');
+    const fill = document.getElementById('timerFill');
+    if (el && fill) {
+      const mins = Math.floor(Math.max(0, s.timeBank) / 60);
+      const secs = Math.max(0, s.timeBank) % 60;
+      el.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+      const totalTime = 60 * s.maxQuestions;
+      fill.style.width = Math.max(0, (s.timeBank / totalTime) * 100) + '%';
+      const cls = s.timeBank <= 30 ? 'danger' : s.timeBank <= 90 ? 'warning' : '';
+      el.className = 'timer-time ' + cls;
+      fill.className = 'timer-bar-fill ' + cls;
+    }
+    if (s.timeBank <= 0) {
+      stopTimer();
+      if (!s.answered) timerExpired();
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  if (practiceTimerInterval) { clearInterval(practiceTimerInterval); practiceTimerInterval = null; }
+}
+
+function timerExpired() {
+  const s = practiceSession;
+  if (!s) return;
+  if (!s.answered) {
+    // Auto-skip: count as wrong
+    s.answered = true;
+    s.timeTaken.push(60);
+    s.totalAnswered++;
+    if (!state.practiceStats) state.practiceStats = { totalAttempted:0, totalCorrect:0, vrCorrect:0, nvrCorrect:0, answeredIds:[], bestSessionPct:0, perfectSession:false };
+    state.practiceStats.totalAttempted++;
+    if (s.adaptiveMode) { s.adaptiveStreak = 0; if (s.currentDiff > 1) s.currentDiff--; }
+    save();
+    renderPracticeStats();
+  }
+  // Auto-advance after brief delay
+  setTimeout(function() { if (practiceSession) { practiceSession.current++; renderCurrentQuestion(); } }, 500);
 }
 
 function selectPracticeAnswer(idx) {
   const s = practiceSession;
   if (!s || s.answered) return;
   s.answered = true;
+  stopTimer();
   const q = s.questions[s.current];
   const correct = idx === q.ans;
+  const elapsed = Math.round((Date.now() - s.questionStartTime) / 1000);
+  s.timeTaken.push(elapsed);
+  s.totalAnswered++;
   const btns = document.querySelectorAll('#qOptions .option-btn');
 
   btns.forEach((btn, i) => {
@@ -1674,36 +2063,51 @@ function selectPracticeAnswer(idx) {
     btn.classList.add('disabled');
   });
 
+  // Adaptive difficulty update
+  if (s.adaptiveMode) {
+    if (correct) {
+      s.adaptiveStreak++;
+      const threshold = (s.timedMode && elapsed < 20) ? 2 : 3;
+      if (s.adaptiveStreak >= threshold && s.currentDiff < 3) {
+        s.currentDiff++;
+        s.adaptiveStreak = 0;
+      }
+    } else {
+      s.adaptiveStreak = 0;
+      if (s.currentDiff > 1) s.currentDiff--;
+    }
+  }
+
+  // XP based on difficulty
+  const baseXP = s.adaptiveMode ? [0, 10, 15, 20][q.diff] : 10;
+  const streak = getCurrentStreak();
   const fb = document.getElementById('qFeedback');
   if (correct) {
     s.correct++;
-    // Award XP and coins
-    const streak = getCurrentStreak();
-    const xp = streak >= 3 ? 15 : 10;
+    const xp = baseXP + (streak >= 3 ? 5 : 0);
     const coins = 5;
     s.xpEarned += xp;
     s.coinsEarned += coins;
     const oldXP = state.totalXP;
     state.totalXP += xp;
     state.coins += coins;
-    // Count toward daily goal
     const subject = q.cat === 'vr' ? 'english' : 'maths';
     const key = todayKey();
     if (!state.days[key]) state.days[key] = { maths: 0, english: 0 };
     state.days[key][subject]++;
     state.goalsHit = countGoalsHit();
-    // Check for level up
     const oldLevel = getLevel(oldXP);
     const newLevel = getLevel(state.totalXP);
     if (newLevel.level > oldLevel.level) showLevelUp(newLevel);
     save();
     render();
-    fb.innerHTML = '<div class="q-feedback correct">\u2705 Correct! +' + xp + ' XP +' + coins + ' \uD83E\uDE99<br>' + q.exp + '</div>';
+    let fbText = '\u2705 Correct! +' + xp + ' XP +' + coins + ' \uD83E\uDE99';
+    if (s.timedMode) fbText += ' (' + elapsed + 's)';
+    fb.innerHTML = '<div class="q-feedback correct">' + fbText + '<br>' + q.exp + '</div>';
   } else {
-    fb.innerHTML = '<div class="q-feedback incorrect">\u274C Not quite!<br>' + q.exp + '</div>';
+    fb.innerHTML = '<div class="q-feedback incorrect">\u274C Not quite!' + (s.timedMode ? ' (' + elapsed + 's)' : '') + '<br>' + q.exp + '</div>';
   }
 
-  // Track in practice stats
   if (!state.practiceStats) state.practiceStats = { totalAttempted:0, totalCorrect:0, vrCorrect:0, nvrCorrect:0, answeredIds:[], bestSessionPct:0, perfectSession:false };
   state.practiceStats.totalAttempted++;
   if (correct) {
@@ -1714,9 +2118,7 @@ function selectPracticeAnswer(idx) {
   }
   save();
   renderPracticeStats();
-
   document.getElementById('qActions').style.display = '';
-  // Check badges
   checkBadges();
 }
 
@@ -1726,18 +2128,14 @@ function nextPracticeQuestion() {
 }
 
 function showSessionSummary() {
+  stopTimer();
   const s = practiceSession;
-  const pct = s.questions.length > 0 ? Math.round((s.correct / s.questions.length) * 100) : 0;
+  const total = s.totalAnswered || s.questions.length;
+  const pct = total > 0 ? Math.round((s.correct / total) * 100) : 0;
 
-  // Update best session
   if (!state.practiceStats) state.practiceStats = { totalAttempted:0, totalCorrect:0, vrCorrect:0, nvrCorrect:0, answeredIds:[], bestSessionPct:0, perfectSession:false };
-  if (pct > (state.practiceStats.bestSessionPct || 0)) {
-    state.practiceStats.bestSessionPct = pct;
-  }
-  // Check for perfect session badge
-  if (s.correct === s.questions.length && s.questions.length >= 10) {
-    state.practiceStats.perfectSession = true;
-  }
+  if (pct > (state.practiceStats.bestSessionPct || 0)) state.practiceStats.bestSessionPct = pct;
+  if (s.correct === total && total >= 10) state.practiceStats.perfectSession = true;
   save();
   renderPracticeStats();
 
@@ -1745,25 +2143,42 @@ function showSessionSummary() {
   const msg = pct >= 80 ? 'Amazing work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
 
   const content = document.getElementById('practiceContent');
-  content.innerHTML = '<div class="session-summary">' +
-    '<div style="font-size:48px">' + emoji + '</div>' +
-    '<div class="session-label">' + msg + '</div>' +
-    '<div class="session-score">' + s.correct + '/' + s.questions.length + '</div>' +
-    '<div class="session-label">' + pct + '% correct</div>' +
-    '<div class="session-rewards">' +
-      '<div class="session-reward"><div class="reward-val">\u26A1 ' + s.xpEarned + '</div>XP earned</div>' +
-      '<div class="session-reward"><div class="reward-val">\uD83E\uDE99 ' + s.coinsEarned + '</div>Coins earned</div>' +
-    '</div>' +
-    '<div class="session-btns">' +
-      '<button class="btn-back" onclick="backToPicker()">\uD83C\uDFE0 Menu</button>' +
-      '<button class="btn-again" onclick="startSession(\'' + s.cat + '\',\'' + s.type + '\')">\uD83D\uDD04 Again</button>' +
-    '</div>' +
-  '</div>';
+  let html = '<div class="session-summary">';
+  html += '<div style="font-size:48px">' + emoji + '</div>';
+  html += '<div class="session-label">' + msg + '</div>';
+  html += '<div class="session-score">' + s.correct + '/' + total + '</div>';
+  html += '<div class="session-label">' + pct + '% correct</div>';
+
+  // Time stats
+  if (s.timeTaken.length > 0) {
+    const avgTime = Math.round(s.timeTaken.reduce((a,b) => a+b, 0) / s.timeTaken.length);
+    const fastest = Math.min(...s.timeTaken);
+    const timeLeft = s.timedMode ? Math.max(0, s.timeBank) : 0;
+    html += '<div class="time-stats">';
+    html += '<div class="time-stat"><div class="time-stat-val">' + avgTime + 's</div>Avg time</div>';
+    html += '<div class="time-stat"><div class="time-stat-val">' + fastest + 's</div>Fastest</div>';
+    if (s.timedMode) {
+      const m = Math.floor(timeLeft / 60); const sec = timeLeft % 60;
+      html += '<div class="time-stat"><div class="time-stat-val">' + m + ':' + (sec<10?'0':'') + sec + '</div>Time left</div>';
+    }
+    html += '</div>';
+  }
+
+  html += '<div class="session-rewards">';
+  html += '<div class="session-reward"><div class="reward-val">\u26A1 ' + s.xpEarned + '</div>XP earned</div>';
+  html += '<div class="session-reward"><div class="reward-val">\uD83E\uDE99 ' + s.coinsEarned + '</div>Coins earned</div>';
+  html += '</div>';
+  html += '<div class="session-btns">';
+  html += '<button class="btn-back" onclick="backToPicker()">\uD83C\uDFE0 Menu</button>';
+  html += '<button class="btn-again" onclick="startSession(\'' + s.cat + '\',\'' + s.type + '\')">\uD83D\uDD04 Again</button>';
+  html += '</div></div>';
+  content.innerHTML = html;
 
   if (pct >= 80) fireConfetti();
 }
 
 function backToPicker() {
+  stopTimer();
   practiceSession = null;
   document.getElementById('practicePicker').style.display = '';
   document.getElementById('subtypeGrid').innerHTML = '';
