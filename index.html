@@ -200,7 +200,13 @@
     font-size: 15px;
     font-weight: 700;
     color: var(--primary);
-    margin-bottom: 12px;
+    margin-bottom: 2px;
+  }
+  .today-attempted {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 600;
+    margin-bottom: 10px;
   }
 
   /* Subject grid */
@@ -225,10 +231,19 @@
     font-weight: 900;
     color: var(--primary);
     line-height: 1;
-    margin-bottom: 6px;
+    margin-bottom: 2px;
     transition: transform 0.2s;
   }
   .subject-count.bump { animation: bump 0.3s ease; }
+  .subject-attempted {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 600;
+    margin-bottom: 6px;
+    min-height: 16px;
+  }
+  .subject-attempted .att-correct { color: var(--green); font-weight: 700; }
+  .subject-attempted .att-wrong { color: var(--red); font-weight: 700; }
   @keyframes bump {
     0% { transform: scale(1); }
     40% { transform: scale(1.15); }
@@ -1252,13 +1267,15 @@
 
     <!-- Today's Practice -->
     <div class="today-card">
-      <div class="today-label">Today's Questions</div>
-      <div class="today-total" id="todayTotal">0 total</div>
+      <div class="today-label">Today's Correct Answers</div>
+      <div class="today-total" id="todayTotal">0 correct</div>
+      <div class="today-attempted" id="todayAttemptedTotal"></div>
 
       <div class="subject-grid">
         <div class="subject-col">
           <div class="subject-label maths-label">📐 Maths</div>
           <div class="subject-count" id="mathsCount">0</div>
+          <div class="subject-attempted" id="mathsAttempted"></div>
           <div class="btn-row">
             <button class="btn-subtract" onclick="removeQuestion('maths')">−</button>
             <button class="btn-add" onclick="addQuestion('maths')">+</button>
@@ -1271,6 +1288,7 @@
         <div class="subject-col">
           <div class="subject-label english-label">📖 English</div>
           <div class="subject-count" id="englishCount">0</div>
+          <div class="subject-attempted" id="englishAttempted"></div>
           <div class="btn-row">
             <button class="btn-subtract" onclick="removeQuestion('english')">−</button>
             <button class="btn-add" onclick="addQuestion('english')">+</button>
@@ -2103,10 +2121,19 @@ function timerExpired() {
     s.answered = true;
     s.timeTaken.push(60);
     s.totalAnswered++;
+    s.results.push({ diff: s.questions[s.current].diff, correct: false });
+    // Track attempted count for timed-out questions
+    const tq = s.questions[s.current];
+    const attSubject = tq.cat === 'vr' ? 'english' : 'maths';
+    const attKey = todayKey();
+    if (!state.days[attKey]) state.days[attKey] = { maths: 0, english: 0 };
+    if (!state.days[attKey][attSubject + 'Attempted']) state.days[attKey][attSubject + 'Attempted'] = 0;
+    state.days[attKey][attSubject + 'Attempted']++;
     if (!state.practiceStats) state.practiceStats = { totalAttempted:0, totalCorrect:0, vrCorrect:0, nvrCorrect:0, answeredIds:[], bestSessionPct:0, perfectSession:false };
     state.practiceStats.totalAttempted++;
     if (s.adaptiveMode) { s.adaptiveStreak = 0; if (s.currentDiff > 1) s.currentDiff--; }
     save();
+    render();
     renderPracticeStats();
   }
   // Auto-advance after brief delay
@@ -2132,6 +2159,15 @@ function selectPracticeAnswer(idx) {
     if (i !== idx && i !== q.ans) btn.classList.add('dim');
     btn.classList.add('disabled');
   });
+
+  // Always track attempted count (correct or not)
+  {
+    const attSubject = q.cat === 'vr' ? 'english' : 'maths';
+    const attKey = todayKey();
+    if (!state.days[attKey]) state.days[attKey] = { maths: 0, english: 0 };
+    if (!state.days[attKey][attSubject + 'Attempted']) state.days[attKey][attSubject + 'Attempted'] = 0;
+    state.days[attKey][attSubject + 'Attempted']++;
+  }
 
   // Adaptive difficulty update
   if (s.adaptiveMode) {
@@ -2175,6 +2211,8 @@ function selectPracticeAnswer(idx) {
     if (s.timedMode) fbText += ' (' + elapsed + 's)';
     fb.innerHTML = '<div class="q-feedback correct">' + fbText + '<br>' + q.exp + '</div>';
   } else {
+    save();
+    render();
     fb.innerHTML = '<div class="q-feedback incorrect">\u274C Not quite!' + (s.timedMode ? ' (' + elapsed + 's)' : '') + '<br>' + q.exp + '</div>';
   }
 
@@ -2326,8 +2364,8 @@ function dateKey(date) {
 
 function getDayEntry(key) {
   const e = state.days[key];
-  if (!e) return { maths: 0, english: 0 };
-  return { maths: e.maths || 0, english: e.english || 0 };
+  if (!e) return { maths: 0, english: 0, mathsAttempted: 0, englishAttempted: 0 };
+  return { maths: e.maths || 0, english: e.english || 0, mathsAttempted: e.mathsAttempted || 0, englishAttempted: e.englishAttempted || 0 };
 }
 
 function getDayTotal(key) {
@@ -2596,10 +2634,37 @@ function render() {
     document.getElementById('levelXPLabel').textContent = `${state.totalXP} XP - MAX!`;
   }
 
-  // Today - subjects
+  // Today - subjects (correct counts are the main display)
+  const todayEntry = getDayEntry(todayKey());
+  const todayMA = todayEntry.mathsAttempted;
+  const todayEA = todayEntry.englishAttempted;
+  const todayTotalAttempted = todayMA + todayEA;
   document.getElementById('mathsCount').textContent = todayM;
   document.getElementById('englishCount').textContent = todayE;
-  document.getElementById('todayTotal').textContent = today + ' total';
+  document.getElementById('todayTotal').textContent = today + ' correct';
+
+  // Show attempted breakdown under each subject
+  const mathsAttEl = document.getElementById('mathsAttempted');
+  if (todayMA > 0) {
+    const mathsWrong = todayMA - todayM;
+    mathsAttEl.innerHTML = '<span class="att-correct">✓' + todayM + '</span> of ' + todayMA + ' attempted' + (mathsWrong > 0 ? ' · <span class="att-wrong">✗' + mathsWrong + '</span>' : '');
+  } else {
+    mathsAttEl.textContent = '';
+  }
+  const englishAttEl = document.getElementById('englishAttempted');
+  if (todayEA > 0) {
+    const engWrong = todayEA - todayE;
+    englishAttEl.innerHTML = '<span class="att-correct">✓' + todayE + '</span> of ' + todayEA + ' attempted' + (engWrong > 0 ? ' · <span class="att-wrong">✗' + engWrong + '</span>' : '');
+  } else {
+    englishAttEl.textContent = '';
+  }
+  // Total attempted
+  const totalAttEl = document.getElementById('todayAttemptedTotal');
+  if (todayTotalAttempted > 0 && todayTotalAttempted !== today) {
+    totalAttEl.textContent = todayTotalAttempted + ' attempted in app · only correct count';
+  } else {
+    totalAttEl.textContent = '';
+  }
 
   // Streak hint
   const hint = document.getElementById('streakHint');
@@ -2803,12 +2868,17 @@ function renderHistory() {
     const d = new Date(k + 'T12:00:00');
     const label = d.toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' });
     const entry = getDayEntry(k);
-    const count = entry.maths + entry.english;
+    const correct = entry.maths + entry.english;
+    const attempted = entry.mathsAttempted + entry.englishAttempted;
     const div = document.createElement('div');
     div.className = 'history-item';
+    let detail = `${correct}✓ (M:${entry.maths} E:${entry.english})`;
+    if (attempted > 0 && attempted !== correct) {
+      detail += ` <span style="color:var(--text-light);font-size:11px">of ${attempted}</span>`;
+    }
     div.innerHTML = `
       <span>${label}</span>
-      <span class="history-count">${count}q (M:${entry.maths} E:${entry.english}) ${isDayGoalMet(k) ? '🎯' : ''}</span>
+      <span class="history-count">${detail} ${isDayGoalMet(k) ? '🎯' : ''}</span>
     `;
     list.appendChild(div);
   });
