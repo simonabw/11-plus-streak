@@ -1176,6 +1176,192 @@
   .time-stats { display: flex; justify-content: center; gap: 16px; margin: 8px 0; font-size: 12px; font-weight: 700; color: var(--text-light); }
   .time-stat { text-align: center; }
   .time-stat-val { font-size: 18px; color: var(--primary); font-weight: 900; }
+
+  /* ============ RPG BATTLE SCENE ============ */
+  .battle-arena {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 18px; padding: 12px 16px; margin-bottom: 12px;
+    position: relative; overflow: hidden; color: white;
+  }
+  .battle-arena::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 120%, rgba(124,58,237,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .battle-header {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; font-weight: 800; margin-bottom: 10px; opacity: 0.9;
+  }
+  .battle-header .wave-name { display: flex; align-items: center; gap: 4px; }
+  .battle-header .battle-gold { color: var(--accent-light); }
+  .battle-field {
+    display: flex; justify-content: space-between; align-items: center;
+    min-height: 90px; padding: 0 8px;
+  }
+  .battle-character {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0; font-size: 28px; line-height: 1.1; transition: transform 0.15s;
+  }
+  .battle-character.attacking { animation: playerAttack 0.4s ease-out; }
+  .battle-character.hit { animation: playerHit 0.3s ease-out; }
+  .char-weapon { font-size: 22px; }
+  .char-face { font-size: 32px; }
+  .char-boots { font-size: 18px; opacity: 0.7; }
+  .battle-vs {
+    font-size: 14px; font-weight: 900; color: var(--accent);
+    text-shadow: 0 0 10px rgba(245,158,11,0.5);
+  }
+  .battle-mob {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px; transition: transform 0.15s, opacity 0.4s;
+  }
+  .battle-mob.hit { animation: mobHit 0.3s ease-out; }
+  .battle-mob.dying { animation: mobDeath 0.6s ease-out forwards; }
+  .mob-emoji { font-size: 40px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
+  .mob-name { font-size: 11px; font-weight: 800; opacity: 0.8; }
+  .mob-boss .mob-emoji { font-size: 52px; animation: bossPulse 2s infinite; }
+  .mob-boss .mob-name { color: #f87171; font-size: 13px; }
+  .mob-hp-bar {
+    width: 80px; height: 6px; background: rgba(255,255,255,0.2);
+    border-radius: 3px; overflow: hidden;
+  }
+  .mob-hp-fill {
+    height: 100%; border-radius: 3px; transition: width 0.4s ease-out;
+    background: linear-gradient(90deg, var(--green), #34d399);
+  }
+  .mob-hp-fill.wounded { background: linear-gradient(90deg, var(--accent), #fbbf24); }
+  .mob-hp-fill.critical { background: linear-gradient(90deg, var(--red), #f87171); }
+  .mob-hp-text { font-size: 9px; font-weight: 700; opacity: 0.6; margin-top: 1px; }
+  .player-stats {
+    margin-top: 10px; padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .player-hp-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .player-hp-label { font-size: 14px; }
+  .player-hp-bar {
+    flex: 1; height: 10px; background: rgba(255,255,255,0.15);
+    border-radius: 5px; overflow: hidden;
+  }
+  .player-hp-fill {
+    height: 100%; border-radius: 5px; transition: width 0.4s ease-out;
+    background: linear-gradient(90deg, #10b981, #34d399);
+  }
+  .player-hp-fill.low { background: linear-gradient(90deg, var(--red), #f87171); }
+  .player-hp-fill.medium { background: linear-gradient(90deg, var(--accent), #fbbf24); }
+  .player-hp-text { font-size: 11px; font-weight: 700; min-width: 55px; text-align: right; }
+  .player-stat-row { display: flex; gap: 16px; font-size: 11px; font-weight: 700; opacity: 0.7; }
+  .damage-float {
+    position: absolute; font-size: 20px; font-weight: 900;
+    pointer-events: none; animation: floatUp 1s ease-out forwards;
+    z-index: 10; text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+  .damage-float.player-dmg { color: #f87171; }
+  .damage-float.mob-dmg { color: #fbbf24; }
+  .damage-float.heal { color: #34d399; }
+  .damage-float.gold { color: var(--accent-light); font-size: 16px; }
+  @keyframes floatUp {
+    0% { opacity:1; transform:translateY(0) scale(1); }
+    60% { opacity:1; transform:translateY(-30px) scale(1.2); }
+    100% { opacity:0; transform:translateY(-50px) scale(0.8); }
+  }
+  @keyframes playerAttack {
+    0% { transform:translateX(0); } 30% { transform:translateX(30px) scale(1.1); }
+    60% { transform:translateX(10px); } 100% { transform:translateX(0) scale(1); }
+  }
+  @keyframes mobHit {
+    0% { transform:translateX(0); } 25% { transform:translateX(8px); }
+    50% { transform:translateX(-6px); } 75% { transform:translateX(3px); } 100% { transform:translateX(0); }
+  }
+  @keyframes playerHit {
+    0% { transform:translateX(0); } 25% { transform:translateX(-6px); }
+    50% { transform:translateX(4px); } 100% { transform:translateX(0); }
+  }
+  @keyframes mobDeath {
+    0% { opacity:1; transform:scale(1) rotate(0deg); }
+    50% { opacity:0.5; transform:scale(1.2) rotate(10deg); }
+    100% { opacity:0; transform:scale(0) rotate(30deg); }
+  }
+  @keyframes bossPulse {
+    0%,100% { filter:drop-shadow(0 0 6px rgba(239,68,68,0.3)); }
+    50% { filter:drop-shadow(0 0 14px rgba(239,68,68,0.6)); }
+  }
+  @keyframes lootBounce {
+    0% { transform:translateY(-20px) scale(0); opacity:0; }
+    50% { transform:translateY(5px) scale(1.2); opacity:1; }
+    70% { transform:translateY(-4px) scale(1); }
+    100% { transform:translateY(0) scale(1); opacity:1; }
+  }
+  .battle-overlay {
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.85);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 1000; gap: 12px; animation: fadeIn 0.3s; color: white;
+  }
+  .battle-overlay .overlay-icon { font-size: 60px; animation: lootBounce 0.6s ease-out; }
+  .battle-overlay .overlay-title { font-size: 26px; font-weight: 900; letter-spacing: 1px; }
+  .battle-overlay .overlay-sub { font-size: 16px; font-weight: 600; opacity: 0.8; text-align: center; padding: 0 20px; }
+  .battle-overlay .loot-items { display: flex; gap: 12px; margin: 8px 0; }
+  .battle-overlay .loot-item {
+    background: rgba(255,255,255,0.1); border-radius: 12px;
+    padding: 10px 16px; text-align: center; animation: lootBounce 0.6s ease-out;
+  }
+  .battle-overlay .loot-item .loot-emoji { font-size: 30px; }
+  .battle-overlay .loot-item .loot-name { font-size: 11px; font-weight: 700; margin-top: 4px; }
+  .battle-overlay .overlay-btn {
+    margin-top: 12px; background: var(--primary); color: white;
+    border: none; border-radius: 14px; padding: 12px 32px;
+    font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit;
+  }
+  .wave-progress-card {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 16px; padding: 14px 16px; margin-bottom: 16px; color: white;
+  }
+  .wave-progress-header {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px; font-weight: 800; margin-bottom: 8px;
+  }
+  .wave-progress-bar {
+    height: 8px; background: rgba(255,255,255,0.15);
+    border-radius: 4px; overflow: hidden; margin-bottom: 6px;
+  }
+  .wave-progress-fill {
+    height: 100%; border-radius: 4px; transition: width 0.4s;
+    background: linear-gradient(90deg, var(--primary-light), var(--accent));
+  }
+  .wave-mob-icons { display: flex; gap: 8px; font-size: 18px; margin-bottom: 4px; }
+  .wave-mob-icons .defeated { opacity: 0.4; }
+  .wave-stats { font-size: 10px; font-weight: 700; opacity: 0.6; display: flex; gap: 12px; }
+  .armory-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .armory-tab {
+    flex: 1; padding: 8px 4px; border: 2px solid #e5e7eb;
+    border-radius: 10px; background: white; cursor: pointer;
+    font-family: inherit; font-size: 12px; font-weight: 700;
+    text-align: center; transition: all 0.2s;
+  }
+  .armory-tab.active { border-color: var(--primary); background: #f5f3ff; color: var(--primary); }
+  .equip-card {
+    display: flex; align-items: center; gap: 10px;
+    background: white; border-radius: 14px; padding: 10px 12px;
+    margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 2px solid transparent; transition: all 0.2s;
+  }
+  .equip-card.equipped { border-color: var(--accent); background: #fffbeb; }
+  .equip-card.boss-locked { opacity: 0.5; }
+  .equip-emoji { font-size: 28px; }
+  .equip-info { flex: 1; }
+  .equip-name { font-size: 13px; font-weight: 800; }
+  .equip-stat { font-size: 11px; font-weight: 600; color: var(--green); }
+  .equip-source { font-size: 10px; color: var(--text-light); font-weight: 600; }
+  .btn-equip {
+    padding: 5px 12px; border: 2px solid var(--primary); border-radius: 8px;
+    background: white; color: var(--primary); font-weight: 700; cursor: pointer;
+    font-family: inherit; font-size: 11px;
+  }
+  .btn-buy-equip {
+    padding: 5px 12px; border: none; border-radius: 8px;
+    background: var(--primary); color: white; font-weight: 700; cursor: pointer;
+    font-family: inherit; font-size: 11px;
+  }
 </style>
 </head>
 <body>
@@ -1344,8 +1530,8 @@
       </div>
     </div>
 
-    <!-- Avatar Shop -->
-    <div class="section-title">🛍️ Avatar Shop <span style="font-size:13px;font-weight:600;color:var(--text-light);margin-left:auto;" id="shopBalance">🪙 0</span></div>
+    <!-- Armory (was Avatar Shop) -->
+    <div class="section-title">⚔️ Armory <span style="font-size:13px;font-weight:600;color:var(--text-light);margin-left:auto;" id="shopBalance">🪙 0</span></div>
     <div class="shop-card" id="avatarShop"></div>
 
     <!-- Badges -->
@@ -1388,6 +1574,7 @@
 
       <div id="practiceArea">
         <div class="practice-picker" id="practicePicker">
+          <div id="waveProgressContainer"></div>
           <div class="section-title">Choose a Category</div>
           <div class="category-grid">
             <button class="category-btn" onclick="showSubtypes('vr')">
@@ -1438,6 +1625,15 @@ const BADGES = [
   { id: 'quiz25', icon: '🎓', name: 'Brain Power', desc: '25 correct practice answers', check: d => d.practiceCorrect >= 25 },
   { id: 'quiz50', icon: '🧠', name: 'Genius Mode', desc: '50 correct practice answers', check: d => d.practiceCorrect >= 50 },
   { id: 'perfect10', icon: '💯', name: 'Perfect 10', desc: '10/10 in a session', check: d => d.perfectSession === true },
+  // RPG Badges
+  { id: 'mob10', icon: '⚔️', name: 'Monster Hunter', desc: 'Slay 10 mobs', check: d => d.mobsKilled >= 10 },
+  { id: 'mob50', icon: '🗡️', name: 'Slayer', desc: 'Slay 50 mobs', check: d => d.mobsKilled >= 50 },
+  { id: 'mob100', icon: '💀', name: 'Destroyer', desc: 'Slay 100 mobs', check: d => d.mobsKilled >= 100 },
+  { id: 'boss1', icon: '🐉', name: 'Boss Slayer', desc: 'Defeat your first boss', check: d => d.bossesKilled >= 1 },
+  { id: 'wave5', icon: '🌲', name: 'Forest Explorer', desc: 'Reach Wave 5', check: d => d.highestWave >= 5 },
+  { id: 'wave10', icon: '💎', name: 'Cave Diver', desc: 'Reach Wave 10', check: d => d.highestWave >= 10 },
+  { id: 'wave15', icon: '🌋', name: 'Volcano Runner', desc: 'Reach Wave 15', check: d => d.highestWave >= 15 },
+  { id: 'wave20', icon: '👑', name: 'Dragon Slayer', desc: 'Reach Wave 20', check: d => d.highestWave >= 20 },
 ];
 
 const REWARDS = [
@@ -1486,6 +1682,133 @@ const AVATARS = [
   { id: 'champion', icon: '🏆', name: 'The Champion', tier: 'legendary', cost: 500, theme: 'Ultimate' },
   { id: 'ruler', icon: '👑', name: 'Supreme Ruler', tier: 'legendary', cost: 500, theme: 'Ultimate' },
 ];
+
+// ============ RPG EQUIPMENT ============
+const EQUIPMENT = [
+  // Weapons (ATK = damage per correct answer)
+  { id:'wooden_sword', slot:'weapon', emoji:'🗡️', name:'Wooden Sword', atk:5, def:0, hp:0, cost:0, source:'start' },
+  { id:'iron_sword', slot:'weapon', emoji:'⚔️', name:'Iron Sword', atk:10, def:0, hp:0, cost:200, source:'shop' },
+  { id:'fire_blade', slot:'weapon', emoji:'🔥', name:'Fire Blade', atk:15, def:0, hp:0, cost:400, source:'shop' },
+  { id:'thunder_axe', slot:'weapon', emoji:'⚡', name:'Thunder Axe', atk:20, def:0, hp:0, cost:700, source:'shop' },
+  { id:'dragon_fang', slot:'weapon', emoji:'🐉', name:'Dragon Fang', atk:28, def:0, hp:0, cost:0, source:'boss', bossWave:10 },
+  { id:'shadow_blade', slot:'weapon', emoji:'⚫', name:'Shadow Blade', atk:35, def:0, hp:0, cost:0, source:'boss', bossWave:15 },
+  { id:'star_sword', slot:'weapon', emoji:'🌟', name:'Star Sword', atk:45, def:0, hp:0, cost:0, source:'boss', bossWave:20 },
+  // Armor (DEF = damage reduction, HP = bonus max HP)
+  { id:'cloth_tunic', slot:'armor', emoji:'👕', name:'Cloth Tunic', atk:0, def:2, hp:0, cost:0, source:'start' },
+  { id:'leather_armor', slot:'armor', emoji:'🥋', name:'Leather Armor', atk:0, def:5, hp:10, cost:200, source:'shop' },
+  { id:'chain_mail', slot:'armor', emoji:'⛓️', name:'Chain Mail', atk:0, def:8, hp:20, cost:400, source:'shop' },
+  { id:'crystal_plate', slot:'armor', emoji:'💎', name:'Crystal Plate', atk:0, def:12, hp:30, cost:700, source:'shop' },
+  { id:'dragon_scale', slot:'armor', emoji:'🐲', name:'Dragon Scale', atk:0, def:18, hp:50, cost:0, source:'boss', bossWave:10 },
+  { id:'void_armor', slot:'armor', emoji:'🖤', name:'Void Armor', atk:0, def:25, hp:70, cost:0, source:'boss', bossWave:15 },
+  { id:'star_shield', slot:'armor', emoji:'✨', name:'Star Shield', atk:0, def:32, hp:100, cost:0, source:'boss', bossWave:20 },
+  // Accessories (special passive effects)
+  { id:'no_accessory', slot:'accessory', emoji:'➖', name:'None', atk:0, def:0, hp:0, cost:0, source:'start', effect:null },
+  { id:'healing_ring', slot:'accessory', emoji:'💍', name:'Healing Ring', atk:0, def:0, hp:0, cost:300, source:'shop', effect:'heal5' },
+  { id:'lucky_charm', slot:'accessory', emoji:'🍀', name:'Lucky Charm', atk:0, def:0, hp:0, cost:300, source:'shop', effect:'gold50' },
+  { id:'power_gem', slot:'accessory', emoji:'💎', name:'Power Gem', atk:5, def:0, hp:0, cost:500, source:'shop', effect:null },
+  { id:'shield_amulet', slot:'accessory', emoji:'🧿', name:'Shield Amulet', atk:0, def:5, hp:0, cost:500, source:'shop', effect:null },
+  { id:'vampire_fang', slot:'accessory', emoji:'🧛', name:'Vampire Fang', atk:0, def:0, hp:0, cost:0, source:'boss', bossWave:5, effect:'lifesteal' },
+];
+
+// ============ RPG MOBS & WAVES ============
+const WAVE_REGIONS = [
+  { name:'Grasslands', waves:[1,2,3,4], emoji:'🌾', diffTarget:1 },
+  { name:'Grasslands Boss', waves:[5], emoji:'🌾', diffTarget:1 },
+  { name:'Dark Forest', waves:[6,7,8,9], emoji:'🌲', diffTarget:1.5 },
+  { name:'Dark Forest Boss', waves:[10], emoji:'🌲', diffTarget:2 },
+  { name:'Crystal Cave', waves:[11,12,13,14], emoji:'💎', diffTarget:2 },
+  { name:'Crystal Cave Boss', waves:[15], emoji:'💎', diffTarget:2.5 },
+  { name:'Volcano', waves:[16,17,18,19], emoji:'🌋', diffTarget:2.5 },
+  { name:'Dragon Peak', waves:[20], emoji:'👑', diffTarget:3 },
+];
+
+const MOB_TEMPLATES = [
+  // Grasslands mobs (waves 1-4)
+  { id:'rat', name:'Giant Rat', emoji:'🐀', hp:20, atk:3, gold:8, region:'Grasslands' },
+  { id:'snake', name:'Viper', emoji:'🐍', hp:25, atk:5, gold:10, region:'Grasslands' },
+  { id:'bat', name:'Cave Bat', emoji:'🦇', hp:20, atk:4, gold:8, region:'Grasslands' },
+  { id:'spider', name:'Web Spider', emoji:'🕷️', hp:30, atk:5, gold:12, region:'Grasslands' },
+  // Boss wave 5
+  { id:'dire_wolf', name:'Dire Wolf', emoji:'🐺', hp:80, atk:10, gold:60, region:'Grasslands Boss', boss:true, drops:['vampire_fang'] },
+  // Dark Forest mobs (waves 6-9)
+  { id:'zombie', name:'Zombie', emoji:'🧟', hp:35, atk:7, gold:15, region:'Dark Forest' },
+  { id:'skeleton', name:'Skeleton', emoji:'🦴', hp:30, atk:8, gold:15, region:'Dark Forest' },
+  { id:'vine', name:'Vine Monster', emoji:'🌿', hp:40, atk:6, gold:18, region:'Dark Forest' },
+  { id:'boar', name:'Wild Boar', emoji:'🐗', hp:45, atk:8, gold:18, region:'Dark Forest' },
+  // Boss wave 10
+  { id:'forest_dragon', name:'Forest Dragon', emoji:'🐉', hp:120, atk:14, gold:100, region:'Dark Forest Boss', boss:true, drops:['dragon_fang','dragon_scale'] },
+  // Crystal Cave mobs (waves 11-14)
+  { id:'scorpion', name:'Scorpion', emoji:'🦂', hp:45, atk:10, gold:22, region:'Crystal Cave' },
+  { id:'golem', name:'Rock Golem', emoji:'🪨', hp:60, atk:8, gold:25, region:'Crystal Cave' },
+  { id:'imp', name:'Fire Imp', emoji:'🔥', hp:40, atk:12, gold:22, region:'Crystal Cave' },
+  { id:'eye', name:'Cave Eye', emoji:'👁️', hp:50, atk:11, gold:25, region:'Crystal Cave' },
+  // Boss wave 15
+  { id:'dark_wizard', name:'Dark Wizard', emoji:'🧙', hp:160, atk:18, gold:150, region:'Crystal Cave Boss', boss:true, drops:['shadow_blade','void_armor'] },
+  // Volcano mobs (waves 16-19)
+  { id:'drake', name:'Lava Drake', emoji:'🦎', hp:60, atk:14, gold:30, region:'Volcano' },
+  { id:'skull_knight', name:'Skull Knight', emoji:'💀', hp:70, atk:15, gold:32, region:'Volcano' },
+  { id:'demon', name:'Demon', emoji:'👹', hp:75, atk:16, gold:35, region:'Volcano' },
+  { id:'shadow', name:'Shadow Beast', emoji:'🌑', hp:65, atk:18, gold:35, region:'Volcano' },
+  // Final boss wave 20
+  { id:'dragon_king', name:'Dragon King', emoji:'👑', hp:250, atk:22, gold:250, region:'Dragon Peak', boss:true, drops:['star_sword','star_shield'] },
+];
+
+function getWaveInfo(waveNum) {
+  // Find region for this wave
+  let region = WAVE_REGIONS.find(r => r.waves.includes(waveNum));
+  if (!region && waveNum > 20) {
+    // Endless mode: cycle through regions with scaling
+    region = { name:'Endless Realm', emoji:'♾️', diffTarget:3 };
+  }
+  if (!region) region = WAVE_REGIONS[0];
+
+  // Get mobs for this wave
+  const regionMobs = MOB_TEMPLATES.filter(m => m.region === region.name);
+  const isBoss = regionMobs.length === 1 && regionMobs[0].boss;
+  const scale = waveNum > 20 ? 1 + (waveNum - 20) * 0.15 : 1;
+
+  let mobs;
+  if (isBoss) {
+    mobs = [regionMobs[0]];
+  } else if (waveNum > 20) {
+    // Endless: pick 4 random mobs from all non-boss mobs, scaled
+    const allMobs = MOB_TEMPLATES.filter(m => !m.boss);
+    mobs = shuffleArray([...allMobs]).slice(0, 4);
+  } else {
+    // Regular wave: cycle through region's mobs (4 per wave)
+    mobs = regionMobs.slice(0, 4);
+  }
+
+  return {
+    name: region.name,
+    emoji: region.emoji,
+    diffTarget: region.diffTarget,
+    isBoss,
+    mobCount: isBoss ? 1 : 4,
+    mobs: mobs.map(m => ({
+      ...m,
+      hp: Math.round(m.hp * scale),
+      atk: Math.round(m.atk * scale),
+      gold: Math.round(m.gold * scale),
+    })),
+  };
+}
+
+function getPlayerStats() {
+  const rpg = state.rpg || {};
+  const weapon = EQUIPMENT.find(e => e.id === (rpg.equippedWeapon || 'wooden_sword')) || EQUIPMENT[0];
+  const armor = EQUIPMENT.find(e => e.id === (rpg.equippedArmor || 'cloth_tunic')) || EQUIPMENT[7];
+  const acc = EQUIPMENT.find(e => e.id === (rpg.equippedAccessory || 'no_accessory')) || EQUIPMENT[14];
+  return {
+    atk: 5 + weapon.atk + armor.atk + acc.atk,
+    def: 0 + weapon.def + armor.def + acc.def,
+    maxHP: 100 + weapon.hp + armor.hp + acc.hp,
+    weaponEmoji: weapon.emoji,
+    armorEmoji: armor.emoji,
+    accEmoji: acc.emoji,
+    accEffect: acc.effect,
+  };
+}
 
 const LEVELS = [
   { level: 1, name: 'Beginner', xpNeeded: 0 },
@@ -3115,7 +3438,7 @@ function switchView(view) {
   document.querySelectorAll('.tab-btn').forEach((btn, i) => {
     btn.classList.toggle('active', (i === 0 && view === 'tracker') || (i === 1 && view === 'practice'));
   });
-  if (view === 'practice') renderPracticeStats();
+  if (view === 'practice') { renderPracticeStats(); renderWaveProgress(); }
 }
 
 function renderPracticeStats() {
@@ -3124,6 +3447,31 @@ function renderPracticeStats() {
   const acc = ps.totalAttempted > 0 ? Math.round((ps.totalCorrect / ps.totalAttempted) * 100) + '%' : '-';
   document.getElementById('pStatAccuracy').textContent = acc;
   document.getElementById('pStatBest').textContent = (ps.bestSessionPct || 0) + '%';
+}
+
+function renderWaveProgress() {
+  const container = document.getElementById('waveProgressContainer');
+  if (!container) return;
+  const rpg = state.rpg;
+  const wave = rpg.currentWave;
+  const waveInfo = getWaveInfo(wave);
+  const defeated = rpg.waveMobsDefeated;
+  const total = waveInfo.mobCount;
+  const pct = Math.round((defeated / total) * 100);
+
+  let mobIcons = '';
+  waveInfo.mobs.forEach((m, i) => {
+    const isDefeated = i < defeated;
+    mobIcons += '<span' + (isDefeated ? ' class="defeated"' : '') + '>' + m.emoji + (isDefeated ? '\u2705' : '') + '</span>';
+  });
+
+  container.innerHTML = '<div class="wave-progress-card">' +
+    '<div class="wave-progress-header"><span>' + waveInfo.emoji + ' Wave ' + wave + ': ' + waveInfo.name + '</span>' +
+    '<span>' + defeated + '/' + total + ' mobs</span></div>' +
+    '<div class="wave-progress-bar"><div class="wave-progress-fill" style="width:' + pct + '%"></div></div>' +
+    '<div class="wave-mob-icons">' + mobIcons + '</div>' +
+    '<div class="wave-stats"><span>\uD83D\uDC80 Total kills: ' + rpg.totalMobsKilled + '</span>' +
+    '<span>\u2694\uFE0F Highest wave: ' + rpg.highestWave + '</span></div></div>';
 }
 
 function showSubtypes(cat) {
@@ -3152,12 +3500,33 @@ function startSession(cat, type) {
   const answered = (state.practiceStats && state.practiceStats.answeredIds) || [];
   qs.sort((a, b) => (answered.includes(a.id) ? 1 : 0) - (answered.includes(b.id) ? 1 : 0));
 
-  // Adaptive mode: load more questions, start at diff 1
+  // Wave-based difficulty targeting
+  const wave = state.rpg.currentWave;
+  const region = WAVE_REGIONS.find(r => r.waves.includes(wave)) || WAVE_REGIONS[0];
+  const targetDiff = region.diffTarget;
+
+  // Sort so questions near targetDiff come first (but still randomised within same priority)
+  if (!practiceModeAdaptive) {
+    qs.sort((a, b) => {
+      const aAlready = answered.includes(a.id) ? 1 : 0;
+      const bAlready = answered.includes(b.id) ? 1 : 0;
+      if (aAlready !== bAlready) return aAlready - bAlready;
+      return Math.abs(a.diff - targetDiff) - Math.abs(b.diff - targetDiff);
+    });
+  }
+
   if (practiceModeAdaptive) {
-    qs = qs.slice(0, 30); // larger pool for adaptive
+    qs = qs.slice(0, 30);
   } else {
     qs = qs.slice(0, 10);
   }
+
+  // Setup battle state
+  const ps = getPlayerStats();
+  const waveInfo = getWaveInfo(wave);
+  const mobIdx = state.rpg.currentMobIndex || 0;
+  const mob = waveInfo.mobs[Math.min(mobIdx, waveInfo.mobs.length - 1)];
+  const mobHP = state.rpg.currentMobHP != null ? state.rpg.currentMobHP : mob.hp;
 
   const numQs = practiceModeAdaptive ? 10 : qs.length;
   practiceSession = {
@@ -3180,7 +3549,21 @@ function startSession(cat, type) {
     // Adaptive
     adaptiveMode: practiceModeAdaptive,
     currentDiff: 1,
-    adaptiveStreak: 0
+    adaptiveStreak: 0,
+    // Battle
+    battle: {
+      playerHP: ps.maxHP,
+      maxHP: ps.maxHP,
+      mob: { ...mob },
+      mobHP: mobHP,
+      mobMaxHP: mob.hp,
+      waveInfo: waveInfo,
+      mobsKilledThisSession: 0,
+      goldEarned: 0,
+      damageDealt: 0,
+      damageTaken: 0,
+      defeated: false,
+    }
   };
   document.getElementById('practicePicker').style.display = 'none';
   document.getElementById('subtypeGrid').innerHTML = '';
@@ -3221,7 +3604,49 @@ function renderCurrentQuestion() {
   const pct = Math.round((s.totalAnswered / s.maxQuestions) * 100);
 
   const content = document.getElementById('practiceContent');
-  let html = '<div class="question-card">';
+  let html = '';
+
+  // ---- BATTLE ARENA ----
+  if (s.battle && !s.battle.defeated) {
+    const b = s.battle;
+    const ps = getPlayerStats();
+    const hpPct = Math.max(0, Math.round((b.playerHP / b.maxHP) * 100));
+    const mobHpPct = Math.max(0, Math.round((b.mobHP / b.mobMaxHP) * 100));
+    const hpClass = hpPct <= 25 ? 'low' : hpPct <= 50 ? 'medium' : '';
+    const mobHpClass = mobHpPct <= 25 ? 'critical' : mobHpPct <= 50 ? 'wounded' : '';
+    const isBoss = b.mob.boss;
+    const avatarEmoji = AVATARS.find(a => a.id === state.activeAvatar);
+    const faceEmoji = avatarEmoji ? avatarEmoji.icon : '\uD83D\uDCD3';
+
+    html += '<div class="battle-arena" id="battleArena">';
+    html += '<div class="battle-header"><div class="wave-name">' + b.waveInfo.emoji + ' Wave ' + state.rpg.currentWave + ': ' + b.waveInfo.name + '</div>';
+    html += '<div class="battle-gold">\uD83E\uDE99 ' + state.coins + '</div></div>';
+    html += '<div class="battle-field">';
+    // Character
+    html += '<div class="battle-character" id="battleChar">';
+    html += '<div class="char-weapon">' + ps.weaponEmoji + '</div>';
+    html += '<div class="char-face">' + faceEmoji + '</div>';
+    html += '<div class="char-boots">\uD83D\uDC62</div>';
+    html += '</div>';
+    // VS
+    html += '<div class="battle-vs">⚔️</div>';
+    // Mob
+    html += '<div class="battle-mob' + (isBoss ? ' mob-boss' : '') + '" id="battleMob">';
+    html += '<div class="mob-emoji">' + b.mob.emoji + '</div>';
+    html += '<div class="mob-name">' + b.mob.name + '</div>';
+    html += '<div class="mob-hp-bar"><div class="mob-hp-fill ' + mobHpClass + '" id="mobHpFill" style="width:' + mobHpPct + '%"></div></div>';
+    html += '<div class="mob-hp-text">' + Math.max(0, b.mobHP) + '/' + b.mobMaxHP + '</div>';
+    html += '</div></div>';
+    // Player stats
+    html += '<div class="player-stats">';
+    html += '<div class="player-hp-row"><span class="player-hp-label">\u2764\uFE0F</span>';
+    html += '<div class="player-hp-bar"><div class="player-hp-fill ' + hpClass + '" id="playerHpFill" style="width:' + hpPct + '%"></div></div>';
+    html += '<span class="player-hp-text">' + Math.max(0, b.playerHP) + '/' + b.maxHP + '</span></div>';
+    html += '<div class="player-stat-row"><span>\u2694\uFE0F ATK: ' + ps.atk + '</span><span>\uD83D\uDEE1\uFE0F DEF: ' + ps.def + '</span></div>';
+    html += '</div></div>';
+  }
+
+  html += '<div class="question-card">';
 
   // Timer bar
   if (s.timedMode) {
@@ -3258,7 +3683,7 @@ function renderCurrentQuestion() {
     html += '<button class="option-btn" onclick="selectPracticeAnswer(' + i + ')">' + opt + '</button>';
   });
   html += '</div><div id="qFeedback"></div>';
-  html += '<div id="qActions" style="display:none"><button class="q-next-btn" onclick="nextPracticeQuestion()">Next Question \u27A1\uFE0F</button></div>';
+  html += '<div id="qActions" style="display:none"><button class="q-next-btn" onclick="nextPracticeQuestion()">Next Attack \u2694\uFE0F</button></div>';
   html += '</div>';
   content.innerHTML = html;
 
@@ -3315,9 +3740,23 @@ function timerExpired() {
     if (!state.practiceStats) state.practiceStats = { totalAttempted:0, totalCorrect:0, vrCorrect:0, nvrCorrect:0, answeredIds:[], bestSessionPct:0, perfectSession:false };
     state.practiceStats.totalAttempted++;
     if (s.adaptiveMode) { s.adaptiveStreak = 0; if (s.currentDiff > 1) s.currentDiff--; }
+    // Battle: mob attacks on timeout too
+    if (s.battle && !s.battle.defeated) {
+      const ps = getPlayerStats();
+      const mobDmg = Math.max(1, s.battle.mob.atk - ps.def);
+      s.battle.playerHP -= mobDmg;
+      s.battle.damageTaken += mobDmg;
+      if (s.battle.playerHP <= 0) { s.battle.playerHP = 0; s.battle.defeated = true; }
+      updatePlayerHPBar(s.battle);
+    }
     save();
     render();
     renderPracticeStats();
+  }
+  // If defeated, show overlay instead of advancing
+  if (s.battle && s.battle.defeated) {
+    setTimeout(() => showDefeatedOverlay(), 500);
+    return;
   }
   // Auto-advance after brief delay
   setTimeout(function() { if (practiceSession) { practiceSession.current++; renderCurrentQuestion(); } }, 500);
@@ -3371,6 +3810,9 @@ function selectPracticeAnswer(idx) {
   const baseXP = s.adaptiveMode ? [0, 10, 15, 20][q.diff] : 10;
   const streak = getCurrentStreak();
   const fb = document.getElementById('qFeedback');
+  const b = s.battle;
+  const ps = getPlayerStats();
+
   if (correct) {
     s.correct++;
     const xp = baseXP + (streak >= 3 ? 5 : 0);
@@ -3380,7 +3822,7 @@ function selectPracticeAnswer(idx) {
     const oldXP = state.totalXP;
     state.totalXP += xp;
     state.coins += coins;
-    const subject = q.cat === 'vr' ? 'english' : 'maths'; // NVR and Maths both count as maths
+    const subject = q.cat === 'vr' ? 'english' : 'maths';
     const key = todayKey();
     if (!state.days[key]) state.days[key] = { maths: 0, english: 0 };
     state.days[key][subject]++;
@@ -3388,15 +3830,77 @@ function selectPracticeAnswer(idx) {
     const oldLevel = getLevel(oldXP);
     const newLevel = getLevel(state.totalXP);
     if (newLevel.level > oldLevel.level) showLevelUp(newLevel);
-    save();
-    render();
-    let fbText = '\u2705 Correct! +' + xp + ' XP +' + coins + ' \uD83E\uDE99';
+
+    // ---- BATTLE: Player attacks mob ----
+    let battleText = '';
+    if (b) {
+      const dmg = ps.atk;
+      b.mobHP -= dmg;
+      b.damageDealt += dmg;
+      battleText = ' \u2694\uFE0F -' + dmg + ' damage!';
+      // Animate
+      const charEl = document.getElementById('battleChar');
+      const mobEl = document.getElementById('battleMob');
+      if (charEl) { charEl.classList.add('attacking'); setTimeout(() => charEl.classList.remove('attacking'), 400); }
+      if (mobEl) { setTimeout(() => { mobEl.classList.add('hit'); setTimeout(() => mobEl.classList.remove('hit'), 300); }, 200); }
+      // Floating damage on mob
+      showFloatingDamage('mob', '-' + dmg);
+      // Update mob HP bar + text
+      setTimeout(() => {
+        const fill = document.getElementById('mobHpFill');
+        if (fill) {
+          const pct = Math.max(0, Math.round((b.mobHP / b.mobMaxHP) * 100));
+          fill.style.width = pct + '%';
+          fill.className = 'mob-hp-fill' + (pct <= 25 ? ' critical' : pct <= 50 ? ' wounded' : '');
+        }
+        const hpText = document.querySelector('.mob-hp-text');
+        if (hpText) hpText.textContent = Math.max(0, b.mobHP) + '/' + b.mobMaxHP;
+      }, 200);
+      // Healing ring effect
+      if (ps.accEffect === 'heal5' && b.playerHP < b.maxHP) {
+        b.playerHP = Math.min(b.maxHP, b.playerHP + 5);
+        showFloatingDamage('player', '+5', 'heal');
+        updatePlayerHPBar(b);
+      }
+      // Check mob death
+      if (b.mobHP <= 0) {
+        b.mobHP = 0;
+        handleMobDeath(s);
+      }
+    }
+
+    save(); render();
+    let fbText = '\u2705 Correct! +' + xp + ' XP' + battleText;
     if (s.timedMode) fbText += ' (' + elapsed + 's)';
     fb.innerHTML = '<div class="q-feedback correct">' + fbText + '<br>' + q.exp + '</div>';
   } else {
-    save();
-    render();
-    fb.innerHTML = '<div class="q-feedback incorrect">\u274C Not quite!' + (s.timedMode ? ' (' + elapsed + 's)' : '') + '<br>' + q.exp + '</div>';
+    // ---- BATTLE: Mob attacks player ----
+    let battleText = '';
+    if (b) {
+      const mobDmg = Math.max(1, b.mob.atk - ps.def);
+      b.playerHP -= mobDmg;
+      b.damageTaken += mobDmg;
+      battleText = ' \uD83D\uDCA5 ' + b.mob.name + ' hits you for ' + mobDmg + '!';
+      // Animate
+      const charEl = document.getElementById('battleChar');
+      if (charEl) { charEl.classList.add('hit'); setTimeout(() => charEl.classList.remove('hit'), 300); }
+      showFloatingDamage('player', '-' + mobDmg);
+      updatePlayerHPBar(b);
+      // Check player death
+      if (b.playerHP <= 0) {
+        b.playerHP = 0;
+        b.defeated = true;
+        updatePlayerHPBar(b);
+      }
+    }
+
+    save(); render();
+    fb.innerHTML = '<div class="q-feedback incorrect">\u274C Not quite!' + battleText + (s.timedMode ? ' (' + elapsed + 's)' : '') + '<br>' + q.exp + '</div>';
+
+    // If defeated, end session after short delay
+    if (b && b.defeated) {
+      setTimeout(() => showDefeatedOverlay(), 800);
+    }
   }
 
   if (!state.practiceStats) state.practiceStats = { totalAttempted:0, totalCorrect:0, vrCorrect:0, nvrCorrect:0, answeredIds:[], bestSessionPct:0, perfectSession:false };
@@ -3410,11 +3914,169 @@ function selectPracticeAnswer(idx) {
   }
   save();
   renderPracticeStats();
-  document.getElementById('qActions').style.display = '';
+  // Don't show next button if defeated
+  if (!b || !b.defeated) {
+    document.getElementById('qActions').style.display = '';
+  }
   checkBadges();
 }
 
+// ============ BATTLE HELPER FUNCTIONS ============
+function showFloatingDamage(target, text, type) {
+  const arena = document.getElementById('battleArena');
+  if (!arena) return;
+  const float = document.createElement('div');
+  float.className = 'damage-float ' + (type === 'heal' ? 'heal' : target === 'mob' ? 'mob-dmg' : 'player-dmg');
+  float.textContent = text;
+  // Position near the target
+  if (target === 'mob') {
+    float.style.right = '20px'; float.style.top = '40px';
+  } else {
+    float.style.left = '20px'; float.style.top = '40px';
+  }
+  arena.appendChild(float);
+  setTimeout(() => float.remove(), 1000);
+}
+
+function updatePlayerHPBar(b) {
+  setTimeout(() => {
+    const fill = document.getElementById('playerHpFill');
+    const text = document.querySelector('.player-hp-text');
+    if (fill) {
+      const pct = Math.max(0, Math.round((b.playerHP / b.maxHP) * 100));
+      fill.style.width = pct + '%';
+      fill.className = 'player-hp-fill' + (pct <= 25 ? ' low' : pct <= 50 ? ' medium' : '');
+    }
+    if (text) text.textContent = Math.max(0, b.playerHP) + '/' + b.maxHP;
+  }, 100);
+}
+
+function handleMobDeath(s) {
+  const b = s.battle;
+  const ps = getPlayerStats();
+  b.mobsKilledThisSession++;
+  state.rpg.totalMobsKilled++;
+  state.rpg.waveMobsDefeated++;
+
+  // Gold reward (with lucky charm bonus)
+  let goldReward = b.mob.gold;
+  if (ps.accEffect === 'gold50') goldReward = Math.round(goldReward * 1.5);
+  state.coins += goldReward;
+  b.goldEarned += goldReward;
+  s.coinsEarned += goldReward;
+
+  // Lifesteal accessory
+  if (ps.accEffect === 'lifesteal' && b.playerHP < b.maxHP) {
+    b.playerHP = Math.min(b.maxHP, b.playerHP + 10);
+    updatePlayerHPBar(b);
+  }
+
+  // Animate mob death
+  const mobEl = document.getElementById('battleMob');
+  if (mobEl) mobEl.classList.add('dying');
+
+  // Show gold floating
+  showFloatingDamage('mob', '+' + goldReward + ' \uD83E\uDE99', 'gold');
+
+  // Check if boss
+  if (b.mob.boss) {
+    state.rpg.bossesKilled++;
+    const drops = b.mob.drops || [];
+    const newLoot = awardBossDrop(drops);
+    // Show boss overlay after a delay
+    setTimeout(() => showBossDefeatedOverlay(b.mob, newLoot, goldReward), 800);
+  }
+
+  // Check if wave complete
+  const waveInfo = b.waveInfo;
+  if (state.rpg.waveMobsDefeated >= waveInfo.mobCount) {
+    // Wave complete!
+    state.rpg.currentWave++;
+    state.rpg.waveMobsDefeated = 0;
+    state.rpg.currentMobIndex = 0;
+    state.rpg.currentMobHP = null;
+    if (state.rpg.currentWave > state.rpg.highestWave) state.rpg.highestWave = state.rpg.currentWave;
+    if (!b.mob.boss) {
+      setTimeout(() => showWaveCompleteOverlay(state.rpg.currentWave - 1), 800);
+    }
+  } else {
+    // Next mob in wave
+    state.rpg.currentMobIndex++;
+    const nextWaveInfo = getWaveInfo(state.rpg.currentWave);
+    const nextMobIdx = state.rpg.currentMobIndex;
+    if (nextMobIdx < nextWaveInfo.mobs.length) {
+      const nextMob = nextWaveInfo.mobs[nextMobIdx];
+      state.rpg.currentMobHP = nextMob.hp;
+      // Update battle state for next mob
+      setTimeout(() => {
+        b.mob = { ...nextMob };
+        b.mobHP = nextMob.hp;
+        b.mobMaxHP = nextMob.hp;
+      }, 700);
+    }
+  }
+  save();
+}
+
+function showWaveCompleteOverlay(completedWave) {
+  const overlay = document.createElement('div');
+  overlay.className = 'battle-overlay';
+  overlay.id = 'battleOverlay';
+  const wInfo = getWaveInfo(completedWave);
+  overlay.innerHTML = '<div class="overlay-icon">\uD83C\uDF89</div>' +
+    '<div class="overlay-title">WAVE ' + completedWave + ' COMPLETE!</div>' +
+    '<div class="overlay-sub">' + wInfo.emoji + ' ' + wInfo.name + ' cleared!</div>' +
+    '<button class="overlay-btn" onclick="closeBattleOverlay()">Continue \u2694\uFE0F</button>';
+  document.body.appendChild(overlay);
+  fireConfetti();
+}
+
+function showBossDefeatedOverlay(mob, loot, gold) {
+  const overlay = document.createElement('div');
+  overlay.className = 'battle-overlay';
+  overlay.id = 'battleOverlay';
+  let lootHTML = '';
+  if (loot.length > 0) {
+    lootHTML = '<div class="loot-items">';
+    loot.forEach(item => {
+      lootHTML += '<div class="loot-item"><div class="loot-emoji">' + item.emoji + '</div><div class="loot-name">' + item.name + '</div></div>';
+    });
+    lootHTML += '</div>';
+  }
+  overlay.innerHTML = '<div class="overlay-icon">\uD83D\uDC80</div>' +
+    '<div class="overlay-title">BOSS DEFEATED!</div>' +
+    '<div class="overlay-sub">' + mob.emoji + ' ' + mob.name + ' has been slain!</div>' +
+    lootHTML +
+    '<div class="overlay-sub">+' + gold + ' \uD83E\uDE99 gold</div>' +
+    '<button class="overlay-btn" onclick="closeBattleOverlay()">Claim Loot \uD83C\uDF81</button>';
+  document.body.appendChild(overlay);
+  fireConfetti();
+}
+
+function showDefeatedOverlay() {
+  const s = practiceSession;
+  const overlay = document.createElement('div');
+  overlay.className = 'battle-overlay';
+  overlay.id = 'battleOverlay';
+  overlay.innerHTML = '<div class="overlay-icon">\uD83D\uDCA0</div>' +
+    '<div class="overlay-title">DEFEATED!</div>' +
+    '<div class="overlay-sub">Your hero has fallen... but your XP and gold are safe!</div>' +
+    '<div class="overlay-sub">Tip: Buy better gear at the Armory \u2694\uFE0F</div>' +
+    '<button class="overlay-btn" onclick="closeBattleOverlay();showSessionSummary()">Continue</button>';
+  document.body.appendChild(overlay);
+}
+
+function closeBattleOverlay() {
+  const o = document.getElementById('battleOverlay');
+  if (o) o.remove();
+}
+
 function nextPracticeQuestion() {
+  // If defeated, go to summary
+  if (practiceSession.battle && practiceSession.battle.defeated) {
+    showSessionSummary();
+    return;
+  }
   practiceSession.current++;
   renderCurrentQuestion();
 }
@@ -3428,11 +4090,18 @@ function showSessionSummary() {
   if (!state.practiceStats) state.practiceStats = { totalAttempted:0, totalCorrect:0, vrCorrect:0, nvrCorrect:0, answeredIds:[], bestSessionPct:0, perfectSession:false };
   if (pct > (state.practiceStats.bestSessionPct || 0)) state.practiceStats.bestSessionPct = pct;
   if (s.correct === total && total >= 10) state.practiceStats.perfectSession = true;
+
+  // Save mob HP between sessions
+  if (s.battle) {
+    state.rpg.currentMobHP = s.battle.mobHP > 0 ? s.battle.mobHP : null;
+  }
   save();
   renderPracticeStats();
 
-  const emoji = pct >= 80 ? '\uD83C\uDF89' : pct >= 50 ? '\uD83D\uDC4D' : '\uD83D\uDCAA';
-  const msg = pct >= 80 ? 'Amazing work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
+  const b = s.battle;
+  const defeated = b && b.defeated;
+  const emoji = defeated ? '\uD83D\uDCA0' : pct >= 80 ? '\uD83C\uDF89' : pct >= 50 ? '\uD83D\uDC4D' : '\uD83D\uDCAA';
+  const msg = defeated ? 'Your hero fell in battle...' : pct >= 80 ? 'Amazing work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
 
   const content = document.getElementById('practiceContent');
   let html = '<div class="session-summary">';
@@ -3440,6 +4109,15 @@ function showSessionSummary() {
   html += '<div class="session-label">' + msg + '</div>';
   html += '<div class="session-score">' + s.correct + '/' + total + '</div>';
   html += '<div class="session-label">' + pct + '% correct</div>';
+
+  // Battle stats
+  if (b) {
+    html += '<div style="display:flex;justify-content:center;gap:16px;margin:8px 0;font-size:12px;font-weight:700">';
+    html += '<span>\u2694\uFE0F Mobs: ' + b.mobsKilledThisSession + '</span>';
+    html += '<span>\uD83E\uDE99 Gold: ' + b.goldEarned + '</span>';
+    html += '<span>\uD83D\uDCA5 Dmg: ' + b.damageDealt + '</span>';
+    html += '</div>';
+  }
 
   // Time stats
   if (s.timeTaken.length > 0) {
@@ -3487,10 +4165,16 @@ function showSessionSummary() {
 
 function backToPicker() {
   stopTimer();
+  // Save mob HP for persistence between sessions
+  if (practiceSession && practiceSession.battle) {
+    state.rpg.currentMobHP = practiceSession.battle.mobHP > 0 ? practiceSession.battle.mobHP : null;
+  }
+  save();
   practiceSession = null;
   document.getElementById('practicePicker').style.display = '';
   document.getElementById('subtypeGrid').innerHTML = '';
   document.getElementById('practiceContent').innerHTML = '';
+  renderWaveProgress();
 }
 
 // ============ STATE ============
@@ -3509,6 +4193,19 @@ function getDefaultState() {
     activeTitle: null,
     activeTheme: null,
     practiceStats: { totalAttempted: 0, totalCorrect: 0, vrCorrect: 0, nvrCorrect: 0, answeredIds: [], bestSessionPct: 0, perfectSession: false },
+    rpg: {
+      currentWave: 1,
+      waveMobsDefeated: 0,
+      currentMobHP: null,
+      currentMobIndex: 0,
+      equippedWeapon: 'wooden_sword',
+      equippedArmor: 'cloth_tunic',
+      equippedAccessory: 'no_accessory',
+      ownedEquipment: ['wooden_sword', 'cloth_tunic', 'no_accessory'],
+      totalMobsKilled: 0,
+      bossesKilled: 0,
+      highestWave: 1,
+    },
   };
 }
 
@@ -3531,6 +4228,17 @@ function load() {
       // Ensure arrays exist
       if (!Array.isArray(state.ownedAvatars)) state.ownedAvatars = ['default'];
       if (!state.ownedAvatars.includes('default')) state.ownedAvatars.unshift('default');
+      // Migrate: add RPG state for existing users
+      if (!state.rpg) {
+        state.rpg = getDefaultState().rpg;
+      } else {
+        // Ensure all RPG fields exist
+        const def = getDefaultState().rpg;
+        for (const k of Object.keys(def)) {
+          if (state.rpg[k] === undefined) state.rpg[k] = def[k];
+        }
+        if (!Array.isArray(state.rpg.ownedEquipment)) state.rpg.ownedEquipment = ['wooden_sword','cloth_tunic','no_accessory'];
+      }
     } catch(e) { state = getDefaultState(); }
   }
 }
@@ -3733,6 +4441,86 @@ function selectAvatar(id) {
   render();
 }
 
+// ============ RPG EQUIPMENT FUNCTIONS ============
+function buyEquipment(id) {
+  const item = EQUIPMENT.find(e => e.id === id);
+  if (!item || state.rpg.ownedEquipment.includes(id) || state.coins < item.cost) return;
+  state.coins -= item.cost;
+  state.rpg.ownedEquipment.push(id);
+  if (item.slot === 'weapon') state.rpg.equippedWeapon = id;
+  else if (item.slot === 'armor') state.rpg.equippedArmor = id;
+  else if (item.slot === 'accessory') state.rpg.equippedAccessory = id;
+  save(); fireConfetti(); render();
+}
+
+function equipItem(id) {
+  const item = EQUIPMENT.find(e => e.id === id);
+  if (!item || !state.rpg.ownedEquipment.includes(id)) return;
+  if (item.slot === 'weapon') state.rpg.equippedWeapon = id;
+  else if (item.slot === 'armor') state.rpg.equippedArmor = id;
+  else if (item.slot === 'accessory') state.rpg.equippedAccessory = id;
+  save(); render();
+}
+
+function awardBossDrop(drops) {
+  const newItems = [];
+  for (const dropId of drops) {
+    if (!state.rpg.ownedEquipment.includes(dropId)) {
+      state.rpg.ownedEquipment.push(dropId);
+      newItems.push(EQUIPMENT.find(e => e.id === dropId));
+    }
+  }
+  return newItems;
+}
+
+let activeArmoryTab = 'weapon';
+
+function renderArmory() {
+  const shop = document.getElementById('avatarShop');
+  shop.innerHTML = '';
+  const tabs = document.createElement('div');
+  tabs.className = 'armory-tabs';
+  ['weapon','armor','accessory'].forEach(slot => {
+    const btn = document.createElement('button');
+    btn.className = 'armory-tab' + (activeArmoryTab === slot ? ' active' : '');
+    btn.textContent = slot === 'weapon' ? '⚔️ Weapons' : slot === 'armor' ? '🛡️ Armor' : '💍 Accessories';
+    btn.onclick = () => { activeArmoryTab = slot; renderArmory(); };
+    tabs.appendChild(btn);
+  });
+  shop.appendChild(tabs);
+
+  const items = EQUIPMENT.filter(e => e.slot === activeArmoryTab);
+  for (const item of items) {
+    const owned = state.rpg.ownedEquipment.includes(item.id);
+    const equipped = (activeArmoryTab === 'weapon' && state.rpg.equippedWeapon === item.id) ||
+                     (activeArmoryTab === 'armor' && state.rpg.equippedArmor === item.id) ||
+                     (activeArmoryTab === 'accessory' && state.rpg.equippedAccessory === item.id);
+    const canAfford = state.coins >= item.cost;
+    const isBossLocked = item.source === 'boss' && !owned;
+
+    const card = document.createElement('div');
+    card.className = 'equip-card' + (equipped ? ' equipped' : '') + (isBossLocked ? ' boss-locked' : '');
+
+    let statText = '';
+    if (item.atk) statText += '+' + item.atk + ' ATK ';
+    if (item.def) statText += '+' + item.def + ' DEF ';
+    if (item.hp) statText += '+' + item.hp + ' HP ';
+    if (item.effect === 'heal5') statText = 'Heal 5 HP per correct';
+    if (item.effect === 'gold50') statText = '+50% gold from mobs';
+    if (item.effect === 'lifesteal') statText = 'Heal 10 HP per kill';
+
+    let actionHTML = '';
+    if (equipped) actionHTML = '<span style="color:var(--accent);font-weight:800;font-size:11px">⭐ Equipped</span>';
+    else if (owned) actionHTML = '<button class="btn-equip" onclick="event.stopPropagation();equipItem(\'' + item.id + '\')">Equip</button>';
+    else if (isBossLocked) actionHTML = '<span class="equip-source">\uD83D\uDD12 Wave ' + item.bossWave + ' Boss</span>';
+    else if (item.cost > 0 && canAfford) actionHTML = '<button class="btn-buy-equip" onclick="event.stopPropagation();buyEquipment(\'' + item.id + '\')">🪙 ' + item.cost + '</button>';
+    else if (item.cost > 0) actionHTML = '<span class="equip-source">🪙 ' + item.cost + '</span>';
+
+    card.innerHTML = '<div class="equip-emoji">' + item.emoji + '</div><div class="equip-info"><div class="equip-name">' + item.name + '</div><div class="equip-stat">' + statText + '</div></div><div class="equip-action">' + actionHTML + '</div>';
+    shop.appendChild(card);
+  }
+}
+
 // ============ THEMES ============
 function applyTheme(key) {
   const t = THEMES[key] || THEMES.default;
@@ -3754,6 +4542,7 @@ function applyTheme(key) {
 
 // ============ BADGES ============
 function checkBadges() {
+  const rpg = state.rpg || {};
   const data = {
     totalQuestions: getTotalQuestions(),
     currentStreak: getCurrentStreak(),
@@ -3761,6 +4550,9 @@ function checkBadges() {
     daysActive: getDaysActive(),
     practiceCorrect: state.practiceStats ? state.practiceStats.totalCorrect : 0,
     perfectSession: state.practiceStats ? state.practiceStats.perfectSession : false,
+    mobsKilled: rpg.totalMobsKilled || 0,
+    bossesKilled: rpg.bossesKilled || 0,
+    highestWave: rpg.highestWave || 1,
   };
   let newBadge = null;
   for (const badge of BADGES) {
@@ -3911,7 +4703,7 @@ function render() {
   // Shop balance
   document.getElementById('shopBalance').textContent = '🪙 ' + state.coins;
 
-  renderAvatarShop();
+  renderArmory();
   renderBadges();
   renderRewards();
   renderHistory();
