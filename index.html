@@ -1465,27 +1465,11 @@
           <div class="subject-label maths-label">📐 Maths</div>
           <div class="subject-count" id="mathsCount">0</div>
           <div class="subject-attempted" id="mathsAttempted"></div>
-          <div class="btn-row">
-            <button class="btn-subtract" onclick="removeQuestion('maths')">−</button>
-            <button class="btn-add" onclick="addQuestion('maths')">+</button>
-          </div>
-          <div class="quick-adds">
-            <button class="btn-quick" onclick="addMultiple(5,'maths')">+5</button>
-            <button class="btn-quick" onclick="addMultiple(10,'maths')">+10</button>
-          </div>
         </div>
         <div class="subject-col">
           <div class="subject-label english-label">📖 English</div>
           <div class="subject-count" id="englishCount">0</div>
           <div class="subject-attempted" id="englishAttempted"></div>
-          <div class="btn-row">
-            <button class="btn-subtract" onclick="removeQuestion('english')">−</button>
-            <button class="btn-add" onclick="addQuestion('english')">+</button>
-          </div>
-          <div class="quick-adds">
-            <button class="btn-quick" onclick="addMultiple(5,'english')">+5</button>
-            <button class="btn-quick" onclick="addMultiple(10,'english')">+10</button>
-          </div>
         </div>
       </div>
 
@@ -3719,8 +3703,15 @@ function renderCurrentQuestion() {
   }
 
   html += '<div class="options-grid" id="qOptions">';
-  q.opts.forEach((opt, i) => {
-    html += '<button class="option-btn" onclick="selectPracticeAnswer(' + i + ')">' + opt + '</button>';
+  // Shuffle option display order so correct answer isn't always first
+  const optIndices = q.opts.map((_, i) => i);
+  for (let i = optIndices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [optIndices[i], optIndices[j]] = [optIndices[j], optIndices[i]];
+  }
+  s.optionMap = optIndices;
+  optIndices.forEach((origIdx, displayIdx) => {
+    html += '<button class="option-btn" onclick="selectPracticeAnswer(' + displayIdx + ')">' + q.opts[origIdx] + '</button>';
   });
   html += '</div><div id="qFeedback"></div>';
   html += '<div id="qActions" style="display:none"><button class="q-next-btn" onclick="nextPracticeQuestion()">Next Attack \u2694\uFE0F</button></div>';
@@ -3808,17 +3799,21 @@ function selectPracticeAnswer(idx) {
   s.answered = true;
   stopTimer();
   const q = s.questions[s.current];
-  const correct = idx === q.ans;
+  // Map display index back to original option index
+  const origIdx = s.optionMap ? s.optionMap[idx] : idx;
+  const correct = origIdx === q.ans;
   const elapsed = Math.round((Date.now() - s.questionStartTime) / 1000);
   s.timeTaken.push(elapsed);
-  s.results.push({ diff: q.diff, correct: idx === q.ans });
+  s.results.push({ diff: q.diff, correct });
   s.totalAnswered++;
   const btns = document.querySelectorAll('#qOptions .option-btn');
+  // Find which display position has the correct answer
+  const correctDisplayIdx = s.optionMap ? s.optionMap.indexOf(q.ans) : q.ans;
 
   btns.forEach((btn, i) => {
-    if (i === q.ans) btn.classList.add('correct');
+    if (i === correctDisplayIdx) btn.classList.add('correct');
     if (i === idx && !correct) btn.classList.add('incorrect');
-    if (i !== idx && i !== q.ans) btn.classList.add('dim');
+    if (i !== idx && i !== correctDisplayIdx) btn.classList.add('dim');
     btn.classList.add('disabled');
   });
 
