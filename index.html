@@ -823,7 +823,7 @@
   }
 
   /* Practice View */
-  .view-practice { display: none; }
+  .view-tracker { display: none; }
   .view-practice .main { padding: 10px 20px 120px; }
 
   .practice-picker { text-align: center; }
@@ -1259,6 +1259,8 @@
   .damage-float.mob-dmg { color: #fbbf24; }
   .damage-float.heal { color: #34d399; }
   .damage-float.gold { color: var(--accent-light); font-size: 16px; }
+  .damage-float.power { color: #f59e0b; font-size: 22px; font-weight: 900; text-shadow: 0 2px 4px rgba(245,158,11,0.5); }
+  .damage-float.crit { color: #ef4444; font-size: 24px; font-weight: 900; text-shadow: 0 2px 6px rgba(239,68,68,0.5); }
   @keyframes floatUp {
     0% { opacity:1; transform:translateY(0) scale(1); }
     60% { opacity:1; transform:translateY(-30px) scale(1.2); }
@@ -1347,6 +1349,7 @@
   }
   .equip-card.equipped { border-color: var(--accent); background: #fffbeb; }
   .equip-card.boss-locked { opacity: 0.5; }
+  .equip-card.level-locked { opacity: 0.5; }
   .equip-emoji { font-size: 28px; }
   .equip-info { flex: 1; }
   .equip-name { font-size: 13px; font-weight: 800; }
@@ -1444,8 +1447,8 @@
 
   <!-- Tab Bar -->
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchView('tracker')">📊 Tracker</button>
-    <button class="tab-btn" onclick="switchView('practice')">📝 Practice</button>
+    <button class="tab-btn active" onclick="switchView('practice')">⚔️ Quest</button>
+    <button class="tab-btn" onclick="switchView('tracker')">📊 Upgrades</button>
   </div>
 
   <div class="view-tracker"><div class="main">
@@ -1553,8 +1556,6 @@
     </div>
   </div>
   </div><!-- end view-tracker -->
-
-  <!-- Practice View -->
   <div class="view-practice">
     <div class="main">
       <div class="practice-stats">
@@ -1641,18 +1642,28 @@ const REWARDS = [
   { id: 'theme_blue', icon: '🎨', name: 'Blue Thunder Theme', desc: 'A cool blue theme!', req: 50 },
   { id: 'title_expert', icon: '👨‍🎓', name: 'Title: Quiz Expert', desc: 'A prestigious title', req: 100 },
   { id: 'theme_green', icon: '🌿', name: 'Forest Theme', desc: 'A calming green theme', req: 200 },
+  { id: 'theme_sunset', icon: '🌅', name: 'Sunset Theme', desc: 'Warm sunset colours', req: 350 },
   { id: 'title_master', icon: '🧙', name: 'Title: Grand Master', desc: 'The ultimate title', req: 500 },
+  { id: 'theme_galaxy', icon: '🌌', name: 'Galaxy Theme', desc: 'Deep space vibes', req: 750 },
   { id: 'theme_gold', icon: '✨', name: 'Golden Theme', desc: 'The legendary gold theme', req: 1000 },
+  { id: 'title_legend', icon: '👑', name: 'Title: Legend', desc: 'Only true legends earn this', req: 1500 },
+  { id: 'theme_neon', icon: '💜', name: 'Neon Theme', desc: 'Cyberpunk energy', req: 2000 },
+  { id: 'title_supreme', icon: '⚡', name: 'Title: Supreme', desc: 'The supreme scholar', req: 3000 },
+  { id: 'theme_rainbow', icon: '🌈', name: 'Rainbow Theme', desc: 'All the colours!', req: 5000 },
 ];
 
-const TITLE_REWARDS = { title_starter: 'Practice Pro', title_expert: 'Quiz Expert', title_master: 'Grand Master' };
-const THEME_REWARDS = { theme_blue: 'blue', theme_green: 'green', theme_gold: 'gold' };
+const TITLE_REWARDS = { title_starter: 'Practice Pro', title_expert: 'Quiz Expert', title_master: 'Grand Master', title_legend: 'Legend', title_supreme: 'Supreme' };
+const THEME_REWARDS = { theme_blue: 'blue', theme_green: 'green', theme_sunset: 'sunset', theme_galaxy: 'galaxy', theme_gold: 'gold', theme_neon: 'neon', theme_rainbow: 'rainbow' };
 
 const THEMES = {
   default: { name: 'Default (Purple)', primary: '#7c3aed', primaryLight: '#a78bfa', primaryDark: '#5b21b6', accent: '#f59e0b', accentLight: '#fbbf24', bg: '#faf5ff', levelTrack: '#e9d5ff', statStart: '#f5f3ff', statEnd: '#ede9fe', motivStart: '#f5f3ff', motivEnd: '#ede9fe' },
   blue: { name: 'Blue Thunder', primary: '#2563eb', primaryLight: '#60a5fa', primaryDark: '#1d4ed8', accent: '#f59e0b', accentLight: '#fbbf24', bg: '#eff6ff', levelTrack: '#bfdbfe', statStart: '#eff6ff', statEnd: '#dbeafe', motivStart: '#eff6ff', motivEnd: '#dbeafe' },
   green: { name: 'Forest', primary: '#059669', primaryLight: '#34d399', primaryDark: '#047857', accent: '#f59e0b', accentLight: '#fbbf24', bg: '#ecfdf5', levelTrack: '#a7f3d0', statStart: '#ecfdf5', statEnd: '#d1fae5', motivStart: '#ecfdf5', motivEnd: '#d1fae5' },
+  sunset: { name: 'Sunset', primary: '#e11d48', primaryLight: '#fb7185', primaryDark: '#be123c', accent: '#f59e0b', accentLight: '#fbbf24', bg: '#fff1f2', levelTrack: '#fecdd3', statStart: '#fff1f2', statEnd: '#ffe4e6', motivStart: '#fff1f2', motivEnd: '#ffe4e6' },
+  galaxy: { name: 'Galaxy', primary: '#4338ca', primaryLight: '#818cf8', primaryDark: '#3730a3', accent: '#c084fc', accentLight: '#d8b4fe', bg: '#eef2ff', levelTrack: '#c7d2fe', statStart: '#eef2ff', statEnd: '#e0e7ff', motivStart: '#eef2ff', motivEnd: '#e0e7ff' },
   gold: { name: 'Golden', primary: '#d97706', primaryLight: '#fbbf24', primaryDark: '#b45309', accent: '#7c3aed', accentLight: '#a78bfa', bg: '#fffbeb', levelTrack: '#fde68a', statStart: '#fffbeb', statEnd: '#fef3c7', motivStart: '#fffbeb', motivEnd: '#fef3c7' },
+  neon: { name: 'Neon', primary: '#7c3aed', primaryLight: '#c084fc', primaryDark: '#6d28d9', accent: '#06b6d4', accentLight: '#22d3ee', bg: '#faf5ff', levelTrack: '#e9d5ff', statStart: '#faf5ff', statEnd: '#f3e8ff', motivStart: '#faf5ff', motivEnd: '#f3e8ff' },
+  rainbow: { name: 'Rainbow', primary: '#dc2626', primaryLight: '#f87171', primaryDark: '#b91c1c', accent: '#16a34a', accentLight: '#4ade80', bg: '#fef2f2', levelTrack: '#fecaca', statStart: '#fef2f2', statEnd: '#fee2e2', motivStart: '#fef2f2', motivEnd: '#fee2e2' },
 };
 
 const AVATARS = [
@@ -1689,7 +1700,7 @@ const EQUIPMENT = [
   { id:'wooden_sword', slot:'weapon', emoji:'🗡️', name:'Wooden Sword', atk:5, def:0, hp:0, cost:0, source:'start' },
   { id:'iron_sword', slot:'weapon', emoji:'⚔️', name:'Iron Sword', atk:10, def:0, hp:0, cost:200, source:'shop' },
   { id:'fire_blade', slot:'weapon', emoji:'🔥', name:'Fire Blade', atk:15, def:0, hp:0, cost:400, source:'shop' },
-  { id:'thunder_axe', slot:'weapon', emoji:'⚡', name:'Thunder Axe', atk:20, def:0, hp:0, cost:700, source:'shop' },
+  { id:'thunder_axe', slot:'weapon', emoji:'⚡', name:'Thunder Axe', atk:20, def:0, hp:0, cost:1200, source:'shop' },
   { id:'dragon_fang', slot:'weapon', emoji:'🐉', name:'Dragon Fang', atk:28, def:0, hp:0, cost:0, source:'boss', bossWave:10 },
   { id:'shadow_blade', slot:'weapon', emoji:'⚫', name:'Shadow Blade', atk:35, def:0, hp:0, cost:0, source:'boss', bossWave:15 },
   { id:'star_sword', slot:'weapon', emoji:'🌟', name:'Star Sword', atk:45, def:0, hp:0, cost:0, source:'boss', bossWave:20 },
@@ -1697,7 +1708,7 @@ const EQUIPMENT = [
   { id:'cloth_tunic', slot:'armor', emoji:'👕', name:'Cloth Tunic', atk:0, def:2, hp:0, cost:0, source:'start' },
   { id:'leather_armor', slot:'armor', emoji:'🥋', name:'Leather Armor', atk:0, def:5, hp:10, cost:200, source:'shop' },
   { id:'chain_mail', slot:'armor', emoji:'⛓️', name:'Chain Mail', atk:0, def:8, hp:20, cost:400, source:'shop' },
-  { id:'crystal_plate', slot:'armor', emoji:'💎', name:'Crystal Plate', atk:0, def:12, hp:30, cost:700, source:'shop' },
+  { id:'crystal_plate', slot:'armor', emoji:'💎', name:'Crystal Plate', atk:0, def:12, hp:30, cost:1200, source:'shop' },
   { id:'dragon_scale', slot:'armor', emoji:'🐲', name:'Dragon Scale', atk:0, def:18, hp:50, cost:0, source:'boss', bossWave:10 },
   { id:'void_armor', slot:'armor', emoji:'🖤', name:'Void Armor', atk:0, def:25, hp:70, cost:0, source:'boss', bossWave:15 },
   { id:'star_shield', slot:'armor', emoji:'✨', name:'Star Shield', atk:0, def:32, hp:100, cost:0, source:'boss', bossWave:20 },
@@ -1705,9 +1716,19 @@ const EQUIPMENT = [
   { id:'no_accessory', slot:'accessory', emoji:'➖', name:'None', atk:0, def:0, hp:0, cost:0, source:'start', effect:null },
   { id:'healing_ring', slot:'accessory', emoji:'💍', name:'Healing Ring', atk:0, def:0, hp:0, cost:300, source:'shop', effect:'heal5' },
   { id:'lucky_charm', slot:'accessory', emoji:'🍀', name:'Lucky Charm', atk:0, def:0, hp:0, cost:300, source:'shop', effect:'gold50' },
-  { id:'power_gem', slot:'accessory', emoji:'💎', name:'Power Gem', atk:5, def:0, hp:0, cost:500, source:'shop', effect:null },
-  { id:'shield_amulet', slot:'accessory', emoji:'🧿', name:'Shield Amulet', atk:0, def:5, hp:0, cost:500, source:'shop', effect:null },
+  { id:'power_gem', slot:'accessory', emoji:'💎', name:'Power Gem', atk:5, def:0, hp:0, cost:800, source:'shop', effect:null },
+  { id:'shield_amulet', slot:'accessory', emoji:'🧿', name:'Shield Amulet', atk:0, def:5, hp:0, cost:800, source:'shop', effect:null },
   { id:'vampire_fang', slot:'accessory', emoji:'🧛', name:'Vampire Fang', atk:0, def:0, hp:0, cost:0, source:'boss', bossWave:5, effect:'lifesteal' },
+  { id:'crit_ring', slot:'accessory', emoji:'💥', name:'Critical Ring', atk:0, def:0, hp:0, cost:600, source:'shop', effect:'crit20', levelReq:4 },
+  { id:'xp_tome', slot:'accessory', emoji:'📖', name:'Tome of Wisdom', atk:0, def:0, hp:0, cost:800, source:'shop', effect:'xpboost50', levelReq:5 },
+  { id:'combo_ring', slot:'accessory', emoji:'🔗', name:'Combo Ring', atk:0, def:0, hp:0, cost:1000, source:'shop', effect:'combo', levelReq:6 },
+  { id:'thorn_mail', slot:'accessory', emoji:'🌵', name:'Thorn Mail', atk:0, def:0, hp:0, cost:1200, source:'shop', effect:'thorns', levelReq:7 },
+  { id:'shield_bubble', slot:'accessory', emoji:'🛡️', name:'Shield Bubble', atk:0, def:0, hp:0, cost:1500, source:'shop', effect:'shield_bubble', levelReq:8 },
+  { id:'double_strike', slot:'accessory', emoji:'⚡', name:'Storm Gauntlet', atk:0, def:0, hp:0, cost:0, source:'boss', bossWave:10, effect:'double_strike' },
+  { id:'time_crystal', slot:'accessory', emoji:'⏳', name:'Time Crystal', atk:0, def:0, hp:0, cost:2000, source:'shop', effect:'time_freeze', levelReq:9 },
+  { id:'resurrection_stone', slot:'accessory', emoji:'💎', name:'Resurrection Stone', atk:0, def:0, hp:0, cost:0, source:'boss', bossWave:15, effect:'resurrect' },
+  { id:'coin_crown', slot:'accessory', emoji:'👑', name:'Crown of Greed', atk:0, def:0, hp:0, cost:3000, source:'shop', effect:'gold_double', levelReq:12 },
+  { id:'chaos_gem', slot:'accessory', emoji:'🌀', name:'Chaos Gem', atk:8, def:3, hp:20, cost:0, source:'boss', bossWave:20, effect:'chaos' },
 ];
 
 // ============ RPG MOBS & WAVES ============
@@ -1724,33 +1745,33 @@ const WAVE_REGIONS = [
 
 const MOB_TEMPLATES = [
   // Grasslands mobs (waves 1-4)
-  { id:'rat', name:'Giant Rat', emoji:'🐀', hp:20, atk:3, gold:8, region:'Grasslands' },
-  { id:'snake', name:'Viper', emoji:'🐍', hp:25, atk:5, gold:10, region:'Grasslands' },
-  { id:'bat', name:'Cave Bat', emoji:'🦇', hp:20, atk:4, gold:8, region:'Grasslands' },
-  { id:'spider', name:'Web Spider', emoji:'🕷️', hp:30, atk:5, gold:12, region:'Grasslands' },
+  { id:'rat', name:'Giant Rat', emoji:'🐀', hp:20, atk:3, gold:10, region:'Grasslands' },
+  { id:'snake', name:'Viper', emoji:'🐍', hp:25, atk:5, gold:12, region:'Grasslands' },
+  { id:'bat', name:'Cave Bat', emoji:'🦇', hp:20, atk:4, gold:10, region:'Grasslands' },
+  { id:'spider', name:'Web Spider', emoji:'🕷️', hp:30, atk:5, gold:15, region:'Grasslands' },
   // Boss wave 5
-  { id:'dire_wolf', name:'Dire Wolf', emoji:'🐺', hp:80, atk:10, gold:60, region:'Grasslands Boss', boss:true, drops:['vampire_fang'] },
+  { id:'dire_wolf', name:'Dire Wolf', emoji:'🐺', hp:80, atk:10, gold:80, region:'Grasslands Boss', boss:true, drops:['vampire_fang'] },
   // Dark Forest mobs (waves 6-9)
-  { id:'zombie', name:'Zombie', emoji:'🧟', hp:35, atk:7, gold:15, region:'Dark Forest' },
-  { id:'skeleton', name:'Skeleton', emoji:'🦴', hp:30, atk:8, gold:15, region:'Dark Forest' },
-  { id:'vine', name:'Vine Monster', emoji:'🌿', hp:40, atk:6, gold:18, region:'Dark Forest' },
-  { id:'boar', name:'Wild Boar', emoji:'🐗', hp:45, atk:8, gold:18, region:'Dark Forest' },
+  { id:'zombie', name:'Zombie', emoji:'🧟', hp:35, atk:7, gold:25, region:'Dark Forest' },
+  { id:'skeleton', name:'Skeleton', emoji:'🦴', hp:30, atk:8, gold:28, region:'Dark Forest' },
+  { id:'vine', name:'Vine Monster', emoji:'🌿', hp:40, atk:6, gold:30, region:'Dark Forest' },
+  { id:'boar', name:'Wild Boar', emoji:'🐗', hp:45, atk:8, gold:35, region:'Dark Forest' },
   // Boss wave 10
-  { id:'forest_dragon', name:'Forest Dragon', emoji:'🐉', hp:120, atk:14, gold:100, region:'Dark Forest Boss', boss:true, drops:['dragon_fang','dragon_scale'] },
+  { id:'forest_dragon', name:'Forest Dragon', emoji:'🐉', hp:120, atk:14, gold:200, region:'Dark Forest Boss', boss:true, drops:['dragon_fang','dragon_scale','double_strike'] },
   // Crystal Cave mobs (waves 11-14)
-  { id:'scorpion', name:'Scorpion', emoji:'🦂', hp:45, atk:10, gold:22, region:'Crystal Cave' },
-  { id:'golem', name:'Rock Golem', emoji:'🪨', hp:60, atk:8, gold:25, region:'Crystal Cave' },
-  { id:'imp', name:'Fire Imp', emoji:'🔥', hp:40, atk:12, gold:22, region:'Crystal Cave' },
-  { id:'eye', name:'Cave Eye', emoji:'👁️', hp:50, atk:11, gold:25, region:'Crystal Cave' },
+  { id:'scorpion', name:'Scorpion', emoji:'🦂', hp:45, atk:10, gold:50, region:'Crystal Cave' },
+  { id:'golem', name:'Rock Golem', emoji:'🪨', hp:60, atk:8, gold:60, region:'Crystal Cave' },
+  { id:'imp', name:'Fire Imp', emoji:'🔥', hp:40, atk:12, gold:55, region:'Crystal Cave' },
+  { id:'eye', name:'Cave Eye', emoji:'👁️', hp:50, atk:11, gold:70, region:'Crystal Cave' },
   // Boss wave 15
-  { id:'dark_wizard', name:'Dark Wizard', emoji:'🧙', hp:160, atk:18, gold:150, region:'Crystal Cave Boss', boss:true, drops:['shadow_blade','void_armor'] },
+  { id:'dark_wizard', name:'Dark Wizard', emoji:'🧙', hp:160, atk:18, gold:400, region:'Crystal Cave Boss', boss:true, drops:['shadow_blade','void_armor','resurrection_stone'] },
   // Volcano mobs (waves 16-19)
-  { id:'drake', name:'Lava Drake', emoji:'🦎', hp:60, atk:14, gold:30, region:'Volcano' },
-  { id:'skull_knight', name:'Skull Knight', emoji:'💀', hp:70, atk:15, gold:32, region:'Volcano' },
-  { id:'demon', name:'Demon', emoji:'👹', hp:75, atk:16, gold:35, region:'Volcano' },
-  { id:'shadow', name:'Shadow Beast', emoji:'🌑', hp:65, atk:18, gold:35, region:'Volcano' },
+  { id:'drake', name:'Lava Drake', emoji:'🦎', hp:60, atk:14, gold:100, region:'Volcano' },
+  { id:'skull_knight', name:'Skull Knight', emoji:'💀', hp:70, atk:15, gold:120, region:'Volcano' },
+  { id:'demon', name:'Demon', emoji:'👹', hp:75, atk:16, gold:130, region:'Volcano' },
+  { id:'shadow', name:'Shadow Beast', emoji:'🌑', hp:65, atk:18, gold:150, region:'Volcano' },
   // Final boss wave 20
-  { id:'dragon_king', name:'Dragon King', emoji:'👑', hp:250, atk:22, gold:250, region:'Dragon Peak', boss:true, drops:['star_sword','star_shield'] },
+  { id:'dragon_king', name:'Dragon King', emoji:'👑', hp:250, atk:22, gold:1000, region:'Dragon Peak', boss:true, drops:['star_sword','star_shield','chaos_gem'] },
 ];
 
 function getWaveInfo(waveNum) {
@@ -1765,7 +1786,7 @@ function getWaveInfo(waveNum) {
   // Get mobs for this wave
   const regionMobs = MOB_TEMPLATES.filter(m => m.region === region.name);
   const isBoss = regionMobs.length === 1 && regionMobs[0].boss;
-  const scale = waveNum > 20 ? 1 + (waveNum - 20) * 0.15 : 1;
+  const scale = waveNum > 20 ? 1 + (waveNum - 20) * 0.25 : 1;
 
   let mobs;
   if (isBoss) {
@@ -1815,12 +1836,27 @@ const LEVELS = [
   { level: 2, name: 'Learner', xpNeeded: 100 },
   { level: 3, name: 'Apprentice', xpNeeded: 250 },
   { level: 4, name: 'Scholar', xpNeeded: 500 },
-  { level: 5, name: 'Achiever', xpNeeded: 800 },
-  { level: 6, name: 'Expert', xpNeeded: 1200 },
-  { level: 7, name: 'Champion', xpNeeded: 1800 },
-  { level: 8, name: 'Master', xpNeeded: 2500 },
-  { level: 9, name: 'Grand Master', xpNeeded: 3500 },
-  { level: 10, name: 'Legend', xpNeeded: 5000 },
+  { level: 5, name: 'Achiever', xpNeeded: 900 },
+  { level: 6, name: 'Expert', xpNeeded: 1500 },
+  { level: 7, name: 'Champion', xpNeeded: 2400 },
+  { level: 8, name: 'Master', xpNeeded: 3800 },
+  { level: 9, name: 'Grand Master', xpNeeded: 5800 },
+  { level: 10, name: 'Legend', xpNeeded: 8500 },
+  { level: 11, name: 'Mythic', xpNeeded: 12000 },
+  { level: 12, name: 'Immortal', xpNeeded: 16500 },
+  { level: 13, name: 'Titan', xpNeeded: 22000 },
+  { level: 14, name: 'Demigod', xpNeeded: 29000 },
+  { level: 15, name: 'Celestial', xpNeeded: 38000 },
+  { level: 16, name: 'Cosmic', xpNeeded: 50000 },
+  { level: 17, name: 'Eternal', xpNeeded: 65000 },
+  { level: 18, name: 'Transcendent', xpNeeded: 85000 },
+  { level: 19, name: 'Omniscient', xpNeeded: 110000 },
+  { level: 20, name: 'Supreme', xpNeeded: 140000 },
+  { level: 21, name: 'Ascended', xpNeeded: 180000 },
+  { level: 22, name: 'Infinite', xpNeeded: 230000 },
+  { level: 23, name: 'Godlike', xpNeeded: 300000 },
+  { level: 24, name: 'Omega', xpNeeded: 400000 },
+  { level: 25, name: 'The One', xpNeeded: 500000 },
 ];
 
 const MOTIVATIONAL_MSGS = [
@@ -3436,9 +3472,10 @@ function switchView(view) {
   document.querySelector('.view-tracker').style.display = view === 'tracker' ? 'block' : 'none';
   document.querySelector('.view-practice').style.display = view === 'practice' ? 'block' : 'none';
   document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-    btn.classList.toggle('active', (i === 0 && view === 'tracker') || (i === 1 && view === 'practice'));
+    btn.classList.toggle('active', (i === 0 && view === 'practice') || (i === 1 && view === 'tracker'));
   });
   if (view === 'practice') { renderPracticeStats(); renderWaveProgress(); }
+  if (view === 'tracker') { renderArmory(); }
 }
 
 function renderPracticeStats() {
@@ -3563,6 +3600,9 @@ function startSession(cat, type) {
       damageDealt: 0,
       damageTaken: 0,
       defeated: false,
+      comboCount: 0,
+      shieldUsed: false,
+      resurrected: false,
     }
   };
   document.getElementById('practicePicker').style.display = 'none';
@@ -3806,8 +3846,9 @@ function selectPracticeAnswer(idx) {
     }
   }
 
-  // XP based on difficulty
-  const baseXP = s.adaptiveMode ? [0, 10, 15, 20][q.diff] : 10;
+  // XP and coins scale by difficulty
+  const baseXP = [0, 10, 25, 50][q.diff] || 10;
+  const baseCoins = [0, 5, 15, 30][q.diff] || 5;
   const streak = getCurrentStreak();
   const fb = document.getElementById('qFeedback');
   const b = s.battle;
@@ -3815,8 +3856,10 @@ function selectPracticeAnswer(idx) {
 
   if (correct) {
     s.correct++;
-    const xp = baseXP + (streak >= 3 ? 5 : 0);
-    const coins = 5;
+    let xp = baseXP + (streak >= 3 ? 5 : 0);
+    let coins = baseCoins;
+    // Accessory: Tome of Wisdom (+50% XP)
+    if (ps.accEffect === 'xpboost50') xp = Math.round(xp * 1.5);
     s.xpEarned += xp;
     s.coinsEarned += coins;
     const oldXP = state.totalXP;
@@ -3833,18 +3876,70 @@ function selectPracticeAnswer(idx) {
 
     // ---- BATTLE: Player attacks mob ----
     let battleText = '';
+    let extraFbLines = [];
     if (b) {
-      const dmg = ps.atk;
+      // Difficulty-based damage multiplier
+      const diffMultiplier = [0, 1, 1.3, 2][q.diff] || 1;
+      let dmg = Math.round(ps.atk * diffMultiplier);
+      let isPowerStrike = q.diff === 3;
+      let isCrit = false;
+
+      // Accessory: Combo Ring (+2 dmg per consecutive correct)
+      if (ps.accEffect === 'combo') {
+        b.comboCount++;
+        const comboBonus = b.comboCount * 2;
+        dmg += comboBonus;
+        if (b.comboCount > 1) extraFbLines.push('\uD83D\uDD17 Combo x' + b.comboCount + '! +' + comboBonus + ' bonus');
+      }
+
+      // Accessory: Critical Ring (20% chance 2x damage)
+      if (ps.accEffect === 'crit20' && Math.random() < 0.2) {
+        dmg *= 2;
+        isCrit = true;
+      }
+
+      // Accessory: Storm Gauntlet (25% chance double strike)
+      let doubleStrike = false;
+      if (ps.accEffect === 'double_strike' && Math.random() < 0.25) {
+        doubleStrike = true;
+      }
+
+      // Accessory: Chaos Gem (random bonus each attack)
+      if (ps.accEffect === 'chaos') {
+        const roll = Math.random();
+        if (roll < 0.25) { dmg += 8; extraFbLines.push('\uD83C\uDF00 Chaos: +8 ATK!'); }
+        else if (roll < 0.5) { b.playerHP = Math.min(b.maxHP, b.playerHP + 10); extraFbLines.push('\uD83C\uDF00 Chaos: +10 HP!'); updatePlayerHPBar(b); }
+        else if (roll < 0.75) { state.coins += 20; s.coinsEarned += 20; extraFbLines.push('\uD83C\uDF00 Chaos: +20 gold!'); }
+        else { xp += 15; state.totalXP += 15; s.xpEarned += 15; extraFbLines.push('\uD83C\uDF00 Chaos: +15 XP!'); }
+      }
+
       b.mobHP -= dmg;
       b.damageDealt += dmg;
-      battleText = ' \u2694\uFE0F -' + dmg + ' damage!';
+
+      // Build battle text
+      if (isCrit && isPowerStrike) battleText = ' \u2694\uFE0F -' + dmg + ' CRITICAL POWER STRIKE!';
+      else if (isCrit) battleText = ' \u2694\uFE0F -' + dmg + ' CRITICAL HIT!';
+      else if (isPowerStrike) battleText = ' \u2694\uFE0F -' + dmg + ' POWER STRIKE!';
+      else battleText = ' \u2694\uFE0F -' + dmg + ' damage!';
+
       // Animate
       const charEl = document.getElementById('battleChar');
       const mobEl = document.getElementById('battleMob');
       if (charEl) { charEl.classList.add('attacking'); setTimeout(() => charEl.classList.remove('attacking'), 400); }
       if (mobEl) { setTimeout(() => { mobEl.classList.add('hit'); setTimeout(() => mobEl.classList.remove('hit'), 300); }, 200); }
       // Floating damage on mob
-      showFloatingDamage('mob', '-' + dmg);
+      const floatClass = isCrit ? 'crit' : isPowerStrike ? 'power' : '';
+      showFloatingDamage('mob', '-' + dmg, floatClass);
+
+      // Double strike: second hit
+      if (doubleStrike && b.mobHP > 0) {
+        const dmg2 = Math.round(ps.atk * diffMultiplier);
+        b.mobHP -= dmg2;
+        b.damageDealt += dmg2;
+        extraFbLines.push('\u26A1 Double Strike! -' + dmg2 + ' bonus hit!');
+        setTimeout(() => showFloatingDamage('mob', '-' + dmg2, 'crit'), 400);
+      }
+
       // Update mob HP bar + text
       setTimeout(() => {
         const fill = document.getElementById('mobHpFill');
@@ -3856,12 +3951,20 @@ function selectPracticeAnswer(idx) {
         const hpText = document.querySelector('.mob-hp-text');
         if (hpText) hpText.textContent = Math.max(0, b.mobHP) + '/' + b.mobMaxHP;
       }, 200);
+
       // Healing ring effect
       if (ps.accEffect === 'heal5' && b.playerHP < b.maxHP) {
         b.playerHP = Math.min(b.maxHP, b.playerHP + 5);
         showFloatingDamage('player', '+5', 'heal');
         updatePlayerHPBar(b);
       }
+
+      // Accessory: Time Crystal (+15s in timed mode)
+      if (ps.accEffect === 'time_freeze' && s.timedMode) {
+        s.timeBank += 15;
+        extraFbLines.push('\u231B Time Crystal: +15s!');
+      }
+
       // Check mob death
       if (b.mobHP <= 0) {
         b.mobHP = 0;
@@ -3870,32 +3973,77 @@ function selectPracticeAnswer(idx) {
     }
 
     save(); render();
-    let fbText = '\u2705 Correct! +' + xp + ' XP' + battleText;
+    let fbText = '\u2705 Correct! +' + xp + ' XP, +' + coins + ' \uD83E\uDE99' + battleText;
+    if (extraFbLines.length) fbText += '<br>' + extraFbLines.join(' \u00B7 ');
     if (s.timedMode) fbText += ' (' + elapsed + 's)';
     fb.innerHTML = '<div class="q-feedback correct">' + fbText + '<br>' + q.exp + '</div>';
   } else {
     // ---- BATTLE: Mob attacks player ----
     let battleText = '';
+    let extraFbLines = [];
     if (b) {
-      const mobDmg = Math.max(1, b.mob.atk - ps.def);
+      // Reset combo on wrong answer
+      if (ps.accEffect === 'combo') b.comboCount = 0;
+
+      let mobDmg = Math.max(1, b.mob.atk - ps.def);
+
+      // Accessory: Shield Bubble (block first hit per session)
+      if (ps.accEffect === 'shield_bubble' && !b.shieldUsed) {
+        b.shieldUsed = true;
+        mobDmg = 0;
+        extraFbLines.push('\uD83D\uDEE1\uFE0F Shield Bubble absorbs the hit!');
+      }
+
       b.playerHP -= mobDmg;
       b.damageTaken += mobDmg;
-      battleText = ' \uD83D\uDCA5 ' + b.mob.name + ' hits you for ' + mobDmg + '!';
+      battleText = mobDmg > 0 ? ' \uD83D\uDCA5 ' + b.mob.name + ' hits you for ' + mobDmg + '!' : '';
+
+      // Accessory: Thorn Mail (reflect 30% damage back)
+      if (ps.accEffect === 'thorns' && mobDmg > 0) {
+        const reflect = Math.round(mobDmg * 0.3);
+        if (reflect > 0) {
+          b.mobHP -= reflect;
+          b.damageDealt += reflect;
+          extraFbLines.push('\uD83C\uDF35 Thorns reflect ' + reflect + ' damage!');
+          showFloatingDamage('mob', '-' + reflect, 'power');
+          setTimeout(() => {
+            const fill = document.getElementById('mobHpFill');
+            if (fill) {
+              const pct = Math.max(0, Math.round((b.mobHP / b.mobMaxHP) * 100));
+              fill.style.width = pct + '%';
+            }
+            const hpText = document.querySelector('.mob-hp-text');
+            if (hpText) hpText.textContent = Math.max(0, b.mobHP) + '/' + b.mobMaxHP;
+          }, 200);
+          if (b.mobHP <= 0) { b.mobHP = 0; handleMobDeath(s); }
+        }
+      }
+
       // Animate
       const charEl = document.getElementById('battleChar');
-      if (charEl) { charEl.classList.add('hit'); setTimeout(() => charEl.classList.remove('hit'), 300); }
-      showFloatingDamage('player', '-' + mobDmg);
+      if (charEl && mobDmg > 0) { charEl.classList.add('hit'); setTimeout(() => charEl.classList.remove('hit'), 300); }
+      if (mobDmg > 0) showFloatingDamage('player', '-' + mobDmg);
       updatePlayerHPBar(b);
+
       // Check player death
       if (b.playerHP <= 0) {
-        b.playerHP = 0;
-        b.defeated = true;
-        updatePlayerHPBar(b);
+        // Accessory: Resurrection Stone (revive once at 25% HP)
+        if (ps.accEffect === 'resurrect' && !b.resurrected) {
+          b.resurrected = true;
+          b.playerHP = Math.round(b.maxHP * 0.25);
+          extraFbLines.push('\uD83D\uDC8E Resurrection Stone activates! Revived at ' + b.playerHP + ' HP!');
+          updatePlayerHPBar(b);
+        } else {
+          b.playerHP = 0;
+          b.defeated = true;
+          updatePlayerHPBar(b);
+        }
       }
     }
 
     save(); render();
-    fb.innerHTML = '<div class="q-feedback incorrect">\u274C Not quite!' + battleText + (s.timedMode ? ' (' + elapsed + 's)' : '') + '<br>' + q.exp + '</div>';
+    let fbExtra = extraFbLines.length ? '<br>' + extraFbLines.join(' \u00B7 ') : '';
+    fb.innerHTML = '<div class="q-feedback incorrect">\u274C Not quite!' + battleText + fbExtra + (s.timedMode ? ' (' + elapsed + 's)' : '') + '<br>' + q.exp + '</div>';
 
     // If defeated, end session after short delay
     if (b && b.defeated) {
@@ -3958,9 +4106,10 @@ function handleMobDeath(s) {
   state.rpg.totalMobsKilled++;
   state.rpg.waveMobsDefeated++;
 
-  // Gold reward (with lucky charm bonus)
+  // Gold reward (with accessory bonuses)
   let goldReward = b.mob.gold;
   if (ps.accEffect === 'gold50') goldReward = Math.round(goldReward * 1.5);
+  if (ps.accEffect === 'gold_double') goldReward = goldReward * 2;
   state.coins += goldReward;
   b.goldEarned += goldReward;
   s.coinsEarned += goldReward;
@@ -4445,6 +4594,8 @@ function selectAvatar(id) {
 function buyEquipment(id) {
   const item = EQUIPMENT.find(e => e.id === id);
   if (!item || state.rpg.ownedEquipment.includes(id) || state.coins < item.cost) return;
+  // Level requirement check
+  if (item.levelReq && getLevel(state.totalXP).level < item.levelReq) return;
   state.coins -= item.cost;
   state.rpg.ownedEquipment.push(id);
   if (item.slot === 'weapon') state.rpg.equippedWeapon = id;
@@ -4490,6 +4641,22 @@ function renderArmory() {
   shop.appendChild(tabs);
 
   const items = EQUIPMENT.filter(e => e.slot === activeArmoryTab);
+  const playerLevel = getLevel(state.totalXP).level;
+  const effectDescs = {
+    'heal5': 'Heal 5 HP per correct',
+    'gold50': '+50% gold from mobs',
+    'lifesteal': 'Heal 10 HP per kill',
+    'crit20': '20% chance 2x damage',
+    'xpboost50': '+50% XP from questions',
+    'combo': '+2 dmg per combo streak',
+    'thorns': 'Reflect 30% damage back',
+    'shield_bubble': 'Block first hit per battle',
+    'double_strike': '25% chance to hit twice',
+    'time_freeze': '+15s in timed mode',
+    'resurrect': 'Revive once at 25% HP',
+    'gold_double': '2x gold from mobs',
+    'chaos': 'Random bonus each attack',
+  };
   for (const item of items) {
     const owned = state.rpg.ownedEquipment.includes(item.id);
     const equipped = (activeArmoryTab === 'weapon' && state.rpg.equippedWeapon === item.id) ||
@@ -4497,22 +4664,26 @@ function renderArmory() {
                      (activeArmoryTab === 'accessory' && state.rpg.equippedAccessory === item.id);
     const canAfford = state.coins >= item.cost;
     const isBossLocked = item.source === 'boss' && !owned;
+    const levelReq = item.levelReq || 0;
+    const isLevelLocked = levelReq > 0 && playerLevel < levelReq && !owned;
 
     const card = document.createElement('div');
-    card.className = 'equip-card' + (equipped ? ' equipped' : '') + (isBossLocked ? ' boss-locked' : '');
+    card.className = 'equip-card' + (equipped ? ' equipped' : '') + (isBossLocked ? ' boss-locked' : '') + (isLevelLocked ? ' level-locked' : '');
 
     let statText = '';
     if (item.atk) statText += '+' + item.atk + ' ATK ';
     if (item.def) statText += '+' + item.def + ' DEF ';
     if (item.hp) statText += '+' + item.hp + ' HP ';
-    if (item.effect === 'heal5') statText = 'Heal 5 HP per correct';
-    if (item.effect === 'gold50') statText = '+50% gold from mobs';
-    if (item.effect === 'lifesteal') statText = 'Heal 10 HP per kill';
+    if (item.effect && effectDescs[item.effect]) {
+      if (item.atk || item.def || item.hp) statText += '\u00B7 ' + effectDescs[item.effect];
+      else statText = effectDescs[item.effect];
+    }
 
     let actionHTML = '';
     if (equipped) actionHTML = '<span style="color:var(--accent);font-weight:800;font-size:11px">⭐ Equipped</span>';
     else if (owned) actionHTML = '<button class="btn-equip" onclick="event.stopPropagation();equipItem(\'' + item.id + '\')">Equip</button>';
     else if (isBossLocked) actionHTML = '<span class="equip-source">\uD83D\uDD12 Wave ' + item.bossWave + ' Boss</span>';
+    else if (isLevelLocked) actionHTML = '<span class="equip-source">\uD83D\uDD12 Lvl ' + levelReq + '</span>';
     else if (item.cost > 0 && canAfford) actionHTML = '<button class="btn-buy-equip" onclick="event.stopPropagation();buyEquipment(\'' + item.id + '\')">🪙 ' + item.cost + '</button>';
     else if (item.cost > 0) actionHTML = '<span class="equip-source">🪙 ' + item.cost + '</span>';
 
@@ -5011,6 +5182,8 @@ if (!state.name) {
 }
 
 render();
+renderPracticeStats();
+renderWaveProgress();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
