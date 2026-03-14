@@ -744,6 +744,59 @@
   }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+  /* Avatar Unlock Overlay */
+  .avatar-unlock-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 150; justify-content: center; align-items: center; flex-direction: column;
+    color: white; text-align: center; animation: fadeIn 0.3s ease; padding: 24px;
+    background: rgba(16, 185, 129, 0.92);
+  }
+  .avatar-unlock-overlay.show { display: flex; }
+  .avatar-unlock-overlay .overlay-btn { background: white; color: #059669; }
+
+  /* Onboarding Overlay */
+  .onboarding-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 200; background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f59e0b 100%);
+    justify-content: center; align-items: center; flex-direction: column;
+    color: white; text-align: center; padding: 24px; overflow-y: auto;
+  }
+  .onboarding-overlay.show { display: flex; }
+  .onboarding-title { font-size: 30px; font-weight: 900; margin-bottom: 4px; }
+  .onboarding-subtitle { font-size: 15px; font-weight: 600; opacity: 0.9; margin-bottom: 16px; }
+  .onboarding-name-input {
+    font-size: 20px; font-weight: 700; padding: 12px 20px; border-radius: 16px;
+    border: 3px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15);
+    color: white; text-align: center; width: 250px; max-width: 80%;
+    margin-bottom: 16px; font-family: 'Nunito', sans-serif; outline: none;
+  }
+  .onboarding-name-input::placeholder { color: rgba(255,255,255,0.5); }
+  .onboarding-name-input:focus { border-color: rgba(255,255,255,0.7); }
+  .onboarding-label { font-size: 18px; font-weight: 800; margin-bottom: 12px; }
+  .onboarding-avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 340px; margin-bottom: 20px; }
+  .onboarding-avatar-card {
+    text-align: center; padding: 12px 6px; border-radius: 16px;
+    background: rgba(255,255,255,0.15); cursor: pointer; transition: all 0.2s;
+    border: 3px solid transparent;
+  }
+  .onboarding-avatar-card:active { transform: scale(0.92); }
+  .onboarding-avatar-card.selected { border-color: white; background: rgba(255,255,255,0.3); transform: scale(1.05); }
+  .onboarding-avatar-card .avatar-emoji { font-size: 36px; }
+  .onboarding-avatar-card .avatar-label { font-size: 10px; font-weight: 700; margin-top: 2px; }
+  .onboarding-go-btn {
+    padding: 14px 48px; border: none; border-radius: 16px; background: white;
+    color: var(--primary); font-size: 20px; font-weight: 900; cursor: pointer;
+    font-family: 'Nunito', sans-serif; transition: transform 0.2s;
+  }
+  .onboarding-go-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .onboarding-go-btn:active:not(:disabled) { transform: scale(0.95); }
+
+  /* Avatar Collection progress bars */
+  .avatar-card-req { font-size: 8px; font-weight: 700; color: #6b7280; margin-top: 2px; line-height: 1.2; }
+  .avatar-progress-bar { height: 4px; background: #e5e7eb; border-radius: 2px; overflow: hidden; margin: 3px 4px 1px; }
+  .avatar-progress-fill { height: 100%; background: var(--primary-light); border-radius: 2px; transition: width 0.3s; }
+  .avatar-progress-text { font-size: 8px; font-weight: 800; color: #9ca3af; }
+
   .danger-zone {
     margin-top: 12px;
     padding-top: 12px;
@@ -1372,6 +1425,24 @@
 <div class="app-container">
   <canvas id="confetti-canvas"></canvas>
 
+  <!-- Onboarding Overlay -->
+  <div class="onboarding-overlay" id="onboardingOverlay">
+    <div class="onboarding-title">Welcome to 11+ Quest!</div>
+    <div class="onboarding-subtitle">Choose your name and avatar</div>
+    <input type="text" class="onboarding-name-input" id="onboardingName" placeholder="Your name..." maxlength="20">
+    <div class="onboarding-label">Pick your character:</div>
+    <div class="onboarding-avatar-grid" id="onboardingAvatarGrid"></div>
+    <button class="onboarding-go-btn" id="onboardingGoBtn" onclick="completeOnboarding()" disabled>Let's Go!</button>
+  </div>
+
+  <!-- Avatar Unlock Overlay -->
+  <div class="avatar-unlock-overlay" id="avatarUnlockOverlay">
+    <div class="overlay-icon" id="avatarUnlockIcon">🎭</div>
+    <div class="overlay-title">New Avatar!</div>
+    <div class="overlay-sub" id="avatarUnlockName"></div>
+    <button class="overlay-btn" onclick="closeAvatarUnlock()">Awesome!</button>
+  </div>
+
   <!-- Level Up Overlay -->
   <div class="level-up-overlay" id="levelUpOverlay">
     <div class="overlay-icon">⭐</div>
@@ -1521,6 +1592,10 @@
     <div class="section-title">⚔️ Armory <span style="font-size:13px;font-weight:600;color:var(--text-light);margin-left:auto;" id="shopBalance">🪙 0</span></div>
     <div class="shop-card" id="avatarShop"></div>
 
+    <!-- Avatar Collection -->
+    <div class="section-title">🎭 Avatar Collection</div>
+    <div class="shop-card" id="avatarCollection"></div>
+
     <!-- Badges -->
     <div class="section-title">🏆 Badges</div>
     <div class="badges-card">
@@ -1651,31 +1726,32 @@ const THEMES = {
 };
 
 const AVATARS = [
-  // Basic Tier - 100 coins
-  { id: 'cat', icon: '🐱', name: 'Cool Cat', tier: 'basic', cost: 100, theme: 'Animals' },
-  { id: 'dog', icon: '🐶', name: 'Loyal Pup', tier: 'basic', cost: 100, theme: 'Animals' },
-  { id: 'fox', icon: '🦊', name: 'Clever Fox', tier: 'basic', cost: 100, theme: 'Animals' },
-  { id: 'panda', icon: '🐼', name: 'Zen Panda', tier: 'basic', cost: 100, theme: 'Animals' },
-  { id: 'lion', icon: '🦁', name: 'Brave Lion', tier: 'basic', cost: 100, theme: 'Animals' },
-  { id: 'frog', icon: '🐸', name: 'Study Frog', tier: 'basic', cost: 100, theme: 'Animals' },
-  { id: 'robot', icon: '🤖', name: 'Robo Buddy', tier: 'basic', cost: 100, theme: 'Robots' },
-  { id: 'ufo', icon: '🛸', name: 'UFO Kid', tier: 'basic', cost: 100, theme: 'Space' },
-  { id: 'gamer', icon: '🎮', name: 'Game Pro', tier: 'basic', cost: 100, theme: 'Gaming' },
-  { id: 'sports', icon: '🏀', name: 'Slam Dunk', tier: 'basic', cost: 100, theme: 'Sports' },
-  // Holographic Tier - 250 coins
-  { id: 'lightning', icon: '⚡', name: 'Thunder Strike', tier: 'holo', cost: 250, theme: 'Lightning' },
-  { id: 'dragon', icon: '🐉', name: 'Dragon Master', tier: 'holo', cost: 250, theme: 'Mythical' },
-  { id: 'unicorn', icon: '🦄', name: 'Mystic Unicorn', tier: 'holo', cost: 250, theme: 'Mythical' },
-  { id: 'wizard', icon: '🔮', name: 'Crystal Wizard', tier: 'holo', cost: 250, theme: 'Magic' },
-  { id: 'volcano', icon: '🌋', name: 'Volcano Lord', tier: 'holo', cost: 250, theme: 'Elements' },
-  { id: 'ocean', icon: '🌊', name: 'Ocean Titan', tier: 'holo', cost: 250, theme: 'Elements' },
-  { id: 'holobot', icon: '🤖', name: 'Holo-Bot 3000', tier: 'holo', cost: 250, theme: 'Robots' },
-  { id: 'eagle', icon: '🦅', name: 'Sky Eagle', tier: 'holo', cost: 250, theme: 'Animals' },
-  { id: 'star', icon: '🌠', name: 'Shooting Star', tier: 'holo', cost: 250, theme: 'Space' },
-  { id: 'pixel', icon: '👾', name: 'Pixel King', tier: 'holo', cost: 250, theme: 'Gaming' },
-  // Legendary Tier - 500 coins
-  { id: 'champion', icon: '🏆', name: 'The Champion', tier: 'legendary', cost: 500, theme: 'Ultimate' },
-  { id: 'ruler', icon: '👑', name: 'Supreme Ruler', tier: 'legendary', cost: 500, theme: 'Ultimate' },
+  // Starter avatars — free to pick at onboarding
+  { id: 'cat', icon: '🐱', name: 'Cool Cat', tier: 'starter', unlockType: 'starter', unlockDesc: 'Starter avatar' },
+  { id: 'dog', icon: '🐶', name: 'Loyal Pup', tier: 'starter', unlockType: 'starter', unlockDesc: 'Starter avatar' },
+  { id: 'fox', icon: '🦊', name: 'Clever Fox', tier: 'starter', unlockType: 'starter', unlockDesc: 'Starter avatar' },
+  { id: 'panda', icon: '🐼', name: 'Zen Panda', tier: 'starter', unlockType: 'starter', unlockDesc: 'Starter avatar' },
+  { id: 'lion', icon: '🦁', name: 'Brave Lion', tier: 'starter', unlockType: 'starter', unlockDesc: 'Starter avatar' },
+  { id: 'robot', icon: '🤖', name: 'Robo Buddy', tier: 'starter', unlockType: 'starter', unlockDesc: 'Starter avatar' },
+  { id: 'ufo', icon: '🛸', name: 'UFO Kid', tier: 'starter', unlockType: 'starter', unlockDesc: 'Starter avatar' },
+  { id: 'sports', icon: '🏀', name: 'Slam Dunk', tier: 'starter', unlockType: 'starter', unlockDesc: 'Starter avatar' },
+  // Achievement avatars — basic tier
+  { id: 'frog', icon: '🐸', name: 'Study Frog', tier: 'basic', unlockType: 'totalCorrect', unlockValue: 25, unlockDesc: 'Answer 25 questions correctly' },
+  { id: 'gamer', icon: '🎮', name: 'Game Pro', tier: 'basic', unlockType: 'totalCorrect', unlockValue: 50, unlockDesc: 'Answer 50 questions correctly' },
+  // Achievement avatars — holographic tier
+  { id: 'lightning', icon: '⚡', name: 'Thunder Strike', tier: 'holo', unlockType: 'correctStreak', unlockValue: 5, unlockDesc: 'Get 5 correct in a row' },
+  { id: 'dragon', icon: '🐉', name: 'Dragon Master', tier: 'holo', unlockType: 'bossesKilled', unlockValue: 1, unlockDesc: 'Defeat your first boss' },
+  { id: 'unicorn', icon: '🦄', name: 'Mystic Unicorn', tier: 'holo', unlockType: 'perfectSession', unlockValue: true, unlockDesc: 'Get 100% in a session' },
+  { id: 'wizard', icon: '🔮', name: 'Crystal Wizard', tier: 'holo', unlockType: 'totalCorrect', unlockValue: 100, unlockDesc: 'Answer 100 questions correctly' },
+  { id: 'volcano', icon: '🌋', name: 'Volcano Lord', tier: 'holo', unlockType: 'highestWave', unlockValue: 10, unlockDesc: 'Reach Wave 10' },
+  { id: 'ocean', icon: '🌊', name: 'Ocean Titan', tier: 'holo', unlockType: 'mobsKilled', unlockValue: 50, unlockDesc: 'Slay 50 mobs' },
+  { id: 'holobot', icon: '🤖', name: 'Holo-Bot 3000', tier: 'holo', unlockType: 'correctStreak', unlockValue: 10, unlockDesc: 'Get 10 correct in a row' },
+  { id: 'eagle', icon: '🦅', name: 'Sky Eagle', tier: 'holo', unlockType: 'speedAnswers', unlockValue: 10, unlockDesc: 'Answer 10 in under 15s each' },
+  { id: 'star', icon: '🌠', name: 'Shooting Star', tier: 'holo', unlockType: 'highestWave', unlockValue: 15, unlockDesc: 'Reach Wave 15' },
+  { id: 'pixel', icon: '👾', name: 'Pixel King', tier: 'holo', unlockType: 'totalCorrect', unlockValue: 200, unlockDesc: 'Answer 200 questions correctly' },
+  // Achievement avatars — legendary tier
+  { id: 'champion', icon: '🏆', name: 'The Champion', tier: 'legendary', unlockType: 'highestWave', unlockValue: 20, unlockDesc: 'Reach Wave 20 — Dragon Peak' },
+  { id: 'ruler', icon: '👑', name: 'Supreme Ruler', tier: 'legendary', unlockType: 'totalCorrect', unlockValue: 500, unlockDesc: 'Answer 500 questions correctly' },
 ];
 
 // ============ RPG EQUIPMENT ============
@@ -1728,34 +1804,34 @@ const WAVE_REGIONS = [
 ];
 
 const MOB_TEMPLATES = [
-  // Grasslands mobs (waves 1-4)
+  // Grasslands mobs (waves 1-4) — starter area, beatable with basic gear
   { id:'rat', name:'Giant Rat', emoji:'🐀', hp:20, atk:3, gold:10, region:'Grasslands' },
   { id:'snake', name:'Viper', emoji:'🐍', hp:25, atk:5, gold:12, region:'Grasslands' },
-  { id:'bat', name:'Cave Bat', emoji:'🦇', hp:20, atk:4, gold:10, region:'Grasslands' },
+  { id:'bat', name:'Cave Bat', emoji:'🦇', hp:22, atk:4, gold:10, region:'Grasslands' },
   { id:'spider', name:'Web Spider', emoji:'🕷️', hp:30, atk:5, gold:15, region:'Grasslands' },
   // Boss wave 5
-  { id:'dire_wolf', name:'Dire Wolf', emoji:'🐺', hp:80, atk:10, gold:80, region:'Grasslands Boss', boss:true, drops:['vampire_fang'] },
-  // Dark Forest mobs (waves 6-9)
-  { id:'zombie', name:'Zombie', emoji:'🧟', hp:35, atk:7, gold:25, region:'Dark Forest' },
-  { id:'skeleton', name:'Skeleton', emoji:'🦴', hp:30, atk:8, gold:28, region:'Dark Forest' },
-  { id:'vine', name:'Vine Monster', emoji:'🌿', hp:40, atk:6, gold:30, region:'Dark Forest' },
-  { id:'boar', name:'Wild Boar', emoji:'🐗', hp:45, atk:8, gold:35, region:'Dark Forest' },
+  { id:'dire_wolf', name:'Dire Wolf', emoji:'🐺', hp:100, atk:10, gold:80, region:'Grasslands Boss', boss:true, drops:['vampire_fang'] },
+  // Dark Forest mobs (waves 6-9) — need iron gear + crits
+  { id:'zombie', name:'Zombie', emoji:'🧟', hp:50, atk:7, gold:25, region:'Dark Forest' },
+  { id:'skeleton', name:'Skeleton', emoji:'🦴', hp:45, atk:8, gold:28, region:'Dark Forest' },
+  { id:'vine', name:'Vine Monster', emoji:'🌿', hp:55, atk:6, gold:30, region:'Dark Forest' },
+  { id:'boar', name:'Wild Boar', emoji:'🐗', hp:60, atk:8, gold:35, region:'Dark Forest' },
   // Boss wave 10
-  { id:'forest_dragon', name:'Forest Dragon', emoji:'🐉', hp:120, atk:14, gold:200, region:'Dark Forest Boss', boss:true, drops:['dragon_fang','dragon_scale','double_strike'] },
-  // Crystal Cave mobs (waves 11-14)
-  { id:'scorpion', name:'Scorpion', emoji:'🦂', hp:45, atk:10, gold:50, region:'Crystal Cave' },
-  { id:'golem', name:'Rock Golem', emoji:'🪨', hp:60, atk:8, gold:60, region:'Crystal Cave' },
-  { id:'imp', name:'Fire Imp', emoji:'🔥', hp:40, atk:12, gold:55, region:'Crystal Cave' },
-  { id:'eye', name:'Cave Eye', emoji:'👁️', hp:50, atk:11, gold:70, region:'Crystal Cave' },
+  { id:'forest_dragon', name:'Forest Dragon', emoji:'🐉', hp:200, atk:14, gold:200, region:'Dark Forest Boss', boss:true, drops:['dragon_fang','dragon_scale','double_strike'] },
+  // Crystal Cave mobs (waves 11-14) — need dragon gear + accessories
+  { id:'scorpion', name:'Scorpion', emoji:'🦂', hp:90, atk:10, gold:50, region:'Crystal Cave' },
+  { id:'golem', name:'Rock Golem', emoji:'🪨', hp:120, atk:8, gold:60, region:'Crystal Cave' },
+  { id:'imp', name:'Fire Imp', emoji:'🔥', hp:80, atk:12, gold:55, region:'Crystal Cave' },
+  { id:'eye', name:'Cave Eye', emoji:'👁️', hp:100, atk:11, gold:70, region:'Crystal Cave' },
   // Boss wave 15
-  { id:'dark_wizard', name:'Dark Wizard', emoji:'🧙', hp:160, atk:18, gold:400, region:'Crystal Cave Boss', boss:true, drops:['shadow_blade','void_armor','resurrection_stone'] },
-  // Volcano mobs (waves 16-19)
-  { id:'drake', name:'Lava Drake', emoji:'🦎', hp:60, atk:14, gold:100, region:'Volcano' },
-  { id:'skull_knight', name:'Skull Knight', emoji:'💀', hp:70, atk:15, gold:120, region:'Volcano' },
-  { id:'demon', name:'Demon', emoji:'👹', hp:75, atk:16, gold:130, region:'Volcano' },
-  { id:'shadow', name:'Shadow Beast', emoji:'🌑', hp:65, atk:18, gold:150, region:'Volcano' },
+  { id:'dark_wizard', name:'Dark Wizard', emoji:'🧙', hp:350, atk:18, gold:400, region:'Crystal Cave Boss', boss:true, drops:['shadow_blade','void_armor','resurrection_stone'] },
+  // Volcano mobs (waves 16-19) — need shadow gear + strong accessories
+  { id:'drake', name:'Lava Drake', emoji:'🦎', hp:150, atk:14, gold:100, region:'Volcano' },
+  { id:'skull_knight', name:'Skull Knight', emoji:'💀', hp:180, atk:15, gold:120, region:'Volcano' },
+  { id:'demon', name:'Demon', emoji:'👹', hp:200, atk:16, gold:130, region:'Volcano' },
+  { id:'shadow', name:'Shadow Beast', emoji:'🌑', hp:170, atk:18, gold:150, region:'Volcano' },
   // Final boss wave 20
-  { id:'dragon_king', name:'Dragon King', emoji:'👑', hp:250, atk:22, gold:1000, region:'Dragon Peak', boss:true, drops:['star_sword','star_shield','chaos_gem'] },
+  { id:'dragon_king', name:'Dragon King', emoji:'👑', hp:500, atk:22, gold:1000, region:'Dragon Peak', boss:true, drops:['star_sword','star_shield','chaos_gem'] },
 ];
 
 function getWaveInfo(waveNum) {
@@ -3459,7 +3535,7 @@ function switchView(view) {
     btn.classList.toggle('active', (i === 0 && view === 'practice') || (i === 1 && view === 'tracker'));
   });
   if (view === 'practice') { renderPracticeStats(); renderWaveProgress(); }
-  if (view === 'tracker') { renderArmory(); }
+  if (view === 'tracker') { renderArmory(); renderAvatarShop(); }
 }
 
 function renderPracticeStats() {
@@ -3585,6 +3661,7 @@ function startSession(cat, type) {
       damageTaken: 0,
       defeated: false,
       comboCount: 0,
+      correctStreak: 0,
       shieldUsed: false,
       resurrected: false,
     }
@@ -3806,6 +3883,15 @@ function selectPracticeAnswer(idx) {
   s.timeTaken.push(elapsed);
   s.results.push({ diff: q.diff, correct });
   s.totalAnswered++;
+  // Track fast answer streaks for avatar unlocks
+  if (!state.practiceStats.fastAnswerCount) state.practiceStats.fastAnswerCount = 0;
+  if (!state.practiceStats.bestFastStreak) state.practiceStats.bestFastStreak = 0;
+  if (correct && elapsed <= 15) {
+    state.practiceStats.fastAnswerCount++;
+    if (state.practiceStats.fastAnswerCount > state.practiceStats.bestFastStreak) state.practiceStats.bestFastStreak = state.practiceStats.fastAnswerCount;
+  } else {
+    state.practiceStats.fastAnswerCount = 0;
+  }
   const btns = document.querySelectorAll('#qOptions .option-btn');
   // Find which display position has the correct answer
   const correctDisplayIdx = s.optionMap ? s.optionMap.indexOf(q.ans) : q.ans;
@@ -3879,6 +3965,21 @@ function selectPracticeAnswer(idx) {
       let isPowerStrike = q.diff === 3;
       let isCrit = false;
 
+      // Streak & speed crits (double damage)
+      b.correctStreak++;
+      // Persist best streak for avatar unlocks
+      if (!state.practiceStats.bestCorrectStreak) state.practiceStats.bestCorrectStreak = 0;
+      if (b.correctStreak > state.practiceStats.bestCorrectStreak) state.practiceStats.bestCorrectStreak = b.correctStreak;
+      if (b.correctStreak >= 3) {
+        dmg *= 2;
+        isCrit = true;
+        extraFbLines.push('\uD83D\uDD25 ' + b.correctStreak + '-streak CRIT!');
+      } else if (elapsed < 30) {
+        dmg *= 2;
+        isCrit = true;
+        extraFbLines.push('\u26A1 Speed CRIT! (' + elapsed + 's)');
+      }
+
       // Accessory: Combo Ring (+2 dmg per consecutive correct)
       if (ps.accEffect === 'combo') {
         b.comboCount++;
@@ -3887,10 +3988,11 @@ function selectPracticeAnswer(idx) {
         if (b.comboCount > 1) extraFbLines.push('\uD83D\uDD17 Combo x' + b.comboCount + '! +' + comboBonus + ' bonus');
       }
 
-      // Accessory: Critical Ring (20% chance 2x damage)
-      if (ps.accEffect === 'crit20' && Math.random() < 0.2) {
+      // Accessory: Critical Ring (20% chance 2x damage, if not already crit)
+      if (!isCrit && ps.accEffect === 'crit20' && Math.random() < 0.2) {
         dmg *= 2;
         isCrit = true;
+        extraFbLines.push('\uD83D\uDCA5 Critical Ring CRIT!');
       }
 
       // Accessory: Storm Gauntlet (25% chance double strike)
@@ -3977,7 +4079,8 @@ function selectPracticeAnswer(idx) {
     let battleText = '';
     let extraFbLines = [];
     if (b) {
-      // Reset combo on wrong answer
+      // Reset streaks on wrong answer
+      b.correctStreak = 0;
       if (ps.accEffect === 'combo') b.comboCount = 0;
 
       let mobDmg = Math.max(1, b.mob.atk - ps.def);
@@ -4235,6 +4338,9 @@ function showSessionSummary() {
   if (pct > (state.practiceStats.bestSessionPct || 0)) state.practiceStats.bestSessionPct = pct;
   if (s.correct === total && total >= 10) state.practiceStats.perfectSession = true;
 
+  // Check for avatar unlocks (including perfectSession)
+  checkAvatarUnlocks();
+
   // Save mob HP between sessions
   if (s.battle) {
     state.rpg.currentMobHP = s.battle.mobHP > 0 ? s.battle.mobHP : null;
@@ -4372,6 +4478,16 @@ function load() {
       // Ensure arrays exist
       if (!Array.isArray(state.ownedAvatars)) state.ownedAvatars = ['default'];
       if (!state.ownedAvatars.includes('default')) state.ownedAvatars.unshift('default');
+      // Migrate: grant all starter avatars to existing users
+      const starterIds = AVATARS.filter(a => a.unlockType === 'starter').map(a => a.id);
+      starterIds.forEach(sid => {
+        if (!state.ownedAvatars.includes(sid)) state.ownedAvatars.push(sid);
+      });
+      // Migrate: ensure practiceStats tracking fields exist
+      if (!state.practiceStats) state.practiceStats = {};
+      if (state.practiceStats.bestCorrectStreak === undefined) state.practiceStats.bestCorrectStreak = 0;
+      if (state.practiceStats.fastAnswerCount === undefined) state.practiceStats.fastAnswerCount = 0;
+      if (state.practiceStats.bestFastStreak === undefined) state.practiceStats.bestFastStreak = 0;
       // Migrate: add RPG state for existing users
       if (!state.rpg) {
         state.rpg = getDefaultState().rpg;
@@ -4383,6 +4499,8 @@ function load() {
         }
         if (!Array.isArray(state.rpg.ownedEquipment)) state.rpg.ownedEquipment = ['wooden_sword','cloth_tunic','no_accessory'];
       }
+      // Retroactively unlock any earned achievement avatars
+      checkAvatarUnlocks();
     } catch(e) { state = getDefaultState(); }
   }
 }
@@ -4566,18 +4684,6 @@ function removeQuestion(subject) {
 }
 
 // ============ AVATAR SHOP ============
-function buyAvatar(id) {
-  const avatar = AVATARS.find(a => a.id === id);
-  if (!avatar || state.ownedAvatars.includes(id) || state.coins < avatar.cost) return;
-  if (!confirm(`Buy ${avatar.icon} ${avatar.name} for 🪙 ${avatar.cost} coins?`)) return;
-  state.coins -= avatar.cost;
-  state.ownedAvatars.push(id);
-  state.activeAvatar = id;
-  save();
-  fireConfetti();
-  render();
-}
-
 function selectAvatar(id) {
   if (!state.ownedAvatars.includes(id)) return;
   state.activeAvatar = id;
@@ -4728,6 +4834,59 @@ function checkBadges() {
     }
   }
   if (newBadge) { save(); showBadgeUnlock(newBadge); }
+  // Also check avatar unlocks
+  checkAvatarUnlocks();
+}
+
+// ============ AVATAR UNLOCKS ============
+function checkAvatarUnlocks() {
+  const ps = state.practiceStats || {};
+  const rpg = state.rpg || {};
+  let newlyUnlocked = null;
+  for (const av of AVATARS) {
+    if (state.ownedAvatars.includes(av.id)) continue;
+    if (av.unlockType === 'starter') continue;
+    let unlocked = false;
+    switch (av.unlockType) {
+      case 'totalCorrect': unlocked = (ps.totalCorrect || 0) >= av.unlockValue; break;
+      case 'correctStreak': unlocked = (ps.bestCorrectStreak || 0) >= av.unlockValue; break;
+      case 'perfectSession': unlocked = ps.perfectSession === true; break;
+      case 'mobsKilled': unlocked = (rpg.totalMobsKilled || 0) >= av.unlockValue; break;
+      case 'bossesKilled': unlocked = (rpg.bossesKilled || 0) >= av.unlockValue; break;
+      case 'highestWave': unlocked = (rpg.highestWave || 1) >= av.unlockValue; break;
+      case 'speedAnswers': unlocked = (ps.bestFastStreak || 0) >= av.unlockValue; break;
+    }
+    if (unlocked) {
+      state.ownedAvatars.push(av.id);
+      newlyUnlocked = av;
+    }
+  }
+  if (newlyUnlocked) { save(); showAvatarUnlock(newlyUnlocked); }
+}
+
+function getAvatarProgress(av) {
+  const ps = state.practiceStats || {};
+  const rpg = state.rpg || {};
+  switch (av.unlockType) {
+    case 'totalCorrect': return { current: ps.totalCorrect || 0, target: av.unlockValue, pct: Math.min(100, Math.round(((ps.totalCorrect || 0) / av.unlockValue) * 100)) };
+    case 'correctStreak': return { current: ps.bestCorrectStreak || 0, target: av.unlockValue, pct: Math.min(100, Math.round(((ps.bestCorrectStreak || 0) / av.unlockValue) * 100)) };
+    case 'mobsKilled': return { current: rpg.totalMobsKilled || 0, target: av.unlockValue, pct: Math.min(100, Math.round(((rpg.totalMobsKilled || 0) / av.unlockValue) * 100)) };
+    case 'bossesKilled': return { current: rpg.bossesKilled || 0, target: av.unlockValue, pct: Math.min(100, Math.round(((rpg.bossesKilled || 0) / av.unlockValue) * 100)) };
+    case 'highestWave': return { current: rpg.highestWave || 1, target: av.unlockValue, pct: Math.min(100, Math.round(((rpg.highestWave || 1) / av.unlockValue) * 100)) };
+    case 'speedAnswers': return { current: ps.bestFastStreak || 0, target: av.unlockValue, pct: Math.min(100, Math.round(((ps.bestFastStreak || 0) / av.unlockValue) * 100)) };
+    case 'perfectSession': return { current: ps.perfectSession ? 1 : 0, target: 1, pct: ps.perfectSession ? 100 : 0 };
+    default: return null;
+  }
+}
+
+function showAvatarUnlock(avatar) {
+  document.getElementById('avatarUnlockIcon').textContent = avatar.icon;
+  document.getElementById('avatarUnlockName').textContent = avatar.name + ' Unlocked!';
+  document.getElementById('avatarUnlockOverlay').classList.add('show');
+  fireConfetti();
+}
+function closeAvatarUnlock() {
+  document.getElementById('avatarUnlockOverlay').classList.remove('show');
 }
 
 // ============ RENDERING ============
@@ -4870,6 +5029,7 @@ function render() {
   document.getElementById('shopBalance').textContent = '🪙 ' + state.coins;
 
   renderArmory();
+  renderAvatarShop();
   renderBadges();
   renderRewards();
   renderHistory();
@@ -4896,21 +5056,24 @@ function renderWeek() {
 }
 
 function renderAvatarShop() {
-  const shop = document.getElementById('avatarShop');
-  shop.innerHTML = '';
+  const collection = document.getElementById('avatarCollection');
+  if (!collection) return;
+  collection.innerHTML = '';
 
   const tiers = [
-    { key: 'basic', label: '⭐ Basic — 100 coins', cls: 'basic' },
-    { key: 'holo', label: '✨ Holographic — 250 coins', cls: 'holo' },
-    { key: 'legendary', label: '👑 Legendary — 500 coins', cls: 'legendary' },
+    { key: 'starter', label: '\uD83C\uDF1F Starter Avatars', cls: 'starter' },
+    { key: 'basic', label: '\u2B50 Achievement Avatars', cls: 'basic' },
+    { key: 'holo', label: '\u2728 Holographic \u2014 Rare Achievements', cls: 'holo' },
+    { key: 'legendary', label: '\uD83D\uDC51 Legendary \u2014 Epic Achievements', cls: 'legendary' },
   ];
 
   for (const tier of tiers) {
     const avatars = AVATARS.filter(a => a.tier === tier.key);
+    if (avatars.length === 0) continue;
     const label = document.createElement('div');
-    label.className = `shop-tier-label ${tier.cls}`;
+    label.className = 'shop-tier-label ' + tier.cls;
     label.textContent = tier.label;
-    shop.appendChild(label);
+    collection.appendChild(label);
 
     const grid = document.createElement('div');
     grid.className = 'shop-grid';
@@ -4918,41 +5081,35 @@ function renderAvatarShop() {
     for (const av of avatars) {
       const owned = state.ownedAvatars.includes(av.id);
       const isActive = state.activeAvatar === av.id;
-      const canAfford = state.coins >= av.cost;
-
       const card = document.createElement('div');
       let cardClass = 'avatar-card';
       if (isActive) cardClass += ' active-avatar';
       else if (owned) cardClass += ' owned';
-      else if (canAfford) cardClass += ' affordable';
       else cardClass += ' locked';
-
-      if (tier.key === 'holo' && (owned || canAfford)) cardClass += ' holo-card';
-      if (tier.key === 'legendary' && (owned || canAfford)) cardClass += ' legendary-card';
-
+      if (tier.key === 'holo' && owned) cardClass += ' holo-card';
+      if (tier.key === 'legendary' && owned) cardClass += ' legendary-card';
       card.className = cardClass;
 
       let statusHTML = '';
       if (isActive) {
-        statusHTML = '<div class="avatar-card-status" style="color:var(--primary)">⭐ Active</div>';
-        card.onclick = null;
+        statusHTML = '<div class="avatar-card-status" style="color:var(--primary)">\u2B50 Active</div>';
       } else if (owned) {
-        statusHTML = '<div class="avatar-card-status" style="color:var(--green)">✅ Owned</div>';
-        card.onclick = () => selectAvatar(av.id);
-      } else if (canAfford) {
-        statusHTML = `<button class="btn-buy" onclick="event.stopPropagation();buyAvatar('${av.id}')">🪙 ${av.cost} Buy</button>`;
+        statusHTML = '<div class="avatar-card-status" style="color:var(--green)">\u2705 Owned</div>';
+        card.onclick = () => { selectAvatar(av.id); renderAvatarShop(); };
       } else {
-        statusHTML = `<div class="avatar-card-cost">🪙 ${av.cost}</div>`;
+        const progress = getAvatarProgress(av);
+        statusHTML = '<div class="avatar-card-req">' + av.unlockDesc + '</div>';
+        if (progress) {
+          statusHTML += '<div class="avatar-progress-bar"><div class="avatar-progress-fill" style="width:' + progress.pct + '%"></div></div>';
+          statusHTML += '<div class="avatar-progress-text">' + progress.current + '/' + progress.target + '</div>';
+        }
       }
 
-      card.innerHTML = `
-        <div class="avatar-card-icon">${av.icon}</div>
-        <div class="avatar-card-name">${av.name}</div>
-        ${statusHTML}
-      `;
+      card.innerHTML = '<div class="avatar-card-icon">' + (owned ? av.icon : '\uD83D\uDD12') + '</div>' +
+        '<div class="avatar-card-name">' + av.name + '</div>' + statusHTML;
       grid.appendChild(card);
     }
-    shop.appendChild(grid);
+    collection.appendChild(grid);
   }
 }
 
@@ -5166,14 +5323,47 @@ load();
 applyTheme(state.activeTheme || 'default');
 
 if (!state.name) {
-  setTimeout(() => {
-    const name = prompt("Welcome to 11+ Quest! What's your name?");
-    if (name && name.trim()) {
-      state.name = name.trim();
-      save();
-      render();
+  showOnboarding();
+}
+
+function showOnboarding() {
+  const grid = document.getElementById('onboardingAvatarGrid');
+  const starters = AVATARS.filter(a => a.unlockType === 'starter');
+  let selectedId = null;
+  grid.innerHTML = '';
+  starters.forEach(av => {
+    const card = document.createElement('div');
+    card.className = 'onboarding-avatar-card';
+    card.innerHTML = '<div class="avatar-emoji">' + av.icon + '</div><div class="avatar-label">' + av.name + '</div>';
+    card.onclick = () => {
+      document.querySelectorAll('.onboarding-avatar-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedId = av.id;
+      updateGoBtn();
+    };
+    grid.appendChild(card);
+  });
+  const nameInput = document.getElementById('onboardingName');
+  nameInput.addEventListener('input', updateGoBtn);
+  function updateGoBtn() {
+    document.getElementById('onboardingGoBtn').disabled = !nameInput.value.trim() || !selectedId;
+  }
+  document.getElementById('onboardingOverlay').classList.add('show');
+
+  window.completeOnboarding = function() {
+    const name = nameInput.value.trim();
+    if (!name || !selectedId) return;
+    state.name = name;
+    const starterIds = AVATARS.filter(a => a.unlockType === 'starter').map(a => a.id);
+    for (const sid of starterIds) {
+      if (!state.ownedAvatars.includes(sid)) state.ownedAvatars.push(sid);
     }
-  }, 500);
+    state.activeAvatar = selectedId;
+    save();
+    document.getElementById('onboardingOverlay').classList.remove('show');
+    fireConfetti();
+    render();
+  };
 }
 
 render();
