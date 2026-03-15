@@ -1314,6 +1314,97 @@
   .damage-float.gold { color: var(--accent-light); font-size: 16px; }
   .damage-float.power { color: #f59e0b; font-size: 22px; font-weight: 900; text-shadow: 0 2px 4px rgba(245,158,11,0.5); }
   .damage-float.crit { color: #ef4444; font-size: 24px; font-weight: 900; text-shadow: 0 2px 6px rgba(239,68,68,0.5); }
+  /* Battle visual effects */
+  .battle-mob.slash-effect { position: relative; }
+  .battle-mob.slash-effect::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    width: 60px; height: 60px; transform: translate(-50%,-50%) rotate(-45deg);
+    background: linear-gradient(135deg, transparent 35%, rgba(255,255,255,0.9) 50%, transparent 65%);
+    animation: slashFlash 0.3s ease-out forwards;
+    pointer-events: none; border-radius: 50%;
+  }
+  @keyframes slashFlash {
+    0% { opacity: 1; transform: translate(-50%,-50%) rotate(-45deg) scale(0.3); }
+    100% { opacity: 0; transform: translate(-50%,-50%) rotate(-45deg) scale(2); }
+  }
+  .battle-arena.shake { animation: screenShake 0.3s ease-out; }
+  @keyframes screenShake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+  }
+  .battle-character.damage-flash { animation: damageFlash 0.4s ease-out; }
+  @keyframes damageFlash {
+    0%,100% { filter: none; }
+    30% { filter: brightness(2) saturate(0) sepia(1) hue-rotate(-50deg); }
+    60% { filter: brightness(1.5) saturate(0.5); }
+  }
+  /* Exam simulator */
+  .exam-sim-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; border-radius: 14px;
+    padding: 12px 22px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit;
+    box-shadow: 0 4px 15px rgba(239,68,68,0.3); transition: transform 0.15s;
+  }
+  .exam-sim-btn:active { transform: scale(0.95); }
+  .exam-results { text-align: center; }
+  .exam-grade { font-size: 36px; font-weight: 900; margin: 8px 0; }
+  .exam-cat-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 13px; font-weight: 700; }
+  .exam-cat-row span:first-child { width: 100px; text-align: left; }
+  .exam-cat-row span:last-of-type { width: 70px; text-align: right; }
+  .exam-cat-bar { flex: 1; height: 8px; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
+  .exam-cat-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+  /* Daily challenges */
+  .challenges-card { background: var(--card); border-radius: 18px; padding: 14px; box-shadow: var(--shadow); margin-bottom: 18px; }
+  .challenge-item { padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+  .challenge-item:last-child { border-bottom: none; }
+  .challenge-item.done { opacity: 0.6; }
+  .challenge-desc { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .challenge-bar { height: 6px; background: #f3f4f6; border-radius: 3px; overflow: hidden; margin-bottom: 3px; }
+  .challenge-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 3px; transition: width 0.4s; }
+  .challenge-meta { font-size: 11px; font-weight: 600; color: var(--text-light); display: flex; justify-content: space-between; align-items: center; }
+  .claim-btn { background: var(--green); color: white; border: none; border-radius: 8px; padding: 3px 10px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .claim-btn:active { transform: scale(0.95); }
+  /* Boss abilities */
+  .boss-abilities { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; margin: 2px 0; }
+  .boss-ability-tag { font-size: 8px; font-weight: 700; padding: 1px 5px; background: rgba(239,68,68,0.25); border-radius: 5px; color: #fca5a5; }
+  .boss-status { font-size: 14px; margin-top: 1px; text-align: center; }
+  /* Consumable buttons */
+  .battle-items { display: flex; gap: 6px; margin-top: 6px; justify-content: center; }
+  .item-btn {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 10px; padding: 4px 10px; cursor: pointer;
+    font-size: 18px; display: flex; align-items: center; gap: 2px;
+    color: white; font-family: inherit; transition: all 0.15s;
+  }
+  .item-btn:disabled, .item-btn.disabled { opacity: 0.3; cursor: default; }
+  .item-btn:active:not(:disabled) { transform: scale(0.9); }
+  .item-count { font-size: 10px; font-weight: 800; min-width: 12px; }
+  /* Pet system */
+  .pet-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .pet-card {
+    background: #f9fafb; border-radius: 14px; padding: 12px; text-align: center;
+    border: 2px solid transparent; transition: all 0.2s;
+  }
+  .pet-card.active-pet { border-color: var(--accent); background: rgba(124,58,237,0.05); }
+  .pet-emoji { font-size: 36px; margin-bottom: 2px; }
+  .pet-name { font-size: 13px; font-weight: 800; }
+  .pet-desc { font-size: 10px; color: var(--text-light); margin: 2px 0 6px; }
+  .pet-level { font-size: 11px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
+  .pet-xp-bar { height: 5px; background: #e5e7eb; border-radius: 3px; overflow: hidden; margin: 3px 0; }
+  .pet-xp-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 3px; transition: width 0.4s; }
+  .pet-xp-text { font-size: 9px; color: var(--text-light); font-weight: 600; }
+  .pet-actions { display: flex; gap: 4px; justify-content: center; margin-top: 6px; flex-wrap: wrap; }
+  .pet-btn { border: none; border-radius: 8px; padding: 4px 10px; font-size: 10px; font-weight: 700; cursor: pointer; font-family: inherit; transition: transform 0.15s; }
+  .pet-btn:active { transform: scale(0.95); }
+  .pet-btn.buy { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; }
+  .pet-btn.feed { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
+  .pet-btn.equip { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; }
+  .pet-btn:disabled { opacity: 0.4; cursor: default; }
+  .pet-equipped { font-size: 10px; font-weight: 800; color: var(--green); }
+  .battle-pet { position: absolute; bottom: 2px; left: 10px; font-size: 20px; animation: petBob 1.5s ease-in-out infinite; }
+  @keyframes petBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
   @keyframes floatUp {
     0% { opacity:1; transform:translateY(0) scale(1); }
     60% { opacity:1; transform:translateY(-30px) scale(1.2); }
@@ -1473,6 +1564,11 @@
       <select id="settingsTheme"><option value="">Default (Purple)</option></select>
       <label>Active Avatar</label>
       <select id="settingsAvatar"><option value="default">Default</option></select>
+      <label>Sound Effects</label>
+      <select id="settingsSound">
+        <option value="on">On 🔊</option>
+        <option value="off">Off 🔇</option>
+      </select>
       <div class="modal-btns">
         <button class="modal-btn secondary" onclick="closeSettings()">Cancel</button>
         <button class="modal-btn primary" onclick="saveSettings()">Save</button>
@@ -1487,7 +1583,7 @@
   <div class="header">
     <div class="header-top">
       <div class="header-title-row">
-        <div class="avatar-display" id="headerAvatar">📚</div>
+        <div class="avatar-display" id="headerAvatar">📚</div><span id="headerPet" style="font-size:18px;margin-left:-6px;margin-right:2px"></span>
         <div>
           <div class="app-title">11+ <span>Quest</span></div>
         </div>
@@ -1498,6 +1594,7 @@
           <div class="stat-pill">⚡<span id="totalXP">0</span></div>
           <div class="stat-pill">🪙<span id="coinCount">0</span></div>
         </div>
+        <button class="settings-btn" onclick="toggleSound()" id="soundToggle">🔊</button>
         <button class="settings-btn" onclick="openSettings()">⚙️</button>
       </div>
     </div>
@@ -1559,6 +1656,10 @@
       </div>
     </div>
 
+    <!-- Daily Challenges -->
+    <div class="section-title">🏅 Daily Challenges</div>
+    <div class="challenges-card" id="dailyChallengesCard"></div>
+
     <!-- This Week -->
     <div class="section-title">📅 This Week</div>
     <div class="week-card">
@@ -1596,6 +1697,12 @@
     <div class="section-title">🎭 Avatar Collection</div>
     <div class="shop-card" id="avatarCollection"></div>
 
+    <!-- Pets -->
+    <div class="section-title">🐾 Pets</div>
+    <div class="shop-card">
+      <div class="pet-grid" id="petShop"></div>
+    </div>
+
     <!-- Badges -->
     <div class="section-title">🏆 Badges</div>
     <div class="badges-card">
@@ -1632,6 +1739,11 @@
         </div>
       </div>
 
+      <div id="radarSection" style="display:none;margin:10px 16px 0">
+        <div style="font-size:15px;font-weight:800;color:var(--text);text-align:center;margin-bottom:4px">🎯 Skill Radar</div>
+        <canvas id="radarChart" width="280" height="280" style="display:block;margin:0 auto;max-width:100%"></canvas>
+      </div>
+
       <div id="practiceArea">
         <div class="practice-picker" id="practicePicker">
           <div id="waveProgressContainer"></div>
@@ -1655,6 +1767,9 @@
             <button class="mode-toggle" id="adaptiveToggle" onclick="toggleMode('adaptive')">
               <span class="toggle-dot"></span>🧠 Adaptive
             </button>
+          </div>
+          <div style="text-align:center;margin-top:14px">
+            <button class="exam-sim-btn" onclick="startExamMode()">📝 Mock Exam (50 Qs, 60 min)</button>
           </div>
         </div>
         <div id="practiceContent"></div>
@@ -1810,28 +1925,70 @@ const MOB_TEMPLATES = [
   { id:'bat', name:'Cave Bat', emoji:'🦇', hp:22, atk:4, gold:10, region:'Grasslands' },
   { id:'spider', name:'Web Spider', emoji:'🕷️', hp:30, atk:5, gold:15, region:'Grasslands' },
   // Boss wave 5
-  { id:'dire_wolf', name:'Dire Wolf', emoji:'🐺', hp:100, atk:10, gold:80, region:'Grasslands Boss', boss:true, drops:['vampire_fang'] },
+  { id:'dire_wolf', name:'Dire Wolf', emoji:'🐺', hp:100, atk:10, gold:80, region:'Grasslands Boss', boss:true, drops:['vampire_fang'], abilities:['dodge'] },
   // Dark Forest mobs (waves 6-9) — need iron gear + crits
   { id:'zombie', name:'Zombie', emoji:'🧟', hp:50, atk:7, gold:25, region:'Dark Forest' },
   { id:'skeleton', name:'Skeleton', emoji:'🦴', hp:45, atk:8, gold:28, region:'Dark Forest' },
   { id:'vine', name:'Vine Monster', emoji:'🌿', hp:55, atk:6, gold:30, region:'Dark Forest' },
   { id:'boar', name:'Wild Boar', emoji:'🐗', hp:60, atk:8, gold:35, region:'Dark Forest' },
   // Boss wave 10
-  { id:'forest_dragon', name:'Forest Dragon', emoji:'🐉', hp:200, atk:14, gold:200, region:'Dark Forest Boss', boss:true, drops:['dragon_fang','dragon_scale','double_strike'] },
+  { id:'forest_dragon', name:'Forest Dragon', emoji:'🐉', hp:200, atk:14, gold:200, region:'Dark Forest Boss', boss:true, drops:['dragon_fang','dragon_scale','double_strike'], abilities:['poison','enrage'] },
   // Crystal Cave mobs (waves 11-14) — need dragon gear + accessories
   { id:'scorpion', name:'Scorpion', emoji:'🦂', hp:90, atk:10, gold:50, region:'Crystal Cave' },
   { id:'golem', name:'Rock Golem', emoji:'🪨', hp:120, atk:8, gold:60, region:'Crystal Cave' },
   { id:'imp', name:'Fire Imp', emoji:'🔥', hp:80, atk:12, gold:55, region:'Crystal Cave' },
   { id:'eye', name:'Cave Eye', emoji:'👁️', hp:100, atk:11, gold:70, region:'Crystal Cave' },
   // Boss wave 15
-  { id:'dark_wizard', name:'Dark Wizard', emoji:'🧙', hp:350, atk:18, gold:400, region:'Crystal Cave Boss', boss:true, drops:['shadow_blade','void_armor','resurrection_stone'] },
+  { id:'dark_wizard', name:'Dark Wizard', emoji:'🧙', hp:350, atk:18, gold:400, region:'Crystal Cave Boss', boss:true, drops:['shadow_blade','void_armor','resurrection_stone'], abilities:['heal','dodge'] },
   // Volcano mobs (waves 16-19) — need shadow gear + strong accessories
   { id:'drake', name:'Lava Drake', emoji:'🦎', hp:150, atk:14, gold:100, region:'Volcano' },
   { id:'skull_knight', name:'Skull Knight', emoji:'💀', hp:180, atk:15, gold:120, region:'Volcano' },
   { id:'demon', name:'Demon', emoji:'👹', hp:200, atk:16, gold:130, region:'Volcano' },
   { id:'shadow', name:'Shadow Beast', emoji:'🌑', hp:170, atk:18, gold:150, region:'Volcano' },
   // Final boss wave 20
-  { id:'dragon_king', name:'Dragon King', emoji:'👑', hp:500, atk:22, gold:1000, region:'Dragon Peak', boss:true, drops:['star_sword','star_shield','chaos_gem'] },
+  { id:'dragon_king', name:'Dragon King', emoji:'👑', hp:500, atk:22, gold:1000, region:'Dragon Peak', boss:true, drops:['star_sword','star_shield','chaos_gem'], abilities:['poison','enrage','heal'] },
+];
+
+const CONSUMABLES = [
+  { id: 'health_potion', name: 'Health Potion', emoji: '\uD83E\uDDEA', desc: '+30 HP', cost: 50, effect: 'heal', value: 30 },
+  { id: 'damage_scroll', name: 'Damage Scroll', emoji: '\uD83D\uDCDC', desc: '2x damage next hit', cost: 80, effect: 'dmgBoost', value: 2 },
+  { id: 'shield_potion', name: 'Shield Potion', emoji: '\uD83D\uDEE1\uFE0F', desc: 'Block next hit', cost: 60, effect: 'shield', value: 1 },
+];
+
+const BOSS_ABILITIES = {
+  poison:  { name: 'Poison', emoji: '\u2620\uFE0F', desc: '+5 damage per wrong answer' },
+  dodge:   { name: 'Dodge', emoji: '\uD83D\uDCA8', desc: '20% chance to dodge attacks', chance: 0.2 },
+  heal:    { name: 'Heal', emoji: '\uD83D\uDC9A', desc: 'Heals 10% HP every 3 wrong answers', threshold: 3, healPct: 0.1 },
+  enrage:  { name: 'Enrage', emoji: '\uD83D\uDD25', desc: 'ATK doubles below 30% HP' },
+};
+
+const CHALLENGE_TEMPLATES = [
+  { id:'hard5', desc:'Answer 5 Hard questions', type:'hardCount', target:5, reward:{coins:100,xp:50} },
+  { id:'streak3', desc:'Get a 3-streak', type:'streak', target:3, reward:{coins:75,xp:40} },
+  { id:'kill3', desc:'Defeat 3 mobs', type:'mobKill', target:3, reward:{coins:80,xp:45} },
+  { id:'fast10', desc:'Answer 10 in under 20s', type:'fastAnswer', target:10, reward:{coins:120,xp:60} },
+  { id:'perfect', desc:'Get 100% in a session', type:'perfectSession', target:1, reward:{coins:150,xp:80} },
+  { id:'vr10', desc:'Answer 10 Verbal Reasoning', type:'catCount', cat:'vr', target:10, reward:{coins:80,xp:40} },
+  { id:'maths10', desc:'Answer 10 Maths', type:'catCount', cat:'maths', target:10, reward:{coins:80,xp:40} },
+  { id:'total20', desc:'Answer 20 questions today', type:'totalCount', target:20, reward:{coins:100,xp:50} },
+  { id:'crit5', desc:'Land 5 critical hits', type:'critCount', target:5, reward:{coins:90,xp:50} },
+  { id:'boss1', desc:'Defeat a boss', type:'bossKill', target:1, reward:{coins:200,xp:100} },
+];
+
+const PETS = [
+  { id: 'baby_dragon', name: 'Baby Dragon', emoji: '🐉', desc: '+XP boost per level', cost: 200, ability: 'xpBoost' },
+  { id: 'fairy', name: 'Fairy', emoji: '🧚', desc: 'HP regen on correct answers', cost: 250, ability: 'hpRegen' },
+  { id: 'lucky_cat', name: 'Lucky Cat', emoji: '🐱', desc: 'Extra coins per level', cost: 200, ability: 'coinBoost' },
+  { id: 'owl', name: 'Wise Owl', emoji: '🦉', desc: 'Extra crit chance', cost: 300, ability: 'luck' },
+  { id: 'fox', name: 'Swift Fox', emoji: '🦊', desc: 'Bonus time in timed mode', cost: 250, ability: 'timeBoost' },
+  { id: 'phoenix', name: 'Phoenix', emoji: '🔥', desc: 'Revive once per session', cost: 500, ability: 'revive' },
+];
+const PET_LEVELS = [
+  { level: 1, feedCost: 30, xpNeeded: 0 },
+  { level: 2, feedCost: 60, xpNeeded: 50 },
+  { level: 3, feedCost: 100, xpNeeded: 150 },
+  { level: 4, feedCost: 150, xpNeeded: 350 },
+  { level: 5, feedCost: 250, xpNeeded: 700 },
 ];
 
 function getWaveInfo(waveNum) {
@@ -3535,7 +3692,7 @@ function switchView(view) {
     btn.classList.toggle('active', (i === 0 && view === 'practice') || (i === 1 && view === 'tracker'));
   });
   if (view === 'practice') { renderPracticeStats(); renderWaveProgress(); }
-  if (view === 'tracker') { renderArmory(); renderAvatarShop(); }
+  if (view === 'tracker') { renderArmory(); renderAvatarShop(); renderPetShop(); }
 }
 
 function renderPracticeStats() {
@@ -3544,6 +3701,95 @@ function renderPracticeStats() {
   const acc = ps.totalAttempted > 0 ? Math.round((ps.totalCorrect / ps.totalAttempted) * 100) + '%' : '-';
   document.getElementById('pStatAccuracy').textContent = acc;
   document.getElementById('pStatBest').textContent = (ps.bestSessionPct || 0) + '%';
+
+  // Radar chart
+  const ts = (state.practiceStats && state.practiceStats.typeStats) || {};
+  const typesWithData = Object.keys(ts).filter(function(t) { return ts[t].attempted > 0; });
+  var radarSection = document.getElementById('radarSection');
+  if (radarSection) {
+    if (typesWithData.length >= 3) {
+      radarSection.style.display = '';
+      drawRadarChart('radarChart', ts, typesWithData);
+    } else {
+      radarSection.style.display = 'none';
+    }
+  }
+}
+
+function drawRadarChart(canvasId, ts, types) {
+  var canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var size = canvas.width;
+  var cx = size / 2, cy = size / 2;
+  var radius = size * 0.35;
+  var n = types.length;
+  var step = (2 * Math.PI) / n;
+
+  ctx.clearRect(0, 0, size, size);
+
+  // Grid rings
+  [0.25, 0.5, 0.75, 1.0].forEach(function(pct) {
+    ctx.beginPath();
+    for (var i = 0; i <= n; i++) {
+      var angle = i * step - Math.PI / 2;
+      var x = cx + radius * pct * Math.cos(angle);
+      var y = cy + radius * pct * Math.sin(angle);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = 'rgba(124,58,237,0.12)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // Axes + labels
+  types.forEach(function(t, i) {
+    var angle = i * step - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+    ctx.strokeStyle = 'rgba(124,58,237,0.15)';
+    ctx.stroke();
+    // Label
+    var lx = cx + (radius + 18) * Math.cos(angle);
+    var ly = cy + (radius + 18) * Math.sin(angle);
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '600 8px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    var label = t.length > 10 ? t.substring(0, 9) + '..' : t;
+    ctx.fillText(label, lx, ly);
+  });
+
+  // Data polygon
+  ctx.beginPath();
+  types.forEach(function(t, i) {
+    var stat = ts[t];
+    var pct = stat.attempted > 0 ? stat.correct / stat.attempted : 0;
+    var angle = i * step - Math.PI / 2;
+    var x = cx + radius * pct * Math.cos(angle);
+    var y = cy + radius * pct * Math.sin(angle);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(124,58,237,0.2)';
+  ctx.fill();
+  ctx.strokeStyle = '#7c3aed';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Data points
+  types.forEach(function(t, i) {
+    var stat = ts[t];
+    var pct = stat.attempted > 0 ? stat.correct / stat.attempted : 0;
+    var angle = i * step - Math.PI / 2;
+    var x = cx + radius * pct * Math.cos(angle);
+    var y = cy + radius * pct * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, 2 * Math.PI);
+    ctx.fillStyle = '#7c3aed';
+    ctx.fill();
+  });
 }
 
 function renderWaveProgress() {
@@ -3612,6 +3858,20 @@ function startSession(cat, type) {
     });
   }
 
+  // Spaced repetition: inject previously-wrong questions (~30%)
+  const wrongMap = (state.practiceStats && state.practiceStats.wrongAnswerMap) || {};
+  const wrongQs = PRACTICE_QUESTIONS.filter(function(wq) {
+    return wq.cat === cat && (type === 'all' || wq.type === type) && wrongMap[wq.id] > 0;
+  }).sort(function(a, b) { return (wrongMap[b.id] || 0) - (wrongMap[a.id] || 0); });
+  if (wrongQs.length > 0) {
+    const numSlots = practiceModeAdaptive ? 30 : 10;
+    const numWrong = Math.min(wrongQs.length, Math.ceil(numSlots * 0.3));
+    const injected = wrongQs.slice(0, numWrong);
+    const injectedIds = injected.map(function(wq) { return wq.id; });
+    qs = injected.concat(qs.filter(function(q2) { return !injectedIds.includes(q2.id); }));
+    qs = shuffleArray(qs);
+  }
+
   if (practiceModeAdaptive) {
     qs = qs.slice(0, 30);
   } else {
@@ -3664,7 +3924,62 @@ function startSession(cat, type) {
       correctStreak: 0,
       shieldUsed: false,
       resurrected: false,
+      dmgBoostActive: false,
+      shieldPotionActive: false,
+      bossWrongCount: 0,
+      bossEnraged: false,
+      poisoned: false,
+      statusEffects: [],
     }
+  };
+  document.getElementById('practicePicker').style.display = 'none';
+  document.getElementById('subtypeGrid').innerHTML = '';
+  renderCurrentQuestion();
+}
+
+function startExamMode() {
+  stopTimer();
+  // Gather 50 questions: ~20 VR, ~15 Maths, ~15 NVR
+  const vrQs = shuffleArray(PRACTICE_QUESTIONS.filter(function(q) { return q.cat === 'vr'; })).slice(0, 20);
+  const mathsQs = shuffleArray(PRACTICE_QUESTIONS.filter(function(q) { return q.cat === 'maths'; })).slice(0, 15);
+  const nvrQs = shuffleArray(PRACTICE_QUESTIONS.filter(function(q) { return q.cat === 'nvr'; })).slice(0, 15);
+  let examQs = shuffleArray(vrQs.concat(mathsQs).concat(nvrQs));
+  // If we don't have enough in some category, pad from others
+  if (examQs.length < 50) {
+    const usedIds = examQs.map(function(q) { return q.id; });
+    const extras = shuffleArray(PRACTICE_QUESTIONS.filter(function(q) { return !usedIds.includes(q.id); }));
+    examQs = examQs.concat(extras.slice(0, 50 - examQs.length));
+  }
+  examQs = examQs.slice(0, 50);
+
+  practiceSession = {
+    cat: 'exam', type: 'all',
+    pool: examQs,
+    questions: examQs,
+    current: 0,
+    correct: 0,
+    totalAnswered: 0,
+    maxQuestions: examQs.length,
+    xpEarned: 0,
+    coinsEarned: 0,
+    answered: false,
+    // Timer: 60 minutes total
+    timedMode: true,
+    timeBank: 60 * 60,
+    questionStartTime: 0,
+    timeTaken: [],
+    results: [],
+    // Adaptive off
+    adaptiveMode: false,
+    currentDiff: 1,
+    adaptiveStreak: 0,
+    // No battle in exam mode
+    battle: null,
+    // Exam mode flag
+    examMode: true,
+    // Per-category tracking for results
+    examCatResults: { vr: { total: 0, correct: 0 }, maths: { total: 0, correct: 0 }, nvr: { total: 0, correct: 0 } },
+    examTypeResults: {},
   };
   document.getElementById('practicePicker').style.display = 'none';
   document.getElementById('subtypeGrid').innerHTML = '';
@@ -3707,8 +4022,8 @@ function renderCurrentQuestion() {
   const content = document.getElementById('practiceContent');
   let html = '';
 
-  // ---- BATTLE ARENA ----
-  if (s.battle && !s.battle.defeated) {
+  // ---- BATTLE ARENA (skip in exam mode) ----
+  if (s.battle && !s.battle.defeated && !s.examMode) {
     const b = s.battle;
     const ps = getPlayerStats();
     const hpPct = Math.max(0, Math.round((b.playerHP / b.maxHP) * 100));
@@ -3724,10 +4039,12 @@ function renderCurrentQuestion() {
     html += '<div class="battle-gold">\uD83E\uDE99 ' + state.coins + '</div></div>';
     html += '<div class="battle-field">';
     // Character
-    html += '<div class="battle-character" id="battleChar">';
+    var activePetInfo = getActivePetBonus();
+    html += '<div class="battle-character" id="battleChar" style="position:relative">';
     html += '<div class="char-weapon">' + ps.weaponEmoji + '</div>';
     html += '<div class="char-face">' + faceEmoji + '</div>';
     html += '<div class="char-boots">\uD83D\uDC62</div>';
+    if (activePetInfo) html += '<div class="battle-pet">' + activePetInfo.pet.emoji + '</div>';
     html += '</div>';
     // VS
     html += '<div class="battle-vs">⚔️</div>';
@@ -3735,6 +4052,16 @@ function renderCurrentQuestion() {
     html += '<div class="battle-mob' + (isBoss ? ' mob-boss' : '') + '" id="battleMob">';
     html += '<div class="mob-emoji">' + b.mob.emoji + '</div>';
     html += '<div class="mob-name">' + b.mob.name + '</div>';
+    // Boss abilities display
+    if (b.mob.boss && b.mob.abilities && b.mob.abilities.length > 0) {
+      html += '<div class="boss-abilities">';
+      b.mob.abilities.forEach(function(a) { var ab = BOSS_ABILITIES[a]; if (ab) html += '<span class="boss-ability-tag">' + ab.emoji + ' ' + ab.name + '</span>'; });
+      html += '</div>';
+    }
+    // Boss status effects
+    if (b.statusEffects && b.statusEffects.length > 0) {
+      html += '<div class="boss-status">' + b.statusEffects.join(' ') + '</div>';
+    }
     html += '<div class="mob-hp-bar"><div class="mob-hp-fill ' + mobHpClass + '" id="mobHpFill" style="width:' + mobHpPct + '%"></div></div>';
     html += '<div class="mob-hp-text">' + Math.max(0, b.mobHP) + '/' + b.mobMaxHP + '</div>';
     html += '</div></div>';
@@ -3744,6 +4071,14 @@ function renderCurrentQuestion() {
     html += '<div class="player-hp-bar"><div class="player-hp-fill ' + hpClass + '" id="playerHpFill" style="width:' + hpPct + '%"></div></div>';
     html += '<span class="player-hp-text">' + Math.max(0, b.playerHP) + '/' + b.maxHP + '</span></div>';
     html += '<div class="player-stat-row"><span>\u2694\uFE0F ATK: ' + ps.atk + '</span><span>\uD83D\uDEE1\uFE0F DEF: ' + ps.def + '</span></div>';
+    // Consumable item buttons
+    html += '<div class="battle-items">';
+    CONSUMABLES.forEach(function(c) {
+      var count = (state.rpg.inventory && state.rpg.inventory[c.id]) || 0;
+      html += '<button class="item-btn' + (count === 0 ? ' disabled' : '') + '" onclick="useConsumable(\'' + c.id + '\')" ' + (count === 0 ? 'disabled' : '') + ' title="' + c.name + ': ' + c.desc + '">';
+      html += c.emoji + '<span class="item-count">' + count + '</span></button>';
+    });
+    html += '</div>';
     html += '</div></div>';
   }
 
@@ -3791,7 +4126,8 @@ function renderCurrentQuestion() {
     html += '<button class="option-btn" onclick="selectPracticeAnswer(' + displayIdx + ')">' + q.opts[origIdx] + '</button>';
   });
   html += '</div><div id="qFeedback"></div>';
-  html += '<div id="qActions" style="display:none"><button class="q-next-btn" onclick="nextPracticeQuestion()">Next Attack \u2694\uFE0F</button></div>';
+  const nextBtnLabel = s.examMode ? 'Next Question \u27A1\uFE0F' : 'Next Attack \u2694\uFE0F';
+  html += '<div id="qActions" style="display:none"><button class="q-next-btn" onclick="nextPracticeQuestion()">' + nextBtnLabel + '</button></div>';
   html += '</div>';
   content.innerHTML = html;
 
@@ -3927,13 +4263,23 @@ function selectPracticeAnswer(idx) {
     }
   }
 
-  // XP and coins scale by difficulty
-  const baseXP = [0, 10, 25, 50][q.diff] || 10;
-  const baseCoins = [0, 5, 15, 30][q.diff] || 5;
+  // XP and coins scale by difficulty (1.5x in exam mode)
+  let baseXP = [0, 10, 25, 50][q.diff] || 10;
+  let baseCoins = [0, 5, 15, 30][q.diff] || 5;
+  if (s.examMode) { baseXP = Math.round(baseXP * 1.5); baseCoins = Math.round(baseCoins * 1.5); }
   const streak = getCurrentStreak();
   const fb = document.getElementById('qFeedback');
-  const b = s.battle;
+  const b = s.examMode ? null : s.battle;
   const ps = getPlayerStats();
+
+  // Exam mode: track per-category and per-type results
+  if (s.examMode && s.examCatResults) {
+    var ec = s.examCatResults[q.cat];
+    if (ec) { ec.total++; if (correct) ec.correct++; }
+    if (!s.examTypeResults[q.type]) s.examTypeResults[q.type] = { total: 0, correct: 0 };
+    s.examTypeResults[q.type].total++;
+    if (correct) s.examTypeResults[q.type].correct++;
+  }
 
   if (correct) {
     s.correct++;
@@ -3941,6 +4287,14 @@ function selectPracticeAnswer(idx) {
     let coins = baseCoins;
     // Accessory: Tome of Wisdom (+50% XP)
     if (ps.accEffect === 'xpboost50') xp = Math.round(xp * 1.5);
+    // Pet bonuses on correct answer
+    var petB = getActivePetBonus();
+    if (petB) {
+      if (petB.ability === 'xpBoost') xp = Math.round(xp * (1 + 0.05 * petB.level));
+      if (petB.ability === 'coinBoost') coins = Math.round(coins * (1 + 0.1 * petB.level));
+      // Pet gains 5 XP per correct
+      if (state.pet.petData[petB.pet.id]) state.pet.petData[petB.pet.id].xp += 5;
+    }
     s.xpEarned += xp;
     s.coinsEarned += coins;
     const oldXP = state.totalXP;
@@ -3980,6 +4334,12 @@ function selectPracticeAnswer(idx) {
         extraFbLines.push('\u26A1 Speed CRIT! (' + elapsed + 's)');
       }
 
+      // Pet ability: luck (extra crit chance)
+      if (!isCrit && petB && petB.ability === 'luck' && Math.random() < 0.05 * petB.level) {
+        dmg *= 2; isCrit = true;
+        extraFbLines.push(petB.pet.emoji + ' Lucky CRIT!');
+      }
+
       // Accessory: Combo Ring (+2 dmg per consecutive correct)
       if (ps.accEffect === 'combo') {
         b.comboCount++;
@@ -4010,11 +4370,28 @@ function selectPracticeAnswer(idx) {
         else { xp += 15; state.totalXP += 15; s.xpEarned += 15; extraFbLines.push('\uD83C\uDF00 Chaos: +15 XP!'); }
       }
 
+      // Consumable: Damage Scroll (2x damage)
+      if (b.dmgBoostActive) {
+        dmg *= 2;
+        b.dmgBoostActive = false;
+        extraFbLines.push('\uD83D\uDCDC Damage Scroll: 2x power!');
+        isCrit = true;
+      }
+
+      // Boss ability: Dodge check
+      let dodged = false;
+      if (b.mob.boss && b.mob.abilities && b.mob.abilities.includes('dodge') && Math.random() < BOSS_ABILITIES.dodge.chance) {
+        dmg = 0;
+        dodged = true;
+        extraFbLines.push('\uD83D\uDCA8 Boss dodged your attack!');
+      }
+
       b.mobHP -= dmg;
       b.damageDealt += dmg;
 
       // Build battle text
-      if (isCrit && isPowerStrike) battleText = ' \u2694\uFE0F -' + dmg + ' CRITICAL POWER STRIKE!';
+      if (dodged) battleText = ' \uD83D\uDCA8 DODGED!';
+      else if (isCrit && isPowerStrike) battleText = ' \u2694\uFE0F -' + dmg + ' CRITICAL POWER STRIKE!';
       else if (isCrit) battleText = ' \u2694\uFE0F -' + dmg + ' CRITICAL HIT!';
       else if (isPowerStrike) battleText = ' \u2694\uFE0F -' + dmg + ' POWER STRIKE!';
       else battleText = ' \u2694\uFE0F -' + dmg + ' damage!';
@@ -4024,6 +4401,11 @@ function selectPracticeAnswer(idx) {
       const mobEl = document.getElementById('battleMob');
       if (charEl) { charEl.classList.add('attacking'); setTimeout(() => charEl.classList.remove('attacking'), 400); }
       if (mobEl) { setTimeout(() => { mobEl.classList.add('hit'); setTimeout(() => mobEl.classList.remove('hit'), 300); }, 200); }
+      // Slash effect + screen shake on crits/power strikes
+      triggerSlashEffect();
+      if (isCrit || isPowerStrike) triggerScreenShake();
+      // Sound
+      playSFX(isCrit ? 'crit' : 'hit');
       // Floating damage on mob
       const floatClass = isCrit ? 'crit' : isPowerStrike ? 'power' : '';
       showFloatingDamage('mob', '-' + dmg, floatClass);
@@ -4056,10 +4438,24 @@ function selectPracticeAnswer(idx) {
         updatePlayerHPBar(b);
       }
 
+      // Pet ability: HP regen
+      if (petB && petB.ability === 'hpRegen' && b.playerHP < b.maxHP) {
+        var regenAmt = 2 * petB.level;
+        b.playerHP = Math.min(b.maxHP, b.playerHP + regenAmt);
+        showFloatingDamage('player', '+' + regenAmt, 'heal');
+        updatePlayerHPBar(b);
+      }
+
       // Accessory: Time Crystal (+15s in timed mode)
       if (ps.accEffect === 'time_freeze' && s.timedMode) {
         s.timeBank += 15;
         extraFbLines.push('\u231B Time Crystal: +15s!');
+      }
+
+      // Pet ability: time boost
+      if (petB && petB.ability === 'timeBoost' && s.timedMode) {
+        var timeAdd = 3 * petB.level;
+        s.timeBank += timeAdd;
       }
 
       // Check mob death
@@ -4085,8 +4481,40 @@ function selectPracticeAnswer(idx) {
 
       let mobDmg = Math.max(1, b.mob.atk - ps.def);
 
+      // Boss abilities on wrong answer
+      if (b.mob.boss && b.mob.abilities) {
+        b.bossWrongCount = (b.bossWrongCount || 0) + 1;
+        // Poison: extra damage each wrong answer while poisoned
+        if (b.mob.abilities.includes('poison')) {
+          if (!b.poisoned) { b.poisoned = true; if (!b.statusEffects.includes('\u2620\uFE0F')) b.statusEffects.push('\u2620\uFE0F'); extraFbLines.push('\u2620\uFE0F Poisoned!'); }
+          mobDmg += 5;
+          extraFbLines.push('\u2620\uFE0F Poison: +5 damage!');
+        }
+        // Heal: boss heals every 3 wrong answers
+        if (b.mob.abilities.includes('heal') && b.bossWrongCount % 3 === 0) {
+          var healAmt = Math.round(b.mobMaxHP * 0.1);
+          b.mobHP = Math.min(b.mobMaxHP, b.mobHP + healAmt);
+          extraFbLines.push('\uD83D\uDC9A Boss heals ' + healAmt + ' HP!');
+          showFloatingDamage('mob', '+' + healAmt, 'heal');
+        }
+        // Enrage: ATK doubles below 30% HP
+        if (b.mob.abilities.includes('enrage') && !b.bossEnraged && b.mobHP < b.mobMaxHP * 0.3) {
+          b.bossEnraged = true;
+          if (!b.statusEffects.includes('\uD83D\uDD25')) b.statusEffects.push('\uD83D\uDD25');
+          extraFbLines.push('\uD83D\uDD25 Boss ENRAGED! ATK doubled!');
+        }
+        if (b.bossEnraged) mobDmg *= 2;
+      }
+
+      // Consumable: Shield Potion (block this hit)
+      if (b.shieldPotionActive) {
+        b.shieldPotionActive = false;
+        mobDmg = 0;
+        extraFbLines.push('\uD83D\uDEE1\uFE0F Shield Potion blocks the hit!');
+      }
+
       // Accessory: Shield Bubble (block first hit per session)
-      if (ps.accEffect === 'shield_bubble' && !b.shieldUsed) {
+      if (ps.accEffect === 'shield_bubble' && !b.shieldUsed && mobDmg > 0) {
         b.shieldUsed = true;
         mobDmg = 0;
         extraFbLines.push('\uD83D\uDEE1\uFE0F Shield Bubble absorbs the hit!');
@@ -4120,7 +4548,13 @@ function selectPracticeAnswer(idx) {
       // Animate
       const charEl = document.getElementById('battleChar');
       if (charEl && mobDmg > 0) { charEl.classList.add('hit'); setTimeout(() => charEl.classList.remove('hit'), 300); }
-      if (mobDmg > 0) showFloatingDamage('player', '-' + mobDmg);
+      if (mobDmg > 0) {
+        triggerDamageFlash();
+        triggerScreenShake();
+        showFloatingDamage('player', '-' + mobDmg);
+        playSFX('playerHit');
+      }
+      playSFX('wrong');
       updatePlayerHPBar(b);
 
       // Check player death
@@ -4130,6 +4564,12 @@ function selectPracticeAnswer(idx) {
           b.resurrected = true;
           b.playerHP = Math.round(b.maxHP * 0.25);
           extraFbLines.push('\uD83D\uDC8E Resurrection Stone activates! Revived at ' + b.playerHP + ' HP!');
+          updatePlayerHPBar(b);
+        } else if (petB && petB.ability === 'revive' && !b.petReviveUsed) {
+          // Pet ability: Phoenix revive (once per session at 15% HP)
+          b.petReviveUsed = true;
+          b.playerHP = Math.round(b.maxHP * 0.15);
+          extraFbLines.push(petB.pet.emoji + ' Phoenix revives you at ' + b.playerHP + ' HP!');
           updatePlayerHPBar(b);
         } else {
           b.playerHP = 0;
@@ -4157,7 +4597,34 @@ function selectPracticeAnswer(idx) {
     else if (q.cat === 'nvr') state.practiceStats.nvrCorrect++;
     else if (q.cat === 'maths') state.practiceStats.mathsCorrect = (state.practiceStats.mathsCorrect || 0) + 1;
     if (!state.practiceStats.answeredIds.includes(q.id)) state.practiceStats.answeredIds.push(q.id);
+    // Spaced repetition: reduce wrong count on correct
+    if (state.practiceStats.wrongAnswerMap && state.practiceStats.wrongAnswerMap[q.id]) {
+      state.practiceStats.wrongAnswerMap[q.id] = Math.max(0, state.practiceStats.wrongAnswerMap[q.id] - 1);
+    }
+  } else {
+    // Spaced repetition: track wrong answer
+    if (!state.practiceStats.wrongAnswerMap) state.practiceStats.wrongAnswerMap = {};
+    state.practiceStats.wrongAnswerMap[q.id] = (state.practiceStats.wrongAnswerMap[q.id] || 0) + 1;
   }
+  // Per-type stats for radar chart
+  if (!state.practiceStats.typeStats) state.practiceStats.typeStats = {};
+  if (!state.practiceStats.typeStats[q.type]) state.practiceStats.typeStats[q.type] = { attempted: 0, correct: 0 };
+  state.practiceStats.typeStats[q.type].attempted++;
+  if (correct) state.practiceStats.typeStats[q.type].correct++;
+
+  // Daily challenge tracking
+  updateDailyChallenges({
+    correct: correct,
+    diff: q.diff,
+    cat: q.cat,
+    elapsed: elapsed,
+    streak: b ? b.correctStreak : 0,
+    crit: correct && b && (b.correctStreak >= 3 || elapsed < 30),
+    mobKilled: false,
+    bossKilled: false,
+    perfect: false,
+  });
+
   save();
   renderPracticeStats();
   // Don't show next button if defeated
@@ -4165,6 +4632,149 @@ function selectPracticeAnswer(idx) {
     document.getElementById('qActions').style.display = '';
   }
   checkBadges();
+}
+
+// ============ CONSUMABLES ============
+function useConsumable(id) {
+  const s = practiceSession;
+  if (!s || !s.battle || s.answered) return;
+  const inv = state.rpg.inventory;
+  if (!inv || !inv[id] || inv[id] <= 0) return;
+  inv[id]--;
+  const b = s.battle;
+  const item = CONSUMABLES.find(function(c) { return c.id === id; });
+  if (!item) return;
+  if (item.effect === 'heal') {
+    b.playerHP = Math.min(b.maxHP, b.playerHP + item.value);
+    updatePlayerHPBar(b);
+    showFloatingDamage('player', '+' + item.value, 'heal');
+  } else if (item.effect === 'dmgBoost') {
+    b.dmgBoostActive = true;
+    showFloatingDamage('player', '\uD83D\uDCDC 2x!', 'power');
+  } else if (item.effect === 'shield') {
+    b.shieldPotionActive = true;
+    showFloatingDamage('player', '\uD83D\uDEE1\uFE0F Shield!', 'heal');
+  }
+  playSFX('potion');
+  save();
+  // Update button counts
+  document.querySelectorAll('.item-btn').forEach(function(btn, i) {
+    var c = CONSUMABLES[i];
+    var count = inv[c.id] || 0;
+    btn.querySelector('.item-count').textContent = count;
+    if (count === 0) { btn.disabled = true; btn.classList.add('disabled'); }
+  });
+}
+
+function buyConsumable(id) {
+  var item = CONSUMABLES.find(function(c) { return c.id === id; });
+  if (!item || state.coins < item.cost) return;
+  state.coins -= item.cost;
+  if (!state.rpg.inventory) state.rpg.inventory = {};
+  state.rpg.inventory[id] = (state.rpg.inventory[id] || 0) + 1;
+  playSFX('coin');
+  save();
+  render();
+}
+
+// ============ PET SYSTEM ============
+function getPetLevel(petId) {
+  var pd = state.pet.petData[petId];
+  if (!pd) return 1;
+  var xp = pd.xp || 0;
+  for (var i = PET_LEVELS.length - 1; i >= 0; i--) {
+    if (xp >= PET_LEVELS[i].xpNeeded) return PET_LEVELS[i].level;
+  }
+  return 1;
+}
+
+function getPetXP(petId) {
+  var pd = state.pet.petData[petId];
+  return pd ? (pd.xp || 0) : 0;
+}
+
+function getActivePetBonus() {
+  var petId = state.pet.activePetId;
+  if (!petId) return null;
+  var pet = PETS.find(function(p) { return p.id === petId; });
+  if (!pet) return null;
+  var level = getPetLevel(petId);
+  return { pet: pet, level: level, ability: pet.ability };
+}
+
+function buyPet(id) {
+  var pet = PETS.find(function(p) { return p.id === id; });
+  if (!pet || state.coins < pet.cost) return;
+  if (state.pet.ownedPets.includes(id)) return;
+  state.coins -= pet.cost;
+  state.pet.ownedPets.push(id);
+  state.pet.petData[id] = { xp: 0 };
+  if (!state.pet.activePetId) state.pet.activePetId = id;
+  playSFX('badge');
+  save(); render();
+}
+
+function feedPet(id) {
+  if (!state.pet.ownedPets.includes(id)) return;
+  var level = getPetLevel(id);
+  if (level >= 5) return;
+  var lvlData = PET_LEVELS[level - 1];
+  if (state.coins < lvlData.feedCost) return;
+  state.coins -= lvlData.feedCost;
+  if (!state.pet.petData[id]) state.pet.petData[id] = { xp: 0 };
+  state.pet.petData[id].xp += 25;
+  playSFX('potion');
+  save(); render();
+}
+
+function setActivePet(id) {
+  if (!state.pet.ownedPets.includes(id)) return;
+  state.pet.activePetId = id;
+  save(); render();
+}
+
+function renderPetShop() {
+  var container = document.getElementById('petShop');
+  if (!container) return;
+  var html = '';
+  PETS.forEach(function(pet) {
+    var owned = state.pet.ownedPets.includes(pet.id);
+    var isActive = state.pet.activePetId === pet.id;
+    var level = owned ? getPetLevel(pet.id) : 0;
+    var petXP = owned ? getPetXP(pet.id) : 0;
+    var maxLevel = level >= 5;
+    var nextLvl = level < 5 ? PET_LEVELS[level] : null;
+    var xpToNext = nextLvl ? nextLvl.xpNeeded : 0;
+    var feedCost = level > 0 && level < 5 ? PET_LEVELS[level - 1].feedCost : 0;
+
+    html += '<div class="pet-card' + (isActive ? ' active-pet' : '') + '">';
+    html += '<div class="pet-emoji">' + pet.emoji + '</div>';
+    html += '<div class="pet-name">' + pet.name + '</div>';
+    html += '<div class="pet-desc">' + pet.desc + '</div>';
+
+    if (owned) {
+      html += '<div class="pet-level">Lv.' + level + (maxLevel ? ' MAX' : '') + '</div>';
+      if (!maxLevel) {
+        var xpPct = nextLvl ? Math.min(100, Math.round((petXP / xpToNext) * 100)) : 100;
+        html += '<div class="pet-xp-bar"><div class="pet-xp-fill" style="width:' + xpPct + '%"></div></div>';
+        html += '<div class="pet-xp-text">' + petXP + '/' + xpToNext + ' XP</div>';
+      }
+      html += '<div class="pet-actions">';
+      if (!maxLevel) {
+        html += '<button class="pet-btn feed" onclick="feedPet(\'' + pet.id + '\')" ' + (state.coins < feedCost ? 'disabled' : '') + '>Feed ' + feedCost + ' 🪙</button>';
+      }
+      if (!isActive) {
+        html += '<button class="pet-btn equip" onclick="setActivePet(\'' + pet.id + '\')">Equip</button>';
+      } else {
+        html += '<span class="pet-equipped">✅ Active</span>';
+      }
+      html += '</div>';
+    } else {
+      html += '<button class="pet-btn buy" onclick="buyPet(\'' + pet.id + '\')" ' + (state.coins < pet.cost ? 'disabled' : '') + '>Buy ' + pet.cost + ' 🪙</button>';
+    }
+    html += '</div>';
+  });
+  container.innerHTML = html;
 }
 
 // ============ BATTLE HELPER FUNCTIONS ============
@@ -4203,6 +4813,8 @@ function handleMobDeath(s) {
   b.mobsKilledThisSession++;
   state.rpg.totalMobsKilled++;
   state.rpg.waveMobsDefeated++;
+  // Daily challenge: mob kill
+  updateDailyChallenges({ mobKilled: true, bossKilled: b.mob.boss || false, correct: false });
 
   // Gold reward (with accessory bonuses)
   let goldReward = b.mob.gold;
@@ -4221,6 +4833,8 @@ function handleMobDeath(s) {
   // Animate mob death
   const mobEl = document.getElementById('battleMob');
   if (mobEl) mobEl.classList.add('dying');
+  playSFX('mobDeath');
+  playSFX('coin');
 
   // Show gold floating
   showFloatingDamage('mob', '+' + goldReward + ' \uD83E\uDE99', 'gold');
@@ -4230,6 +4844,8 @@ function handleMobDeath(s) {
     state.rpg.bossesKilled++;
     const drops = b.mob.drops || [];
     const newLoot = awardBossDrop(drops);
+    playSFX('bossRoar');
+    setTimeout(() => playSFX('victory'), 500);
     // Show boss overlay after a delay
     setTimeout(() => showBossDefeatedOverlay(b.mob, newLoot, goldReward), 800);
   }
@@ -4350,13 +4966,27 @@ function showSessionSummary() {
 
   const b = s.battle;
   const defeated = b && b.defeated;
-  const emoji = defeated ? '\uD83D\uDCA0' : pct >= 80 ? '\uD83C\uDF89' : pct >= 50 ? '\uD83D\uDC4D' : '\uD83D\uDCAA';
-  const msg = defeated ? 'Your hero fell in battle...' : pct >= 80 ? 'Amazing work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
+
+  // Exam mode grade boundaries
+  let examGrade = '';
+  if (s.examMode) {
+    if (pct >= 95) examGrade = 'A*';
+    else if (pct >= 85) examGrade = 'A';
+    else if (pct >= 70) examGrade = 'B';
+    else if (pct >= 55) examGrade = 'C';
+    else examGrade = 'D';
+  }
+
+  const emoji = s.examMode ? '\uD83D\uDCDD' : defeated ? '\uD83D\uDCA0' : pct >= 80 ? '\uD83C\uDF89' : pct >= 50 ? '\uD83D\uDC4D' : '\uD83D\uDCAA';
+  const msg = s.examMode ? 'Mock Exam Complete!' : defeated ? 'Your hero fell in battle...' : pct >= 80 ? 'Amazing work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
 
   const content = document.getElementById('practiceContent');
-  let html = '<div class="session-summary">';
+  let html = '<div class="session-summary' + (s.examMode ? ' exam-results' : '') + '">';
   html += '<div style="font-size:48px">' + emoji + '</div>';
   html += '<div class="session-label">' + msg + '</div>';
+  if (s.examMode) {
+    html += '<div class="exam-grade" style="color:' + (examGrade === 'A*' ? '#059669' : examGrade === 'A' ? '#10b981' : examGrade === 'B' ? '#3b82f6' : examGrade === 'C' ? '#f59e0b' : '#ef4444') + '">Grade: ' + examGrade + '</div>';
+  }
   html += '<div class="session-score">' + s.correct + '/' + total + '</div>';
   html += '<div class="session-label">' + pct + '% correct</div>';
 
@@ -4400,13 +5030,58 @@ function showSessionSummary() {
     }
   }
 
+  // Exam mode: per-category breakdown
+  if (s.examMode && s.examCatResults) {
+    html += '<div style="margin:14px 0">';
+    html += '<div style="font-weight:800;font-size:13px;margin-bottom:8px">\uD83D\uDCCA Category Breakdown</div>';
+    var catLabels = { vr: '\uD83D\uDCD6 Verbal Reasoning', maths: '\uD83D\uDCD0 Maths', nvr: '\uD83E\uDDE9 Non-Verbal Reasoning' };
+    ['vr', 'maths', 'nvr'].forEach(function(cat) {
+      var cr = s.examCatResults[cat];
+      if (cr && cr.total > 0) {
+        var catPct = Math.round((cr.correct / cr.total) * 100);
+        var barColor = catPct >= 80 ? '#10b981' : catPct >= 50 ? '#f59e0b' : '#ef4444';
+        html += '<div class="exam-cat-row">';
+        html += '<span style="font-size:11px;font-weight:700;min-width:140px;text-align:left">' + catLabels[cat] + '</span>';
+        html += '<div class="exam-cat-bar"><div class="exam-cat-bar-fill" style="width:' + catPct + '%;background:' + barColor + '"></div></div>';
+        html += '<span style="font-size:11px;font-weight:800;min-width:60px;text-align:right">' + cr.correct + '/' + cr.total + ' (' + catPct + '%)</span>';
+        html += '</div>';
+      }
+    });
+    html += '</div>';
+
+    // Per-type breakdown table
+    var typeKeys = Object.keys(s.examTypeResults || {}).filter(function(t) { return s.examTypeResults[t].total > 0; });
+    if (typeKeys.length > 0) {
+      html += '<div style="margin:10px 0">';
+      html += '<div style="font-weight:800;font-size:13px;margin-bottom:6px">\uD83D\uDCCB Question Type Breakdown</div>';
+      html += '<div style="display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:11px;max-height:200px;overflow-y:auto">';
+      typeKeys.sort(function(a, b) {
+        var aPct = s.examTypeResults[a].correct / s.examTypeResults[a].total;
+        var bPct = s.examTypeResults[b].correct / s.examTypeResults[b].total;
+        return aPct - bPct;
+      });
+      typeKeys.forEach(function(t) {
+        var tr = s.examTypeResults[t];
+        var tPct = Math.round((tr.correct / tr.total) * 100);
+        var tColor = tPct >= 80 ? '#10b981' : tPct >= 50 ? '#f59e0b' : '#ef4444';
+        html += '<span style="font-weight:600;text-align:left">' + t + '</span>';
+        html += '<span style="font-weight:800;color:' + tColor + '">' + tr.correct + '/' + tr.total + ' (' + tPct + '%)</span>';
+      });
+      html += '</div></div>';
+    }
+  }
+
   html += '<div class="session-rewards">';
-  html += '<div class="session-reward"><div class="reward-val">\u26A1 ' + s.xpEarned + '</div>XP earned</div>';
-  html += '<div class="session-reward"><div class="reward-val">\uD83E\uDE99 ' + s.coinsEarned + '</div>Coins earned</div>';
+  html += '<div class="session-reward"><div class="reward-val">\u26A1 ' + s.xpEarned + '</div>XP earned' + (s.examMode ? ' (1.5x)' : '') + '</div>';
+  html += '<div class="session-reward"><div class="reward-val">\uD83E\uDE99 ' + s.coinsEarned + '</div>Coins earned' + (s.examMode ? ' (1.5x)' : '') + '</div>';
   html += '</div>';
   html += '<div class="session-btns">';
   html += '<button class="btn-back" onclick="backToPicker()">\uD83C\uDFE0 Menu</button>';
-  html += '<button class="btn-again" onclick="startSession(\'' + s.cat + '\',\'' + s.type + '\')">\uD83D\uDD04 Again</button>';
+  if (s.examMode) {
+    html += '<button class="btn-again" onclick="startExamMode()">\uD83D\uDD04 Retake Exam</button>';
+  } else {
+    html += '<button class="btn-again" onclick="startSession(\'' + s.cat + '\',\'' + s.type + '\')">\uD83D\uDD04 Again</button>';
+  }
   html += '</div></div>';
   content.innerHTML = html;
 
@@ -4442,7 +5117,10 @@ function getDefaultState() {
     activeAvatar: 'default',
     activeTitle: null,
     activeTheme: null,
-    practiceStats: { totalAttempted: 0, totalCorrect: 0, vrCorrect: 0, nvrCorrect: 0, answeredIds: [], bestSessionPct: 0, perfectSession: false },
+    soundEnabled: true,
+    dailyChallenges: null,
+    pet: { activePetId: null, ownedPets: [], petData: {} },
+    practiceStats: { totalAttempted: 0, totalCorrect: 0, vrCorrect: 0, nvrCorrect: 0, answeredIds: [], bestSessionPct: 0, perfectSession: false, wrongAnswerMap: {}, typeStats: {} },
     rpg: {
       currentWave: 1,
       waveMobsDefeated: 0,
@@ -4455,6 +5133,7 @@ function getDefaultState() {
       totalMobsKilled: 0,
       bossesKilled: 0,
       highestWave: 1,
+      inventory: { health_potion: 0, damage_scroll: 0, shield_potion: 0 },
     },
   };
 }
@@ -4498,7 +5177,17 @@ function load() {
           if (state.rpg[k] === undefined) state.rpg[k] = def[k];
         }
         if (!Array.isArray(state.rpg.ownedEquipment)) state.rpg.ownedEquipment = ['wooden_sword','cloth_tunic','no_accessory'];
+        if (!state.rpg.inventory) state.rpg.inventory = { health_potion: 0, damage_scroll: 0, shield_potion: 0 };
       }
+      // Migrate: sound setting
+      if (state.soundEnabled === undefined) state.soundEnabled = true;
+      // Migrate: spaced repetition + type stats
+      if (!state.practiceStats.wrongAnswerMap) state.practiceStats.wrongAnswerMap = {};
+      if (!state.practiceStats.typeStats) state.practiceStats.typeStats = {};
+      // Migrate: pet system
+      if (!state.pet) state.pet = { activePetId: null, ownedPets: [], petData: {} };
+      if (!state.pet.ownedPets) state.pet.ownedPets = [];
+      if (!state.pet.petData) state.pet.petData = {};
       // Retroactively unlock any earned achievement avatars
       checkAvatarUnlocks();
     } catch(e) { state = getDefaultState(); }
@@ -4732,14 +5421,30 @@ function renderArmory() {
   shop.innerHTML = '';
   const tabs = document.createElement('div');
   tabs.className = 'armory-tabs';
-  ['weapon','armor','accessory'].forEach(slot => {
+  ['weapon','armor','accessory','consumable'].forEach(slot => {
     const btn = document.createElement('button');
     btn.className = 'armory-tab' + (activeArmoryTab === slot ? ' active' : '');
-    btn.textContent = slot === 'weapon' ? '⚔️ Weapons' : slot === 'armor' ? '🛡️ Armor' : '💍 Accessories';
+    btn.textContent = slot === 'weapon' ? '\u2694\uFE0F Weapons' : slot === 'armor' ? '\uD83D\uDEE1\uFE0F Armor' : slot === 'consumable' ? '\uD83E\uDDEA Items' : '\uD83D\uDC8D Accessories';
     btn.onclick = () => { activeArmoryTab = slot; renderArmory(); };
     tabs.appendChild(btn);
   });
   shop.appendChild(tabs);
+
+  // Consumable items tab
+  if (activeArmoryTab === 'consumable') {
+    for (const c of CONSUMABLES) {
+      const count = (state.rpg.inventory && state.rpg.inventory[c.id]) || 0;
+      const canAfford = state.coins >= c.cost;
+      const card = document.createElement('div');
+      card.className = 'equip-card';
+      const actionHTML = canAfford
+        ? '<button class="btn-buy-equip" onclick="event.stopPropagation();buyConsumable(\'' + c.id + '\')">\uD83E\uDE99 ' + c.cost + '</button>'
+        : '<span class="equip-source">\uD83E\uDE99 ' + c.cost + '</span>';
+      card.innerHTML = '<div class="equip-emoji">' + c.emoji + '</div><div class="equip-info"><div class="equip-name">' + c.name + ' <span style="color:var(--green);font-size:11px;font-weight:700">x' + count + '</span></div><div class="equip-stat">' + c.desc + '</div></div><div class="equip-action">' + actionHTML + '</div>';
+      shop.appendChild(card);
+    }
+    return;
+  }
 
   const items = EQUIPMENT.filter(e => e.slot === activeArmoryTab);
   const playerLevel = getLevel(state.totalXP).level;
@@ -4884,6 +5589,7 @@ function showAvatarUnlock(avatar) {
   document.getElementById('avatarUnlockName').textContent = avatar.name + ' Unlocked!';
   document.getElementById('avatarUnlockOverlay').classList.add('show');
   fireConfetti();
+  playSFX('badge');
 }
 function closeAvatarUnlock() {
   document.getElementById('avatarUnlockOverlay').classList.remove('show');
@@ -4907,6 +5613,8 @@ function render() {
   document.getElementById('totalXP').textContent = state.totalXP;
   document.getElementById('coinCount').textContent = state.coins;
   document.getElementById('headerAvatar').textContent = getActiveAvatarIcon();
+  var petBonus = getActivePetBonus();
+  document.getElementById('headerPet').textContent = petBonus ? petBonus.pet.emoji : '';
 
   const hour = new Date().getHours();
   const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
@@ -5030,6 +5738,8 @@ function render() {
 
   renderArmory();
   renderAvatarShop();
+  renderPetShop();
+  renderDailyChallenges();
   renderBadges();
   renderRewards();
   renderHistory();
@@ -5187,6 +5897,7 @@ function showLevelUp(level) {
   document.getElementById('levelUpMsg').textContent = `You reached Level ${level.level} - ${level.name}!`;
   document.getElementById('levelUpOverlay').classList.add('show');
   fireConfetti();
+  playSFX('levelUp');
 }
 function closeLevelUp() { document.getElementById('levelUpOverlay').classList.remove('show'); }
 
@@ -5195,6 +5906,7 @@ function showBadgeUnlock(badge) {
   document.getElementById('badgeOverlayName').textContent = badge.name;
   document.getElementById('badgeOverlay').classList.add('show');
   fireConfetti();
+  playSFX('badge');
 }
 function closeBadgeOverlay() { document.getElementById('badgeOverlay').classList.remove('show'); }
 
@@ -5244,6 +5956,9 @@ function openSettings() {
     }
   }
 
+  // Sound
+  document.getElementById('settingsSound').value = state.soundEnabled ? 'on' : 'off';
+
   document.getElementById('settingsModal').classList.add('show');
 }
 
@@ -5255,6 +5970,8 @@ function saveSettings() {
   state.activeTitle = document.getElementById('settingsTitle').value || null;
   state.activeTheme = document.getElementById('settingsTheme').value || null;
   state.activeAvatar = document.getElementById('settingsAvatar').value || 'default';
+  state.soundEnabled = document.getElementById('settingsSound').value === 'on';
+  document.getElementById('soundToggle').textContent = state.soundEnabled ? '\uD83D\uDD0A' : '\uD83D\uDD07';
   state.goalsHit = countGoalsHit();
   save();
   closeSettings();
@@ -5273,6 +5990,132 @@ function confirmReset() {
       closeSettings();
     }
   }
+}
+
+// ============ DAILY CHALLENGES ============
+function getDailyChallenges() {
+  var today = todayKey();
+  if (state.dailyChallenges && state.dailyChallenges.date === today) return state.dailyChallenges;
+  // Seed RNG from date
+  var seed = 0;
+  for (var i = 0; i < today.length; i++) seed = ((seed << 5) - seed) + today.charCodeAt(i);
+  function seeded() { seed = (seed * 16807 + 0) % 2147483647; return (seed & 0x7fffffff) / 0x7fffffff; }
+  var shuffled = CHALLENGE_TEMPLATES.slice().sort(function() { return seeded() - 0.5; });
+  var picks = shuffled.slice(0, 3);
+  state.dailyChallenges = { date: today, challenges: picks, progress: [0, 0, 0], completed: [false, false, false], claimed: [false, false, false] };
+  save();
+  return state.dailyChallenges;
+}
+
+function updateDailyChallenges(data) {
+  var dc = getDailyChallenges();
+  dc.challenges.forEach(function(ch, i) {
+    if (dc.completed[i]) return;
+    switch(ch.type) {
+      case 'hardCount': if (data.correct && data.diff === 3) dc.progress[i]++; break;
+      case 'streak': if (data.streak >= ch.target) dc.progress[i] = ch.target; break;
+      case 'mobKill': if (data.mobKilled) dc.progress[i]++; break;
+      case 'fastAnswer': if (data.correct && data.elapsed < 20) dc.progress[i]++; break;
+      case 'perfectSession': if (data.perfect) dc.progress[i] = 1; break;
+      case 'catCount': if (data.cat === ch.cat) dc.progress[i]++; break;
+      case 'totalCount': dc.progress[i]++; break;
+      case 'critCount': if (data.crit) dc.progress[i]++; break;
+      case 'bossKill': if (data.bossKilled) dc.progress[i]++; break;
+    }
+    if (dc.progress[i] >= ch.target) dc.completed[i] = true;
+  });
+  save();
+}
+
+function claimDailyChallenge(idx) {
+  var dc = state.dailyChallenges;
+  if (!dc || !dc.completed[idx] || dc.claimed[idx]) return;
+  dc.claimed[idx] = true;
+  var ch = dc.challenges[idx];
+  state.totalXP += ch.reward.xp;
+  state.coins += ch.reward.coins;
+  save(); render(); playSFX('coin'); fireConfetti();
+}
+
+function renderDailyChallenges() {
+  var dc = getDailyChallenges();
+  var container = document.getElementById('dailyChallengesCard');
+  if (!container) return;
+  var html = '';
+  dc.challenges.forEach(function(ch, i) {
+    var pct = Math.min(100, Math.round((dc.progress[i] / ch.target) * 100));
+    var done = dc.completed[i];
+    var claimed = dc.claimed[i];
+    html += '<div class="challenge-item' + (claimed ? ' done' : '') + '">';
+    html += '<div class="challenge-desc">' + ch.desc + '</div>';
+    html += '<div class="challenge-bar"><div class="challenge-fill" style="width:' + pct + '%"></div></div>';
+    html += '<div class="challenge-meta"><span>' + Math.min(dc.progress[i], ch.target) + '/' + ch.target + '</span>';
+    if (done && !claimed) html += '<button class="claim-btn" onclick="claimDailyChallenge(' + i + ')">Claim +' + ch.reward.coins + '\uD83E\uDE99 +' + ch.reward.xp + 'XP</button>';
+    else if (claimed) html += '<span style="color:var(--green)">\u2705 Claimed</span>';
+    else html += '<span>+' + ch.reward.coins + '\uD83E\uDE99</span>';
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+// ============ SOUND ENGINE (Web Audio API) ============
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(freq, dur, type, vol, ramp) {
+  if (!state.soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.value = vol || 0.12;
+    if (ramp) gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + dur);
+  } catch(e) {}
+}
+function playSFX(name) {
+  if (!state.soundEnabled) return;
+  const sfx = {
+    hit:       () => playTone(220, 0.12, 'square', 0.1, true),
+    crit:      () => { playTone(400, 0.08, 'square', 0.12); setTimeout(() => playTone(600, 0.12, 'square', 0.1, true), 60); },
+    playerHit: () => playTone(120, 0.2, 'sawtooth', 0.08, true),
+    wrong:     () => playTone(150, 0.2, 'sawtooth', 0.06, true),
+    mobDeath:  () => { playTone(300, 0.08, 'square', 0.08); setTimeout(() => playTone(500, 0.12, 'sine', 0.08, true), 80); },
+    victory:   () => { [523,659,784].forEach((f,i) => setTimeout(() => playTone(f, 0.18, 'sine', 0.1, true), i*100)); },
+    levelUp:   () => { [440,554,659,880].forEach((f,i) => setTimeout(() => playTone(f, 0.2, 'sine', 0.12, true), i*90)); },
+    coin:      () => { playTone(800, 0.06, 'sine', 0.08); setTimeout(() => playTone(1200, 0.1, 'sine', 0.08, true), 50); },
+    bossRoar:  () => { playTone(80, 0.35, 'sawtooth', 0.12, true); setTimeout(() => playTone(60, 0.25, 'sawtooth', 0.08, true), 180); },
+    potion:    () => { playTone(600, 0.08, 'sine', 0.08); setTimeout(() => playTone(900, 0.12, 'sine', 0.08, true), 60); },
+    badge:     () => { [523,659,784,1047].forEach((f,i) => setTimeout(() => playTone(f, 0.18, 'sine', 0.1, true), i*90)); },
+  };
+  if (sfx[name]) sfx[name]();
+}
+function toggleSound() {
+  state.soundEnabled = !state.soundEnabled;
+  document.getElementById('soundToggle').textContent = state.soundEnabled ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+  save();
+  if (state.soundEnabled) playSFX('coin');
+}
+
+// ============ BATTLE EFFECTS ============
+function triggerSlashEffect() {
+  const mobEl = document.getElementById('battleMob');
+  if (mobEl) { mobEl.classList.add('slash-effect'); setTimeout(() => mobEl.classList.remove('slash-effect'), 350); }
+}
+function triggerScreenShake() {
+  const arena = document.getElementById('battleArena');
+  if (arena) { arena.classList.add('shake'); setTimeout(() => arena.classList.remove('shake'), 350); }
+}
+function triggerDamageFlash() {
+  const charEl = document.getElementById('battleChar');
+  if (charEl) { charEl.classList.add('damage-flash'); setTimeout(() => charEl.classList.remove('damage-flash'), 450); }
 }
 
 // ============ CONFETTI ============
@@ -5321,6 +6164,7 @@ function fireConfetti() {
 // ============ INIT ============
 load();
 applyTheme(state.activeTheme || 'default');
+document.getElementById('soundToggle').textContent = state.soundEnabled !== false ? '\uD83D\uDD0A' : '\uD83D\uDD07';
 
 if (!state.name) {
   showOnboarding();
