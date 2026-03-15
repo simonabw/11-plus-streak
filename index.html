@@ -1341,20 +1341,6 @@
     30% { filter: brightness(2) saturate(0) sepia(1) hue-rotate(-50deg); }
     60% { filter: brightness(1.5) saturate(0.5); }
   }
-  /* Exam simulator */
-  .exam-sim-btn {
-    background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; border-radius: 14px;
-    padding: 12px 22px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit;
-    box-shadow: 0 4px 15px rgba(239,68,68,0.3); transition: transform 0.15s;
-  }
-  .exam-sim-btn:active { transform: scale(0.95); }
-  .exam-results { text-align: center; }
-  .exam-grade { font-size: 36px; font-weight: 900; margin: 8px 0; }
-  .exam-cat-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 13px; font-weight: 700; }
-  .exam-cat-row span:first-child { width: 100px; text-align: left; }
-  .exam-cat-row span:last-of-type { width: 70px; text-align: right; }
-  .exam-cat-bar { flex: 1; height: 8px; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
-  .exam-cat-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
   /* Daily challenges */
   .challenges-card { background: var(--card); border-radius: 18px; padding: 14px; box-shadow: var(--shadow); margin-bottom: 18px; }
   .challenge-item { padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
@@ -1767,9 +1753,6 @@
             <button class="mode-toggle" id="adaptiveToggle" onclick="toggleMode('adaptive')">
               <span class="toggle-dot"></span>🧠 Adaptive
             </button>
-          </div>
-          <div style="text-align:center;margin-top:14px">
-            <button class="exam-sim-btn" onclick="startExamMode()">📝 Mock Exam (50 Qs, 60 min)</button>
           </div>
         </div>
         <div id="practiceContent"></div>
@@ -3937,55 +3920,6 @@ function startSession(cat, type) {
   renderCurrentQuestion();
 }
 
-function startExamMode() {
-  stopTimer();
-  // Gather 50 questions: ~20 VR, ~15 Maths, ~15 NVR
-  const vrQs = shuffleArray(PRACTICE_QUESTIONS.filter(function(q) { return q.cat === 'vr'; })).slice(0, 20);
-  const mathsQs = shuffleArray(PRACTICE_QUESTIONS.filter(function(q) { return q.cat === 'maths'; })).slice(0, 15);
-  const nvrQs = shuffleArray(PRACTICE_QUESTIONS.filter(function(q) { return q.cat === 'nvr'; })).slice(0, 15);
-  let examQs = shuffleArray(vrQs.concat(mathsQs).concat(nvrQs));
-  // If we don't have enough in some category, pad from others
-  if (examQs.length < 50) {
-    const usedIds = examQs.map(function(q) { return q.id; });
-    const extras = shuffleArray(PRACTICE_QUESTIONS.filter(function(q) { return !usedIds.includes(q.id); }));
-    examQs = examQs.concat(extras.slice(0, 50 - examQs.length));
-  }
-  examQs = examQs.slice(0, 50);
-
-  practiceSession = {
-    cat: 'exam', type: 'all',
-    pool: examQs,
-    questions: examQs,
-    current: 0,
-    correct: 0,
-    totalAnswered: 0,
-    maxQuestions: examQs.length,
-    xpEarned: 0,
-    coinsEarned: 0,
-    answered: false,
-    // Timer: 60 minutes total
-    timedMode: true,
-    timeBank: 60 * 60,
-    questionStartTime: 0,
-    timeTaken: [],
-    results: [],
-    // Adaptive off
-    adaptiveMode: false,
-    currentDiff: 1,
-    adaptiveStreak: 0,
-    // No battle in exam mode
-    battle: null,
-    // Exam mode flag
-    examMode: true,
-    // Per-category tracking for results
-    examCatResults: { vr: { total: 0, correct: 0 }, maths: { total: 0, correct: 0 }, nvr: { total: 0, correct: 0 } },
-    examTypeResults: {},
-  };
-  document.getElementById('practicePicker').style.display = 'none';
-  document.getElementById('subtypeGrid').innerHTML = '';
-  renderCurrentQuestion();
-}
-
 function getNextAdaptiveQuestion() {
   const s = practiceSession;
   // Find a question at the current difficulty from the pool
@@ -4023,7 +3957,7 @@ function renderCurrentQuestion() {
   let html = '';
 
   // ---- BATTLE ARENA (skip in exam mode) ----
-  if (s.battle && !s.battle.defeated && !s.examMode) {
+  if (s.battle && !s.battle.defeated) {
     const b = s.battle;
     const ps = getPlayerStats();
     const hpPct = Math.max(0, Math.round((b.playerHP / b.maxHP) * 100));
@@ -4126,8 +4060,7 @@ function renderCurrentQuestion() {
     html += '<button class="option-btn" onclick="selectPracticeAnswer(' + displayIdx + ')">' + q.opts[origIdx] + '</button>';
   });
   html += '</div><div id="qFeedback"></div>';
-  const nextBtnLabel = s.examMode ? 'Next Question \u27A1\uFE0F' : 'Next Attack \u2694\uFE0F';
-  html += '<div id="qActions" style="display:none"><button class="q-next-btn" onclick="nextPracticeQuestion()">' + nextBtnLabel + '</button></div>';
+  html += '<div id="qActions" style="display:none"><button class="q-next-btn" onclick="nextPracticeQuestion()">Next Attack \u2694\uFE0F</button></div>';
   html += '</div>';
   content.innerHTML = html;
 
@@ -4266,20 +4199,10 @@ function selectPracticeAnswer(idx) {
   // XP and coins scale by difficulty (1.5x in exam mode)
   let baseXP = [0, 10, 25, 50][q.diff] || 10;
   let baseCoins = [0, 5, 15, 30][q.diff] || 5;
-  if (s.examMode) { baseXP = Math.round(baseXP * 1.5); baseCoins = Math.round(baseCoins * 1.5); }
   const streak = getCurrentStreak();
   const fb = document.getElementById('qFeedback');
-  const b = s.examMode ? null : s.battle;
+  const b = s.battle;
   const ps = getPlayerStats();
-
-  // Exam mode: track per-category and per-type results
-  if (s.examMode && s.examCatResults) {
-    var ec = s.examCatResults[q.cat];
-    if (ec) { ec.total++; if (correct) ec.correct++; }
-    if (!s.examTypeResults[q.type]) s.examTypeResults[q.type] = { total: 0, correct: 0 };
-    s.examTypeResults[q.type].total++;
-    if (correct) s.examTypeResults[q.type].correct++;
-  }
 
   if (correct) {
     s.correct++;
@@ -4967,26 +4890,13 @@ function showSessionSummary() {
   const b = s.battle;
   const defeated = b && b.defeated;
 
-  // Exam mode grade boundaries
-  let examGrade = '';
-  if (s.examMode) {
-    if (pct >= 95) examGrade = 'A*';
-    else if (pct >= 85) examGrade = 'A';
-    else if (pct >= 70) examGrade = 'B';
-    else if (pct >= 55) examGrade = 'C';
-    else examGrade = 'D';
-  }
-
-  const emoji = s.examMode ? '\uD83D\uDCDD' : defeated ? '\uD83D\uDCA0' : pct >= 80 ? '\uD83C\uDF89' : pct >= 50 ? '\uD83D\uDC4D' : '\uD83D\uDCAA';
-  const msg = s.examMode ? 'Mock Exam Complete!' : defeated ? 'Your hero fell in battle...' : pct >= 80 ? 'Amazing work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
+  const emoji = defeated ? '\uD83D\uDCA0' : pct >= 80 ? '\uD83C\uDF89' : pct >= 50 ? '\uD83D\uDC4D' : '\uD83D\uDCAA';
+  const msg = defeated ? 'Your hero fell in battle...' : pct >= 80 ? 'Amazing work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
 
   const content = document.getElementById('practiceContent');
-  let html = '<div class="session-summary' + (s.examMode ? ' exam-results' : '') + '">';
+  let html = '<div class="session-summary">';
   html += '<div style="font-size:48px">' + emoji + '</div>';
   html += '<div class="session-label">' + msg + '</div>';
-  if (s.examMode) {
-    html += '<div class="exam-grade" style="color:' + (examGrade === 'A*' ? '#059669' : examGrade === 'A' ? '#10b981' : examGrade === 'B' ? '#3b82f6' : examGrade === 'C' ? '#f59e0b' : '#ef4444') + '">Grade: ' + examGrade + '</div>';
-  }
   html += '<div class="session-score">' + s.correct + '/' + total + '</div>';
   html += '<div class="session-label">' + pct + '% correct</div>';
 
@@ -5030,58 +4940,13 @@ function showSessionSummary() {
     }
   }
 
-  // Exam mode: per-category breakdown
-  if (s.examMode && s.examCatResults) {
-    html += '<div style="margin:14px 0">';
-    html += '<div style="font-weight:800;font-size:13px;margin-bottom:8px">\uD83D\uDCCA Category Breakdown</div>';
-    var catLabels = { vr: '\uD83D\uDCD6 Verbal Reasoning', maths: '\uD83D\uDCD0 Maths', nvr: '\uD83E\uDDE9 Non-Verbal Reasoning' };
-    ['vr', 'maths', 'nvr'].forEach(function(cat) {
-      var cr = s.examCatResults[cat];
-      if (cr && cr.total > 0) {
-        var catPct = Math.round((cr.correct / cr.total) * 100);
-        var barColor = catPct >= 80 ? '#10b981' : catPct >= 50 ? '#f59e0b' : '#ef4444';
-        html += '<div class="exam-cat-row">';
-        html += '<span style="font-size:11px;font-weight:700;min-width:140px;text-align:left">' + catLabels[cat] + '</span>';
-        html += '<div class="exam-cat-bar"><div class="exam-cat-bar-fill" style="width:' + catPct + '%;background:' + barColor + '"></div></div>';
-        html += '<span style="font-size:11px;font-weight:800;min-width:60px;text-align:right">' + cr.correct + '/' + cr.total + ' (' + catPct + '%)</span>';
-        html += '</div>';
-      }
-    });
-    html += '</div>';
-
-    // Per-type breakdown table
-    var typeKeys = Object.keys(s.examTypeResults || {}).filter(function(t) { return s.examTypeResults[t].total > 0; });
-    if (typeKeys.length > 0) {
-      html += '<div style="margin:10px 0">';
-      html += '<div style="font-weight:800;font-size:13px;margin-bottom:6px">\uD83D\uDCCB Question Type Breakdown</div>';
-      html += '<div style="display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:11px;max-height:200px;overflow-y:auto">';
-      typeKeys.sort(function(a, b) {
-        var aPct = s.examTypeResults[a].correct / s.examTypeResults[a].total;
-        var bPct = s.examTypeResults[b].correct / s.examTypeResults[b].total;
-        return aPct - bPct;
-      });
-      typeKeys.forEach(function(t) {
-        var tr = s.examTypeResults[t];
-        var tPct = Math.round((tr.correct / tr.total) * 100);
-        var tColor = tPct >= 80 ? '#10b981' : tPct >= 50 ? '#f59e0b' : '#ef4444';
-        html += '<span style="font-weight:600;text-align:left">' + t + '</span>';
-        html += '<span style="font-weight:800;color:' + tColor + '">' + tr.correct + '/' + tr.total + ' (' + tPct + '%)</span>';
-      });
-      html += '</div></div>';
-    }
-  }
-
   html += '<div class="session-rewards">';
-  html += '<div class="session-reward"><div class="reward-val">\u26A1 ' + s.xpEarned + '</div>XP earned' + (s.examMode ? ' (1.5x)' : '') + '</div>';
-  html += '<div class="session-reward"><div class="reward-val">\uD83E\uDE99 ' + s.coinsEarned + '</div>Coins earned' + (s.examMode ? ' (1.5x)' : '') + '</div>';
+  html += '<div class="session-reward"><div class="reward-val">\u26A1 ' + s.xpEarned + '</div>XP earned</div>';
+  html += '<div class="session-reward"><div class="reward-val">\uD83E\uDE99 ' + s.coinsEarned + '</div>Coins earned</div>';
   html += '</div>';
   html += '<div class="session-btns">';
   html += '<button class="btn-back" onclick="backToPicker()">\uD83C\uDFE0 Menu</button>';
-  if (s.examMode) {
-    html += '<button class="btn-again" onclick="startExamMode()">\uD83D\uDD04 Retake Exam</button>';
-  } else {
-    html += '<button class="btn-again" onclick="startSession(\'' + s.cat + '\',\'' + s.type + '\')">\uD83D\uDD04 Again</button>';
-  }
+  html += '<button class="btn-again" onclick="startSession(\'' + s.cat + '\',\'' + s.type + '\')">\uD83D\uDD04 Again</button>';
   html += '</div></div>';
   content.innerHTML = html;
 
